@@ -1,3 +1,5 @@
+# Experimental so far, api.intercom.io isn't public yet.
+
 ## Usage
 
 ```

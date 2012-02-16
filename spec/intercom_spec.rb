@@ -56,8 +56,8 @@ describe Intercom do
 
     it "allows easy setting of custom data" do
       user = Intercom::User.new()
-      user.custom_data["mad"]["stuff"] = [1,2,3]
-      user.custom_data["mad"]["stuff"].must_equal [1,2,3]
+      user.custom_data["mad"]["stuff"] = [1, 2, 3]
+      user.custom_data["mad"]["stuff"].must_equal [1, 2, 3]
     end
 
     it "takes location data" do
@@ -74,6 +74,34 @@ describe Intercom do
       Intercom.app_id = "abc123"
       Intercom.secret_key = "super-secret-key"
       @mock_rest_client = Intercom.mock_rest_client = mock()
+    end
+
+    it "raises ArgumentError if no app_id or secret_key specified" do
+      Intercom.app_id = nil
+      Intercom.secret_key = nil
+      proc { Intercom.url_for_path("something") }.must_raise ArgumentError, "You must set both Intercom.app_id and Intercom.secret_key to use this client. See https://github.com/intercom/intercom for usage examples."
+    end
+
+    it "defaults to https to api.intercom.io" do
+      Intercom.url_for_path("some/resource/path").must_equal "https://abc123:super-secret-key@api.intercom.io/v1/some/resource/path"
+    end
+
+    describe "overriding protocol/hostname" do
+      before do
+        @protocol = Intercom.protocol
+        @hostname = Intercom.hostname
+      end
+
+      after do
+        Intercom.protocol = @protocol
+        Intercom.hostname = @hostname
+      end
+
+      it "allows overriding of the endpoint and protocol" do
+        Intercom.protocol = "http"
+        Intercom.hostname = "localhost:3000"
+        Intercom.url_for_path("some/resource/path").must_equal "http://abc123:super-secret-key@localhost:3000/v1/some/resource/path"
+      end
     end
 
     describe "/v1/users" do

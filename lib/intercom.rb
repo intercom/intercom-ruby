@@ -3,6 +3,11 @@ require "rest_client"
 require 'json'
 
 module Intercom
+  @hostname = "api.intercom.io"
+  @protocol = "https"
+  @app_id = nil
+  @secret_key = nil
+
   def self.app_id=(app_id)
     @app_id = app_id
   end
@@ -12,15 +17,28 @@ module Intercom
   end
 
   def self.protocol
-    "https"
+    @protocol
+  end
+
+  def self.protocol=(override)
+    @protocol = override
   end
 
   def self.hostname
-    "api.intercom.io"
+    @hostname
+  end
+
+  def self.hostname=(override)
+    @hostname = override
+  end
+
+  def self.url_for_path(path)
+    raise ArgumentError, "You must set both Intercom.app_id and Intercom.secret_key to use this client. See https://github.com/intercom/intercom for usage examples." if [@app_id, @secret_key].any?(&:nil?)
+    "#{protocol}://#{@app_id}:#{@secret_key}@#{hostname}/v1/#{path}"
   end
 
   def self.execute_request(method, path, params = {}, headers = {}, payload = nil)
-    url = "https://#{@app_id}:#{@secret_key}@api.intercom.io/v1/#{path}"
+    url = url_for_path(path)
     args = {
         :method => method,
         :url => url,
@@ -97,7 +115,7 @@ module Intercom
 
   class User < IntercomObject
     time_attributes :created_at, :last_impression_at
-    standard_attributes :email, :user_id, :name, :session_count, :social_accounts, :custom_data, :location_data
+    standard_attributes :email, :user_id, :name, :session_count
 
     def self.find(params)
       response = Intercom.execute_request(:get, "users", params)
