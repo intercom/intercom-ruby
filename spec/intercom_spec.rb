@@ -8,7 +8,7 @@ describe Intercom do
   end
 
   it "has a version number" do
-    Intercom::VERSION.must_equal "0.0.1-alpha"
+    Intercom::VERSION.must_equal "0.0.1"
   end
 
   describe "/v1/users" do
