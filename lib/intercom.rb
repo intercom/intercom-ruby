@@ -3,6 +3,11 @@ require "rest_client"
 require 'json'
 
 module Intercom
+  @hostname = "api.intercom.io"
+  @protocol = "https"
+  @app_id = nil
+  @secret_key = nil
+
   def self.app_id=(app_id)
     @app_id = app_id
   end
@@ -12,7 +17,7 @@ module Intercom
   end
 
   def self.protocol
-    @protocol || "https"
+    @protocol
   end
 
   def self.protocol=(override)
@@ -20,7 +25,7 @@ module Intercom
   end
 
   def self.hostname
-    @hostname || "api.intercom.io"
+    @hostname
   end
 
   def self.hostname=(override)
@@ -110,7 +115,7 @@ module Intercom
 
   class User < IntercomObject
     time_attributes :created_at, :last_impression_at
-    standard_attributes :email, :user_id, :name, :session_count, :social_accounts, :custom_data, :location_data
+    standard_attributes :email, :user_id, :name, :session_count
 
     def self.find(params)
       response = Intercom.execute_request(:get, "users", params)
