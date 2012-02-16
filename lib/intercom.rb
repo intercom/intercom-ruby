@@ -12,15 +12,28 @@ module Intercom
   end
 
   def self.protocol
-    "https"
+    @protocol || "https"
+  end
+
+  def self.protocol=(override)
+    @protocol = override
   end
 
   def self.hostname
-    "api.intercom.io"
+    @hostname || "api.intercom.io"
+  end
+
+  def self.hostname=(override)
+    @hostname = override
+  end
+
+  def self.url_for_path(path)
+    raise ArgumentError, "You must set both Intercom.app_id and Intercom.secret_key to use this client. See https://github.com/intercom/intercom for usage examples." if [@app_id, @secret_key].any?(&:nil?)
+    "#{protocol}://#{@app_id}:#{@secret_key}@#{hostname}/v1/#{path}"
   end
 
   def self.execute_request(method, path, params = {}, headers = {}, payload = nil)
-    url = "https://#{@app_id}:#{@secret_key}@api.intercom.io/v1/#{path}"
+    url = url_for_path(path)
     args = {
         :method => method,
         :url => url,

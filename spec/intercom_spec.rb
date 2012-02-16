@@ -76,6 +76,22 @@ describe Intercom do
       @mock_rest_client = Intercom.mock_rest_client = mock()
     end
 
+    it "raises ArgumentError if no app_id or secret_key specified" do
+      Intercom.app_id = nil
+      Intercom.secret_key = nil
+      proc {Intercom.url_for_path("something")}.must_raise ArgumentError, "You must set both Intercom.app_id and Intercom.secret_key to use this client. See https://github.com/intercom/intercom for usage examples."
+    end
+
+    it "defaults to https to api.intercom.io" do
+      Intercom.url_for_path("some/resource/path").must_equal "https://abc123:super-secret-key@api.intercom.io/v1/some/resource/path"
+    end
+
+    it "allows overriding of the endpoint and protocol" do
+      Intercom.stubs(:protocol).returns("http")
+      Intercom.stubs(:hostname).returns("localhost:3000")
+      Intercom.url_for_path("some/resource/path").must_equal "http://abc123:super-secret-key@localhost:3000/v1/some/resource/path"
+    end
+
     describe "/v1/users" do
       describe "get" do
         it "fetches a user" do
