@@ -1,10 +1,11 @@
 require "bundler/gem_tasks"
 require 'rake/testtask'
 
-Rake::TestTask.new(:test) do |test|
-  test.libs << 'test'
-  test.warning = true
-  test.pattern = 'test/**/test_*.rb'
+Rake::TestTask.new(:spec) do |spec|
+  spec.libs.push "lib"
+  spec.libs.push "spec"
+  spec.test_files = FileList['spec/**/*_spec.rb']
+  spec.warning = true
 end
 
-task :default => :test
+task :default => :spec
