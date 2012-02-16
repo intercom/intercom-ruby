@@ -21,15 +21,19 @@ def test_user
   {
       :user_id => 'mysql-id-from-customers-app for eg', # can request by this
       :email => "bo@example.com", # can request by this
-      :session_count => 123, # can't be sent - but can get...
-      :created_at => 1323422442,
-      :last_request_at => 1323422442,
       :name => "Joe Schmoe",
+      :created_at => 1323422442,
+      :session_count => 123,
+      :last_impression_at => 1323422442,
+
+      :custom_data => {"one" => 1, "a" => {"nested-hash" => ["ab", 12, {"deep" => "very-deep"}]}},
       :social_accounts => {
           "twitter" => [{"url" => "http://twitter.com/abc", "username" => "abc"}, {"username" => "abc2", "url" => "http://twitter.com/abc2"}],
           "facebook" => [{"url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"}],
           "quora" => [{"url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"}]
       },
-      :custom_data => {"a" => 1, "b" => {"nested-hash" => ["ab", 12, {"deep" => "man"}]}}
+      :location_data => {
+          "some" => "thing"
+      }
   }
 end
