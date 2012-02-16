@@ -5,11 +5,11 @@ require "intercom/version"
 Gem::Specification.new do |s|
   s.name        = "intercom"
   s.version     = Intercom::VERSION
-  s.authors     = ["Darragh Curran"]
-  s.email       = ["darragh@peelmeagrape.net"]
-  s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.authors     = ["Ben McRedmond", "Ciaran Lee", "Darragh Curran",]
+  s.email       = ["ben@intercom.io", "ciaran@intercom.io", "darragh@intercom.io"]
+  s.homepage    = "http://intercom.io"
+  s.summary     = %q{Ruby bindings for the Intercom API}
+  s.description = %q{Intercom is a customer relationship management and messaging tool for web app owners. See http://intercom.io for more details.}
 
   s.rubyforge_project = "intercom"
 
