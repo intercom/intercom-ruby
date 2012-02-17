@@ -34,7 +34,7 @@ module Intercom
 
   def self.url_for_path(path)
     raise ArgumentError, "You must set both Intercom.app_id and Intercom.secret_key to use this client. See https://github.com/intercom/intercom for usage examples." if [@app_id, @secret_key].any?(&:nil?)
-    "#{protocol}://#{@app_id}:#{@secret_key}@#{hostname}/v1/#{path}"
+    "#{protocol}://#{@app_id}:#{@secret_key}@#{hostname}/api/v1/#{path}"
   end
 
   def self.execute_request(method, path, params = {}, headers = {}, payload = nil)
@@ -42,12 +42,13 @@ module Intercom
     args = {
         :method => method,
         :url => url,
-        :headers => {:params => params}.merge(headers),
+        :headers => {:params => params}.merge(headers).merge(:accept => :json),
         :open_timeout => 10,
         :payload => payload,
         :timeout => 30
     }
-    RestClient::Request.execute(args)
+    response = RestClient::Request.execute(args)
+    JSON.parse(response.body)
   end
 
   class IntercomObject

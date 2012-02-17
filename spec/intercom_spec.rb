@@ -83,7 +83,7 @@ describe Intercom do
     end
 
     it "defaults to https to api.intercom.io" do
-      Intercom.url_for_path("some/resource/path").must_equal "https://abc123:super-secret-key@api.intercom.io/v1/some/resource/path"
+      Intercom.url_for_path("some/resource/path").must_equal "https://abc123:super-secret-key@api.intercom.io/api/v1/some/resource/path"
     end
 
     describe "overriding protocol/hostname" do
@@ -100,11 +100,11 @@ describe Intercom do
       it "allows overriding of the endpoint and protocol" do
         Intercom.protocol = "http"
         Intercom.hostname = "localhost:3000"
-        Intercom.url_for_path("some/resource/path").must_equal "http://abc123:super-secret-key@localhost:3000/v1/some/resource/path"
+        Intercom.url_for_path("some/resource/path").must_equal "http://abc123:super-secret-key@localhost:3000/api/v1/some/resource/path"
       end
     end
 
-    describe "/v1/users" do
+    describe "/api/v1/users" do
       describe "get" do
         it "fetches a user" do
           @mock_rest_client.expects(:get).with("users", {"email" => "bo@example.com"}).returns(test_user)
@@ -118,12 +118,12 @@ describe Intercom do
       describe "post" do
         it "saves a user" do
           user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242")
-          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json)
+          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json, :accept => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json)
           user.save
         end
 
         it "can use User.create for convenience" do
-          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json)
+          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json, :accept => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json)
           user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
           user.email.must_equal "jo@example.com"
         end
