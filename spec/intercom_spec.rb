@@ -123,9 +123,15 @@ describe Intercom do
         end
 
         it "can use User.create for convenience" do
-          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json, :accept => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json)
+          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json, :accept => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
           user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
           user.email.must_equal "jo@example.com"
+        end
+
+        it "updates the @user with attributes as set by the server" do
+          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json, :accept => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "session_count" => 4})
+          user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
+          user.session_count.must_equal 4
         end
       end
     end

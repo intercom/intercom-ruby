@@ -53,8 +53,12 @@ module Intercom
 
   class IntercomObject
     def initialize(attributes={})
+      self.attributes = attributes
+    end
+
+    def attributes=(attributes={})
       @attributes = {}
-      attributes.each do |key, value|
+      (attributes || {}).each do |key, value|
         self.send("#{key.to_s}=", value)
       end
     end
@@ -128,7 +132,8 @@ module Intercom
     end
 
     def save
-      Intercom.execute_request(:post, "users", {}, {:content_type => :json}, to_hash.to_json)
+      response = Intercom.execute_request(:post, "users", {}, {:content_type => :json, :accept => :json}, to_hash.to_json)
+      self.attributes=(response)
       self
     end
 
