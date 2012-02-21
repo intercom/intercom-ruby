@@ -37,6 +37,18 @@ module Intercom
     "#{protocol}://#{@app_id}:#{@secret_key}@#{hostname}/api/v1/#{path}"
   end
 
+  def self.post(path, payload_hash)
+    execute_request(:post, path, {}, {:content_type => :json, :accept => :json}, payload_hash.to_json)
+  end
+
+  def self.put(path, payload_hash)
+    execute_request(:put, path, {}, {:content_type => :json, :accept => :json}, payload_hash.to_json)
+  end
+
+  def self.get(path, params)
+    execute_request(:get, path, params)
+  end
+
   def self.execute_request(method, path, params = {}, headers = {}, payload = nil)
     url = url_for_path(path)
     args = {
@@ -123,7 +135,7 @@ module Intercom
     standard_attributes :email, :user_id, :name, :session_count
 
     def self.find(params)
-      response = Intercom.execute_request(:get, "users", params)
+      response = Intercom.get("users", params)
       User.new(response)
     end
 
@@ -132,21 +144,19 @@ module Intercom
     end
 
     def save
-      response = Intercom.execute_request(:post, "users", {}, {:content_type => :json, :accept => :json}, to_hash.to_json)
+      response = Intercom.post("users", to_hash)
       self.attributes=(response)
       self
     end
 
     def social_accounts=(social_accounts)
-      social_accounts ||= {}
-      @attributes["social_accounts"] = social_accounts.inject(auto_array_hash) do |new_hash, (service, accounts)|
-        new_hash[service] = accounts.map { |account_hash| SocialAccount.new(account_hash) }
-        new_hash
+      @attributes["social_accounts"] = social_accounts.map do |account|
+        SocialAccount.new(account)
       end
     end
 
     def social_accounts
-      @attributes["social_accounts"] ||= auto_array_hash()
+      @attributes["social_accounts"] ||= []
     end
 
     def custom_data
@@ -161,6 +171,22 @@ module Intercom
   class SocialAccount < IntercomObject
     def for_wire
       @attributes
+    end
+  end
+
+  class Message < IntercomObject
+    def self.find(params)
+      Message.new(Intercom.get("messages", params))
+    end
+    def self.find_all(params)
+      response = Intercom.get("messages", params)
+      response.map{|message| Message.new(message)}
+    end
+    def self.create(params)
+      Message.new(Intercom.post("messages", params))
+    end
+    def self.mark_as_read(params)
+      Message.new(Intercom.put("messages", {"read" => true}.merge(params)))
     end
   end
 end

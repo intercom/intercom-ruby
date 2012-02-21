@@ -30,16 +30,16 @@ describe Intercom do
       user.created_at.must_be_nil
       user.last_impression_at.must_be_nil
       user.email.must_be_nil
-      user.social_accounts.must_equal({})
-      user.social_accounts["twitter"].must_equal []
+      user.social_accounts.must_equal([])
     end
 
     it "presents a complete user record correctly" do
       user = Intercom::User.new(test_user)
       user.session_count.must_equal 123
-      user.social_accounts["twitter"].size.must_equal 2
-      twitter_account = user.social_accounts["twitter"].first
+      user.social_accounts.size.must_equal 4
+      twitter_account = user.social_accounts.first
       twitter_account.must_be_kind_of Intercom::SocialAccount
+      twitter_account.type.must_equal "twitter"
       twitter_account.username.must_equal "abc"
       twitter_account.url.must_equal "http://twitter.com/abc"
       user.custom_data["a"]["nested-hash"][2]["deep"].must_equal "very-deep"
@@ -47,11 +47,11 @@ describe Intercom do
 
     it "has social accounts" do
       user = Intercom::User.new()
-      twitter_account = Intercom::SocialAccount.new(:url => "http://twitter.com/abc", "username" => "abc")
-      user.social_accounts["twitter"] << twitter_account
-      user.social_accounts["twitter"].size.must_equal 1
-      user.social_accounts["twitter"].first.must_equal twitter_account
-      user.to_hash["social_accounts"]["twitter"].must_equal([{"username" => "abc", "url" => "http://twitter.com/abc"}])
+      twitter_account = Intercom::SocialAccount.new(:url => "http://twitter.com/abc", "username" => "abc", "type" => "twitter")
+      user.social_accounts << twitter_account
+      user.social_accounts.size.must_equal 1
+      user.social_accounts.first.must_equal twitter_account
+      user.to_hash["social_accounts"].must_equal([{"username" => "abc", "url" => "http://twitter.com/abc", "type" => "twitter"}])
     end
 
     it "allows easy setting of custom data" do
@@ -73,7 +73,6 @@ describe Intercom do
     before do
       Intercom.app_id = "abc123"
       Intercom.secret_key = "super-secret-key"
-      @mock_rest_client = Intercom.mock_rest_client = mock()
     end
 
     it "raises ArgumentError if no app_id or secret_key specified" do
@@ -107,7 +106,7 @@ describe Intercom do
     describe "/api/v1/users" do
       describe "get" do
         it "fetches a user" do
-          @mock_rest_client.expects(:get).with("users", {"email" => "bo@example.com"}).returns(test_user)
+          Intercom.expects(:get).with("users", {"email" => "bo@example.com"}).returns(test_user)
           user = Intercom::User.find("email" => "bo@example.com")
           user.email.must_equal "bo@example.com"
           user.name.must_equal "Joe Schmoe"
@@ -118,21 +117,55 @@ describe Intercom do
       describe "post" do
         it "saves a user" do
           user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242")
-          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json, :accept => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json)
+          Intercom.expects(:post).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"})
           user.save
         end
 
         it "can use User.create for convenience" do
-          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json, :accept => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+          Intercom.expects(:post).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
           user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
           user.email.must_equal "jo@example.com"
         end
 
         it "updates the @user with attributes as set by the server" do
-          @mock_rest_client.expects(:post).with("users", {}, {:content_type => :json, :accept => :json}, {"email" => "jo@example.com", "user_id" => "i-1224242"}.to_json).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "session_count" => 4})
+          Intercom.expects(:post).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "session_count" => 4})
           user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
           user.session_count.must_equal 4
         end
+      end
+    end
+
+    describe "/api/v1/messages" do
+      it "loads messages for a user" do
+        Intercom.expects(:get).with("messages", {"email" => "bo@example.com"}).returns(test_messages)
+        messages = Intercom::Message.find_all("email" => "bo@example.com")
+        messages.size.must_equal 2
+        messages.first.conversation.size.must_equal 3
+        messages.first.conversation[0]["rendered_body"].must_equal "<p>Hey Intercom, What is up?</p>\n"
+      end
+
+      it "loads message for a thread id" do
+        Intercom.expects(:get).with("messages", {"email" => "bo@example.com", "thread_id" => 123}).returns(test_message)
+        message = Intercom::Message.find("email" => "bo@example.com", "thread_id" => 123)
+        message.conversation.size.must_equal 3
+      end
+
+      it "creates a new message" do
+        Intercom.expects(:post).with("messages", {"email" => "jo@example.com", "body" => "Hello World"}).returns(test_message)
+        message = Intercom::Message.create("email" => "jo@example.com", "body" => "Hello World")
+        message.conversation.size.must_equal 3
+      end
+
+      it "creates a comment on existing thread" do
+        Intercom.expects(:post).with("messages", {"email" => "jo@example.com", "body" => "Hello World", "thread_id" => 123}).returns(test_message)
+        message = Intercom::Message.create("email" => "jo@example.com", "body" => "Hello World", "thread_id" => 123)
+        message.conversation.size.must_equal 3
+      end
+
+      it "marks a thread as read... " do
+        Intercom.expects(:put).with("messages", {"read" => true, "email" => "jo@example.com", "thread_id" => 123}).returns(test_message)
+        message = Intercom::Message.mark_as_read("email" => "jo@example.com", "thread_id" => 123)
+        message.conversation.size.must_equal 3
       end
     end
   end
