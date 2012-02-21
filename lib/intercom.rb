@@ -189,4 +189,9 @@ module Intercom
       Message.new(Intercom.put("messages", {"read" => true}.merge(params)))
     end
   end
+  class Impression < IntercomObject
+    def self.create(params)
+      Impression.new(Intercom.post("impressions", params))
+    end
+  end
 end
