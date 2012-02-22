@@ -4,3 +4,4 @@
 Gemfile.lock
 pkg/*
 .rakeTasks
+spike.rb

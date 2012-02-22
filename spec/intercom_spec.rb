@@ -81,6 +81,17 @@ describe Intercom do
       proc { Intercom.url_for_path("something") }.must_raise ArgumentError, "You must set both Intercom.app_id and Intercom.secret_key to use this client. See https://github.com/intercom/intercom for usage examples."
     end
 
+    it "checks for email or user id" do
+      proc {Intercom.require_email_or_user_id("else")}.must_raise ArgumentError, "Expected params Hash, got String"
+      proc {Intercom.require_email_or_user_id(:something => "else")}.must_raise ArgumentError, "Either email or user_id must be specified"
+      proc {Intercom.get("users", :something => "else")}.must_raise ArgumentError, "Either email or user_id must be specified"
+      proc {Intercom.put("users", :something => "else")}.must_raise ArgumentError, "Either email or user_id must be specified"
+      proc {Intercom.post("users", :something => "else")}.must_raise ArgumentError, "Either email or user_id must be specified"
+      Intercom.require_email_or_user_id(:email => "bob@example.com", :something => "else")
+      Intercom.require_email_or_user_id("email" => "bob@example.com", :something => "else")
+      Intercom.require_email_or_user_id(:user_id => "123")
+    end
+
     it "defaults to https to api.intercom.io" do
       Intercom.url_for_path("some/resource/path").must_equal "https://abc123:super-secret-key@api.intercom.io/api/v1/some/resource/path"
     end

@@ -37,12 +37,17 @@ module Intercom
     "#{protocol}://#{@app_id}:#{@secret_key}@#{hostname}/api/v1/#{path}"
   end
 
+  def self.require_email_or_user_id(params)
+    raise ArgumentError.new("Expected params Hash, got #{params.class}") unless params.is_a?(Hash)
+    raise ArgumentError.new("Either email or user_id must be specified") unless params.keys.any? { |key| ["email", "user_id"].include?(key.to_s) }
+  end
+
   def self.post(path, payload_hash)
-    execute_request(:post, path, {}, {:content_type => :json, :accept => :json}, payload_hash.to_json)
+    execute_request(:post, path, {}, {:content_type => :json, :accept => :json}, payload_hash)
   end
 
   def self.put(path, payload_hash)
-    execute_request(:put, path, {}, {:content_type => :json, :accept => :json}, payload_hash.to_json)
+    execute_request(:put, path, {}, {:content_type => :json, :accept => :json}, payload_hash)
   end
 
   def self.get(path, params)
@@ -50,13 +55,14 @@ module Intercom
   end
 
   def self.execute_request(method, path, params = {}, headers = {}, payload = nil)
+    method.eql?(:get) ? require_email_or_user_id(params) : require_email_or_user_id(payload)
     url = url_for_path(path)
     args = {
         :method => method,
         :url => url,
         :headers => {:params => params}.merge(headers).merge(:accept => :json),
         :open_timeout => 10,
-        :payload => payload,
+        :payload => payload.nil? ? nil : payload.to_json,
         :timeout => 30
     }
     response = RestClient::Request.execute(args)
@@ -96,10 +102,6 @@ module Intercom
         return @attributes[method_name] if @attributes.has_key?(method_name)
       end
       super
-    end
-
-    def auto_array_hash
-      Hash.new { |hash, key| hash[key] = [] }
     end
 
     def autovivifying_hash
@@ -150,9 +152,7 @@ module Intercom
     end
 
     def social_accounts=(social_accounts)
-      @attributes["social_accounts"] = social_accounts.map do |account|
-        SocialAccount.new(account)
-      end
+      @attributes["social_accounts"] = social_accounts.map { |account| SocialAccount.new(account) }
     end
 
     def social_accounts
@@ -178,13 +178,16 @@ module Intercom
     def self.find(params)
       Message.new(Intercom.get("messages", params))
     end
+
     def self.find_all(params)
       response = Intercom.get("messages", params)
-      response.map{|message| Message.new(message)}
+      response.map { |message| Message.new(message) }
     end
+
     def self.create(params)
       Message.new(Intercom.post("messages", params))
     end
+
     def self.mark_as_read(params)
       Message.new(Intercom.put("messages", {"read" => true}.merge(params)))
     end

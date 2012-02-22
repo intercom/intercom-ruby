@@ -1,8 +1,6 @@
 require 'intercom'
 require 'minitest/autorun'
 require 'mocha'
-require 'pry'
-IRB = Pry
 
 def test_user
   {
