@@ -63,7 +63,9 @@ module Intercom
         :headers => {:params => params}.merge(headers).merge(:accept => :json),
         :open_timeout => 10,
         :payload => payload.nil? ? nil : payload.to_json,
-        :timeout => 30
+        :timeout => 30,
+        :verify_ssl => OpenSSL::SSL::VERIFY_PEER,
+        :ssl_ca_file => File.join(File.dirname(__FILE__), 'data/cacert.pem')
     }
     response = RestClient::Request.execute(args)
     JSON.parse(response.body)
@@ -192,6 +194,7 @@ module Intercom
       Message.new(Intercom.put("messages", {"read" => true}.merge(params)))
     end
   end
+
   class Impression < IntercomObject
     def self.create(params)
       Impression.new(Intercom.post("impressions", params))
