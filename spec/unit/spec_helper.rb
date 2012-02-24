@@ -4,13 +4,13 @@ require 'mocha'
 
 def test_user
   {
-      :user_id => 'mysql-id-from-customers-app for eg', # can request by this
-      :email => "bo@example.com", # can request by this
+      :user_id => 'id-from-customers-app',
+      :email => "bo@example.com",
       :name => "Joe Schmoe",
       :created_at => 1323422442,
       :session_count => 123,
       :last_impression_at => 1323422442,
-      :custom_data => {"one" => 1, "a" => {"nested-hash" => ["ab", 12, {"deep" => "very-deep"}]}},
+      :custom_data => {"a" => "b", "b" => 2},
       :social_profiles => [
           {"type" => "twitter", "url" => "http://twitter.com/abc", "username" => "abc"},
           {"type" => "twitter", "username" => "abc2", "url" => "http://twitter.com/abc2"},
@@ -18,15 +18,13 @@ def test_user
           {"type" => "quora", "url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"}
       ],
       :location_data => {
-          "some" => "thing"
+          "country_code" => "IRL"
       }
   }
 end
 
 def test_messages
-  [
-      test_message, test_message
-  ]
+  [test_message, test_message]
 end
 
 def test_message
