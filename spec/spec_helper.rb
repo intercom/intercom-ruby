@@ -11,7 +11,7 @@ def test_user
       :session_count => 123,
       :last_impression_at => 1323422442,
       :custom_data => {"one" => 1, "a" => {"nested-hash" => ["ab", 12, {"deep" => "very-deep"}]}},
-      :social_accounts => [
+      :social_profiles => [
           {"type" => "twitter", "url" => "http://twitter.com/abc", "username" => "abc"},
           {"type" => "twitter", "username" => "abc2", "url" => "http://twitter.com/abc2"},
           {"type" => "facebook", "url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"},
@@ -68,4 +68,12 @@ def test_message
           }
       ]
   }
+end
+
+def capture_exception(&block)
+  begin
+    block.call
+  rescue => e
+    return e
+  end
 end

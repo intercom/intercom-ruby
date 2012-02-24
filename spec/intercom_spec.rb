@@ -2,7 +2,35 @@ require "spec_helper"
 
 describe Intercom do
   it "has a version number" do
-    Intercom::VERSION.must_equal "0.0.1"
+    Intercom::VERSION.must_equal "0.0.2"
+  end
+
+  describe "Intercom::IntercomObject" do
+    describe "requires_params" do
+      it "raises if they are missing" do
+        params = {"a" => 1, "b" => 2}
+        Intercom::IntercomObject.requires_parameters(params, %W(a b))
+        expected_message = "Missing required parameters (c)."
+        proc { Intercom::IntercomObject.requires_parameters(params, %W(a b c)) }.must_raise ArgumentError, expected_message
+        capture_exception { Intercom::IntercomObject.requires_parameters(params, %W(a b c)) }.message.must_equal expected_message
+      end
+    end
+
+    describe "allows_params" do
+      it "raises if there are extra ones" do
+        params = {"a" => 1, "b" => 2}
+        Intercom::IntercomObject.allows_parameters(params, %W(a b))
+        expected_message = "Unexpected parameters (b). Only allowed parameters for this operation are (email, user_id, a)."
+        proc { Intercom::IntercomObject.allows_parameters(params, %W(a)) }.must_raise ArgumentError, expected_message
+        capture_exception { Intercom::IntercomObject.allows_parameters(params, %W(a)) }.message.must_equal expected_message
+      end
+
+      it "it ignores email and user_id since they are always allowed" do
+        params = {"a" => 1, "b" => 2, "email" => "ddd@ddd.ddd", "user_id" => "123abc"}
+        Intercom::IntercomObject.allows_parameters(params, %W(a b))
+        Intercom::IntercomObject.allows_parameters(params, %W(a b email user_id))
+      end
+    end
   end
 
   describe "Intercom::User" do
@@ -30,42 +58,61 @@ describe Intercom do
       user.created_at.must_be_nil
       user.last_impression_at.must_be_nil
       user.email.must_be_nil
-      user.social_accounts.must_equal([])
+      user.social_profiles.must_equal([])
     end
 
     it "presents a complete user record correctly" do
       user = Intercom::User.new(test_user)
       user.session_count.must_equal 123
-      user.social_accounts.size.must_equal 4
-      twitter_account = user.social_accounts.first
-      twitter_account.must_be_kind_of Intercom::SocialAccount
+      user.social_profiles.size.must_equal 4
+      twitter_account = user.social_profiles.first
+      twitter_account.must_be_kind_of Intercom::SocialProfile
       twitter_account.type.must_equal "twitter"
       twitter_account.username.must_equal "abc"
       twitter_account.url.must_equal "http://twitter.com/abc"
       user.custom_data["a"]["nested-hash"][2]["deep"].must_equal "very-deep"
     end
 
-    it "has social accounts" do
-      user = Intercom::User.new()
-      twitter_account = Intercom::SocialAccount.new(:url => "http://twitter.com/abc", "username" => "abc", "type" => "twitter")
-      user.social_accounts << twitter_account
-      user.social_accounts.size.must_equal 1
-      user.social_accounts.first.must_equal twitter_account
-      user.to_hash["social_accounts"].must_equal([{"username" => "abc", "url" => "http://twitter.com/abc", "type" => "twitter"}])
+    it "has read-only social accounts" do
+      user = Intercom::User.new(:social_profiles => [:url => "http://twitter.com/abc", "username" => "abc", "type" => "twitter"])
+      user.social_profiles.size.must_equal 1
+      twitter = user.social_profiles.first
+      twitter.type.must_equal "twitter"
+      twitter.url.must_equal "http://twitter.com/abc"
+      twitter.username.must_equal "abc"
+      user.to_hash["social_profiles"].must_equal nil
+      proc { user.social_profiles << "a" }.must_raise RuntimeError, "can't modify frozen array"
+      proc { Intercom::User.new.social_profiles << "a" }.must_raise RuntimeError, "can't modify frozen array"
+    end
+
+    it "fucking works" do
+      assert_raises(RuntimeError, "adadax") do
+        raise RuntimeError.new("adada")
+      end
+      proc { raise RuntimeError.new("adada") }.must_raise RuntimeError, "adadax"
+    end
+
+    it "has read-only location data" do
+      Intercom::User.new.location_data.must_equal({})
+      user = Intercom::User.new(:location_data => {"city" => "Dublin"})
+      user.location_data.must_equal({"city" => "Dublin"})
+      proc { user.location_data["change"] = "123" }.must_raise RuntimeError, "can't modify frozen hash"
+      user.to_hash["location_data"].must_equal nil
     end
 
     it "allows easy setting of custom data" do
+      now = Time.now
       user = Intercom::User.new()
-      user.custom_data["mad"]["stuff"] = [1, 2, 3]
-      user.custom_data["mad"]["stuff"].must_equal [1, 2, 3]
+      user.custom_data["mad"] = 123
+      user.custom_data["other"] = now
+      user.custom_data["thing"] = "yay"
+      user.to_hash["custom_data"].must_equal "mad" => 123, "other" => now, "thing" => "yay"
     end
 
-    it "takes location data" do
-      user = Intercom::User.new
-      user.location_data.must_equal({})
-      user = Intercom::User.new
-      user.location_data["some"] = "thing"
-      user.location_data.must_equal({"some" => "thing"})
+    it "rejects nested data structures in custom_data" do
+      user = Intercom::User.new()
+      proc { user.custom_data["thing"] = [1] }.must_raise ArgumentError
+      proc { user.custom_data["thing"] = {1 => 2} }.must_raise ArgumentError
     end
   end
 
@@ -82,11 +129,11 @@ describe Intercom do
     end
 
     it "checks for email or user id" do
-      proc {Intercom.require_email_or_user_id("else")}.must_raise ArgumentError, "Expected params Hash, got String"
-      proc {Intercom.require_email_or_user_id(:something => "else")}.must_raise ArgumentError, "Either email or user_id must be specified"
-      proc {Intercom.get("users", :something => "else")}.must_raise ArgumentError, "Either email or user_id must be specified"
-      proc {Intercom.put("users", :something => "else")}.must_raise ArgumentError, "Either email or user_id must be specified"
-      proc {Intercom.post("users", :something => "else")}.must_raise ArgumentError, "Either email or user_id must be specified"
+      proc { Intercom.require_email_or_user_id("else") }.must_raise ArgumentError, "Expected params Hash, got String"
+      proc { Intercom.require_email_or_user_id(:something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
+      proc { Intercom.get("users", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
+      proc { Intercom.put("users", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
+      proc { Intercom.post("users", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
       Intercom.require_email_or_user_id(:email => "bob@example.com", :something => "else")
       Intercom.require_email_or_user_id("email" => "bob@example.com", :something => "else")
       Intercom.require_email_or_user_id(:user_id => "123")
@@ -187,8 +234,5 @@ describe Intercom do
         impression.unread_messages.must_equal 10
       end
     end
-  end
-
-  describe "correct use of ssl" do
   end
 end

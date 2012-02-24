@@ -1,3 +1,3 @@
-module Intercom
-  VERSION = "0.0.1"
+module Intercom #:nodoc:
+  VERSION = "0.0.2"
 end
