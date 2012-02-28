@@ -11,7 +11,7 @@ module Intercom
     ##
     # Fetches an Intercom::User from our API.
     #
-    # Calls GET https://api.intercom.io/api/v1/users
+    # Calls GET https://api.intercom.io/v1/users
     #
     # returns Intercom::User object representing the state on our servers.
     #
@@ -24,7 +24,7 @@ module Intercom
     ##
     # Creates (or updates when a user already exists for that email/user_id) a user record on your application.
     #
-    # Calls POST https://api.intercom.io/api/v1/users
+    # Calls POST https://api.intercom.io/v1/users
     #
     # returns Intercom::User object representing the state on our servers.
     #

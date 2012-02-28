@@ -26,7 +26,7 @@ module Intercom
 
   ##
   # Set the id of the application you want to interact with.
-  # When logged into your intercom console, the app_id is in the url after /apps (eg http://intercom.io/apps/<app-id>)
+  # When logged into your intercom console, the app_id is in the url after /apps (eg https://www.intercom.io/apps/<app-id>)
   def self.app_id=(app_id)
     @app_id = app_id
   end
@@ -42,7 +42,7 @@ module Intercom
   private
   def self.url_for_path(path)
     raise ArgumentError, "You must set both Intercom.app_id and Intercom.secret_key to use this client. See https://github.com/intercom/intercom for usage examples." if [@app_id, @secret_key].any?(&:nil?)
-    "#{protocol}://#{@app_id}:#{@secret_key}@#{hostname}/api/v1/#{path}"
+    "#{protocol}://#{@app_id}:#{@secret_key}@#{hostname}/v1/#{path}"
   end
 
   def self.post(path, payload_hash)

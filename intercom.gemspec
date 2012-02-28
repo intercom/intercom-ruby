@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = Intercom::VERSION
   s.authors     = ["Ben McRedmond", "Ciaran Lee", "Darragh Curran",]
   s.email       = ["ben@intercom.io", "ciaran@intercom.io", "darragh@intercom.io"]
-  s.homepage    = "http://intercom.io"
+  s.homepage    = "http://www.intercom.io"
   s.summary     = %q{Ruby bindings for the Intercom API}
-  s.description = %q{Intercom is a customer relationship management and messaging tool for web app owners. See http://intercom.io for more details.}
+  s.description = %q{Intercom is a customer relationship management and messaging tool for web app owners. See https://www.intercom.io for more details.}
 
   s.rubyforge_project = "intercom"
 

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "/api/v1/messages" do
+describe "/v1/messages" do
   it "loads messages for a user" do
     Intercom.expects(:get).with("messages", {"email" => "bo@example.com"}).returns(test_messages)
     messages = Intercom::Message.find_all("email" => "bo@example.com")
