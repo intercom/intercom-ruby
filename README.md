@@ -1,10 +1,6 @@
-# Experimental so far, api.intercom.io isn't public yet.
+Ruby bindings for the Intercom API (https://api.intercom.io). See http://docs.intercom.io/api for more details
 
-Ruby bindings for the Intercom API (https://api.intercom.io).
-
-TODO: link to more complete api docs with examples in each language.
-
-## Usage
+## Basic Usage
 
 ### Configure your access credentials
 
@@ -20,7 +16,7 @@ One of these is required as input to every operation.
 
 #### Users
 
-user = Intercom::User.find(params)
+user = Intercom::User.find(:email => "bob@example.com")
 user = Intercom::User.create(params)
 user = Intercom::User.new(params)
 user.save
