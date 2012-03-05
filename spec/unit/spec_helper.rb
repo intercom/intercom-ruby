@@ -8,9 +8,12 @@ def test_user
       :email => "bo@example.com",
       :name => "Joe Schmoe",
       :created_at => 1323422442,
+      :last_seen_ip  => "1.2.3.4",
+      :last_seen_user_agent  => "Mozilla blah blah ie6",
+      :custom_data => {"a" => "b", "b" => 2},
+      :relationship_score  => 90,
       :session_count => 123,
       :last_impression_at => 1323422442,
-      :custom_data => {"a" => "b", "b" => 2},
       :social_profiles => [
           {"type" => "twitter", "url" => "http://twitter.com/abc", "username" => "abc"},
           {"type" => "twitter", "username" => "abc2", "url" => "http://twitter.com/abc2"},
@@ -34,35 +37,35 @@ def test_message
       "read" => true,
       "created_by_user" => true,
       "thread_id" => 5591,
-      "conversation" => [
+      "messages" => [
           {
               "created_at" => 1329837506,
-              "rendered_body" => "<p>Hey Intercom, What is up?</p>\n",
+              "html" => "<p>Hey Intercom, What is up?</p>\n",
               "from" => {
                   "email" => "bob@example.com",
                   "name" => "Bob",
-                  "user_id" => "123"
-              },
-              "is_admin" => false
+                  "user_id" => "123",
+                  "is_admin" => false
+              }
           },
           {
               "created_at" => 1329664706,
               "rendered_body" => "<p>Not much, you?</p>\n",
               "from" => {
                   "name" => "Super Duper Admin",
-                  "avatar_path_50" => "https//s3.amazonaws.com/intercom-prod/app/public/system/avatars/1454/medium/intercom-ben-avatar.jpg?1326725052"
-              },
-              "is_admin" => true
+                  "avatar_path_50" => "https//s3.amazonaws.com/intercom-prod/app/public/system/avatars/1454/medium/intercom-ben-avatar.jpg?1326725052",
+                  "is_admin" => true
+              }
           },
           {
-              "created_at" => 1329664706,
+              "created_at" => 1329664806,
               "rendered_body" => "<p>Not much either :(</p>\n",
               "from" => {
                   "email" => "bob@example.com",
                   "name" => "Bob",
-                  "user_id" => "123"
-              },
-              "is_admin" => false
+                  "user_id" => "123",
+                  "is_admin" => false
+              }
           }
       ]
   }

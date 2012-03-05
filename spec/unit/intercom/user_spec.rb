@@ -13,7 +13,7 @@ describe "Intercom::User" do
 
   it "presents created_at and last_impression_at as Date" do
     now = Time.now
-    user = Intercom::User.new(:created_at => now, :last_impression_at => now)
+    user = Intercom::User.from_api(:created_at => now, :last_impression_at => now)
     user.created_at.must_be_kind_of Time
     user.created_at.to_s.must_equal now.to_s
     user.last_impression_at.must_be_kind_of Time
@@ -29,7 +29,7 @@ describe "Intercom::User" do
   end
 
   it "presents a complete user record correctly" do
-    user = Intercom::User.new(test_user)
+    user = Intercom::User.from_api(test_user)
     user.session_count.must_equal 123
     user.social_profiles.size.must_equal 4
     twitter_account = user.social_profiles.first
@@ -39,6 +39,9 @@ describe "Intercom::User" do
     twitter_account.url.must_equal "http://twitter.com/abc"
     user.custom_data["a"].must_equal "b"
     user.custom_data["b"].must_equal 2
+    user.relationship_score.must_equal 90
+    user.last_seen_ip.must_equal "1.2.3.4"
+    user.last_seen_user_agent.must_equal "Mozilla blah blah ie6"
   end
 
   it "has read-only social accounts" do
@@ -74,6 +77,9 @@ describe "Intercom::User" do
     user = Intercom::User.new()
     proc { user.custom_data["thing"] = [1] }.must_raise ArgumentError
     proc { user.custom_data["thing"] = {1 => 2} }.must_raise ArgumentError
+
+    user = Intercom::User.from_api(test_user)
+    proc { user.custom_data["thing"] = [1] }.must_raise ArgumentError
   end
 
   it "fetches a user" do
@@ -86,7 +92,7 @@ describe "Intercom::User" do
 
   it "saves a user" do
     user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242")
-    Intercom.expects(:post).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"})
+    Intercom.expects(:post).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
     user.save
   end
 
@@ -100,5 +106,28 @@ describe "Intercom::User" do
     Intercom.expects(:post).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "session_count" => 4})
     user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
     user.session_count.must_equal 4
+  end
+
+  it "raises argument error when trying to set a read only attribute" do
+    read_only_attributes = %w(relationship_score last_impression_at session_count)
+    read_only_attributes.each do |read_only|
+      proc { Intercom::User.create("email" => "jo@example.com", read_only => "some value") }.must_raise NoMethodError
+      user = Intercom::User.new
+      user.public_methods.include?("#{read_only}=").must_equal false
+    end
+  end
+
+  it "sets/gets rw keys" do
+    params = {"email" => "me@example.com", :user_id => "abc123", "name" => "Bob Smith", "last_seen_ip" => "1.2.3.4", "last_seen_user_agent" => "ie6", "created_at" => Time.now}
+    user = Intercom::User.new(params)
+    user.to_hash.keys.sort.must_equal params.keys.map(&:to_s).sort
+    params.keys.each do | key|
+      user.send(key).to_s.must_equal params[key].to_s
+    end
+  end
+
+  it "will allow extra attributes in response from api" do
+    user = Intercom::User.send(:from_api, {"new_param" => "some value"})
+    user.new_param.must_equal "some value"
   end
 end

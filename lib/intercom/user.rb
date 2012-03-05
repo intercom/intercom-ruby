@@ -1,13 +1,11 @@
-require 'intercom/intercom_object'
+require 'intercom/user_resource'
 require 'intercom/shallow_hash'
 require 'intercom/social_profile'
 
 module Intercom
   ##
   # Represents a user of your application on Intercom.
-  class User < IntercomObject
-    standard_attributes :email, :user_id, :name, :session_count
-
+  class User < UserResource
     ##
     # Fetches an Intercom::User from our API.
     #
@@ -16,9 +14,8 @@ module Intercom
     # returns Intercom::User object representing the state on our servers.
     #
     def self.find(params)
-      allows_parameters(params, [])
       response = Intercom.get("users", params)
-      User.new(response)
+      User.from_api(response)
     end
 
     ##
@@ -30,7 +27,6 @@ module Intercom
     #
     # This operation is idempotent.
     def self.create(params)
-      allows_parameters(params, %W(name custom_data created_at))
       User.new(params).save
     end
 
@@ -38,8 +34,39 @@ module Intercom
     # instance method alternative to #create
     def save
       response = Intercom.post("users", to_hash)
-      self.attributes=(response)
-      self
+      self.update_from_api_response(response)
+    end
+
+    def name
+      @attributes["name"]
+    end
+
+    def name=(name)
+      @attributes["name"]=name
+    end
+
+    def last_seen_ip
+      @attributes["last_seen_ip"]
+    end
+
+    def last_seen_ip=(last_seen_ip)
+      @attributes["last_seen_ip"]=last_seen_ip
+    end
+
+    def last_seen_user_agent
+      @attributes["last_seen_user_agent"]
+    end
+
+    def last_seen_user_agent=(last_seen_user_agent)
+      @attributes["last_seen_user_agent"]=last_seen_user_agent
+    end
+
+    def relationship_score
+      @attributes["relationship_score"]
+    end
+
+    def session_count
+      @attributes["session_count"]
     end
 
     ##
@@ -90,13 +117,17 @@ module Intercom
       @attributes["custom_data"] ||= ShallowHash.new
     end
 
-    private
-    def social_profiles=(social_profiles)
+    protected
+    def social_profiles=(social_profiles) #:nodoc:
       @social_profiles = social_profiles.map { |account| SocialProfile.new(account) }.freeze
     end
 
-    def location_data=(hash)
+    def location_data=(hash) #:nodoc:
       @location_data = hash.freeze
+    end
+
+    def custom_data=(custom_data) #:nodoc:
+      @attributes["custom_data"] = ShallowHash.new.merge(custom_data)
     end
   end
 end
