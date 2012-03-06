@@ -2,6 +2,20 @@ require 'intercom/user_resource'
 
 module Intercom
   # A conversation with a user. Either started by the users sending a message to your application using Intercom, or by an Admin sending a message to the user.
+  # == Examples
+  #
+  # Fetching all {MessageThread}'s for a user
+  #    message_threads = Intercom::MessageThread.find_all(:email => "bob@example.com")
+  #    message_threads.size
+  #    message_thread = message_threads[0]
+  #
+  # Fetching a particular {MessageThread}
+  #    message_thread = Intercom::MessageThread.find(:email => "bob@example.com", :thread_id => 123)
+  #    message_thread.messages.map{|message| message.html }
+  #
+  # Creating a {MessageThread} on behalf of a user:
+  #    message_thread = Intercom::MessageThread.create(:email => "bob@example.com", :body => "Hello, I need some help....")
+  #
   class MessageThread < UserResource
     include UnixTimestampUnwrapper
 

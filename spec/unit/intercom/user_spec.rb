@@ -45,7 +45,7 @@ describe "Intercom::User" do
   end
 
   it "has read-only social accounts" do
-    user = Intercom::User.new(:social_profiles => [:url => "http://twitter.com/abc", "username" => "abc", "type" => "twitter"])
+    user = Intercom::User.new(:social_profiles => ["url" => "http://twitter.com/abc", "username" => "abc", "type" => "twitter"])
     user.social_profiles.size.must_equal 1
     twitter = user.social_profiles.first
     twitter.type.must_equal "twitter"

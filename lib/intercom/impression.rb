@@ -7,6 +7,8 @@ module Intercom
   #
   # An impressions contains user_ip, user_agent and location.
   #
+  # == Examples
+  #
   #  impression = Intercom::Impression.create(:email => "person@example.com", :location => "/pricing/upgrade",
   #                                           :user_ip => '1.2.3.4', :user_agent => "my-service-iphone-app-1.2")
   # The impression response will contain {#unread_messages}

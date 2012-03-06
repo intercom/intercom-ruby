@@ -1,43 +1,24 @@
 require 'intercom/user_resource'
 
 module Intercom
-  ##
-  # object representing a social profile for the User (see )http://docs.intercom.io/#SocialProfiles)
-  class SocialProfile < UserResource
-    def for_wire #:nodoc:
-      @attributes
-    end
+  # object representing a social profile for the User (see )http://docs.intercom.io/#SocialProfiles).
+  # Read only part of the {User} object
+  class SocialProfile
+    # @return  [String] type e.g. twitter, facebook etc.
+    attr_reader :type
+    # @return  [String] id
+    attr_reader :id
+    # @return  [String] url
+    attr_reader :url
+    # @return [String] username
+    attr_reader :username
 
-    def type
-      @attributes["type"]
-    end
-
-    def type=(type)
-      @attributes["type"]=type
-    end
-
-    def id
-      @attributes["id"]
-    end
-
-    def id=(id)
-      @attributes["id"]=id
-    end
-
-    def url
-      @attributes["url"]
-    end
-
-    def url=(url)
-      @attributes["url"]=url
-    end
-
-    def username
-      @attributes["username"]
-    end
-
-    def username=(username)
-      @attributes["username"]=username
+    # @private
+    def initialize(params)
+      @type = params["type"]
+      @id = params["id"]
+      @url = params["url"]
+      @username = params["username"]
     end
   end
 end
