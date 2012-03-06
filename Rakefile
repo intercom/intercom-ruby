@@ -16,11 +16,4 @@ Rake::TestTask.new("spec:integration") do |spec|
 end
 
 task :spec => "spec:unit"
-
-require 'rdoc/task'
-RDoc::Task.new do |rd|
-  rd.main = "README.rdoc"
-  rd.rdoc_files.include("README.rdoc", "lib/**/*.rb")
-end
-
 task :default => :spec

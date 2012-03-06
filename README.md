@@ -5,6 +5,12 @@ Ruby bindings for the Intercom API (https://api.intercom.io). See http://docs.in
 gem install intercom
 ```
 
+Using bundler:
+
+```
+gem 'intercom'
+```
+
 ## Basic Usage
 
 ### Configure your access credentials

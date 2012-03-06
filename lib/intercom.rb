@@ -27,6 +27,8 @@ module Intercom
   ##
   # Set the id of the application you want to interact with.
   # When logged into your intercom console, the app_id is in the url after /apps (eg https://www.intercom.io/apps/<app-id>)
+  # @param [String] app_id
+  # @return [String]
   def self.app_id=(app_id)
     @app_id = app_id
   end
@@ -34,6 +36,8 @@ module Intercom
   ##
   # Set the api key to gain access to your application data.
   # When logged into your intercom console, you can view/create api keys in the settings menu
+  # @param [String] api_key
+  # @return [String]
   def self.api_key=(api_key)
     @api_key = api_key
   end
@@ -107,15 +111,16 @@ module Intercom
     @hostname = override
   end
 
-  #
   # Raised when the credentials you provide don't match a valid account on Intercom.
   # Check that you have set <b>Intercom.app_id=</b> and <b>Intercom.api_key=</b> correctly.
   class AuthenticationError < StandardError;
   end
 
+  # Raised when something does wrong on within the Intercom API service.
   class ServerError < StandardError;
   end
 
+  # Raised when requesting resources on behalf of a user that doesn't exist in your application on Intercom.
   class ResourceNotFound < StandardError;
   end
 end

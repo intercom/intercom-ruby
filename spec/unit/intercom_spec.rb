@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Intercom do
   it "has a version number" do
-    Intercom::VERSION.must_equal "0.0.2"
+    Intercom::VERSION.must_match /\d+\.\d+\.\d+/
   end
 
   describe "API" do
