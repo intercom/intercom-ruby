@@ -1,0 +1,8 @@
+0.0.3
+ - renamed Intercom.secret_key to Intercom.api_key for consistency throughout our app and docs
+
+0.0.2
+ - updates to reflect changes to resources served by the api
+
+0.0.1
+ - experimental version
