@@ -20,7 +20,6 @@ Using bundler:
 
 The API supports:
 
-
     POST,PUT,GET https://api.intercom.io/v1/users
     POST,PUT,GET https://api.intercom.io/v1/users/messages
     POST https://api.intercom.io/v1/users/impressions
@@ -28,20 +27,20 @@ The API supports:
 ==== Users
 
     user = Intercom::User.find(:email => "bob@example.com")
-    user = Intercom::User.create(params)
+    user = Intercom::User.create(:email => "bob@example.com", :name => "Bob Smith")
     user = Intercom::User.new(params)
     user.save
 
 ==== Messages
 
-    Intercom::Message.create
-    Intercom::Message.find
-    Intercom::Message.find_all
-    Intercom::Message.mark_as_read
+    Intercom::Message.create(:email => "bob@example.com", :body => "Example message from bob@example.com to your application on Intercom.")
+    Intercom::Message.find(:email => "bob@example.com", :thread_id => 123)
+    Intercom::Message.find_all(:email => "bob@example.com")
+    Intercom::Message.mark_as_read(:email => "bob@example.com", :thread_id => 123)
 
 ==== Impressions
 
-    Intercom::Impression.create
+    Intercom::Impression.create(:email => "bob@example.com", :location => "/path/in/my/app", :user_ip => "1.2.3.4", :user_agent => "my-savage-iphone-app-0.1"
 
 === Errors
 

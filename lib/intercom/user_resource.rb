@@ -1,6 +1,7 @@
 require 'intercom/unix_timestamp_unwrapper'
 
 module Intercom
+  # Base class for resources tied off a {User}, all of which are scoped by either the users :email or :user_id.
   class UserResource
     include UnixTimestampUnwrapper
 
@@ -8,26 +9,36 @@ module Intercom
       self.attributes = attributes
     end
 
+    # @return [Hash] hash of all the attributes in the structure they will be sent to the api
     def to_hash
       UserResource.for_wire(@attributes)
     end
 
+    # @return [String] email address
     def email
       @attributes["email"]
     end
 
+    # @param [String] email
+    # @return [String]
     def email=(email)
-      @attributes["email"]=email
+      @attributes["email"] = email
     end
 
+
+    # @return [String] user_id
     def user_id
       @attributes["user_id"]
     end
 
+    # @param [String] user_id
+    # @return [String]
     def user_id=(user_id)
       @attributes["user_id"] = user_id
     end
 
+    # updates the internal state of this {UserResource} based on the response from the API
+    # @return [UserResource] self
     def update_from_api_response(api_response)
       api_response.each do |key, value|
         setter_method = "#{key.to_s}="
