@@ -58,7 +58,6 @@ module Intercom
       time_at("updated_at")
     end
 
-
     def thread_id=(thread_id)
       @attributes["thread_id"] = thread_id
     end

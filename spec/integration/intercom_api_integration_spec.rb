@@ -4,7 +4,7 @@ require 'minitest/autorun'
 describe "api.intercom.io dummy data requests" do
   before :each do
     Intercom.app_id = "dummy-app-id"
-    Intercom.secret_key = "dummy-secret-key"
+    Intercom.api_key = "dummy-secret-key"
   end
 
   it "should get a user" do
@@ -22,7 +22,11 @@ describe "api.intercom.io dummy data requests" do
 
   it "authentication failure with bad api key" do
     Intercom.app_id = "bad-app-id"
-    Intercom.secret_key = "bad-secret-key"
+    Intercom.api_key = "bad-secret-key"
     proc { Intercom::User.find(:email => "not-found@example.com") }.must_raise Intercom::AuthenticationError
+  end
+
+  it "should find_all messages for a user" do
+    Intercom::MessageThread.find_all(:email => "somebody@example.com")
   end
 end

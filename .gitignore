@@ -4,5 +4,6 @@
 Gemfile.lock
 pkg/*
 .rakeTasks
+.yardoc
 spike.rb
 html

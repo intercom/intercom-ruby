@@ -14,7 +14,7 @@ require "json"
 # == Basic Usage
 # === Configure Intercom with your access credentials
 #   Intercom.app_id = "my_app_id"
-#   Intercom.secret_key = "my_secret_key"
+#   Intercom.api_key = "my_api_key"
 # === Make requests to the API
 #   Intercom::User.find(:email => "bob@example.com")
 #
@@ -22,7 +22,7 @@ module Intercom
   @hostname = "api.intercom.io"
   @protocol = "https"
   @app_id = nil
-  @secret_key = nil
+  @api_key = nil
 
   ##
   # Set the id of the application you want to interact with.
@@ -32,17 +32,17 @@ module Intercom
   end
 
   ##
-  # Set the secret key to gain access to your application data.
+  # Set the api key to gain access to your application data.
   # When logged into your intercom console, you can view/create api keys in the settings menu
-  def self.secret_key=(secret_key)
-    @secret_key = secret_key
+  def self.api_key=(api_key)
+    @api_key = api_key
   end
 
 
   private
   def self.url_for_path(path)
-    raise ArgumentError, "You must set both Intercom.app_id and Intercom.secret_key to use this client. See https://github.com/intercom/intercom for usage examples." if [@app_id, @secret_key].any?(&:nil?)
-    "#{protocol}://#{@app_id}:#{@secret_key}@#{hostname}/v1/#{path}"
+    raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom for usage examples." if [@app_id, @api_key].any?(&:nil?)
+    "#{protocol}://#{@app_id}:#{@api_key}@#{hostname}/v1/#{path}"
   end
 
   def self.post(path, payload_hash)
@@ -107,6 +107,9 @@ module Intercom
     @hostname = override
   end
 
+  #
+  # Raised when the credentials you provide don't match a valid account on Intercom.
+  # Check that you have set <b>Intercom.app_id=</b> and <b>Intercom.api_key=</b> correctly.
   class AuthenticationError < StandardError;
   end
 

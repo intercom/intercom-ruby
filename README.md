@@ -5,31 +5,48 @@ Ruby bindings for the Intercom API (https://api.intercom.io). See http://docs.in
 ### Configure your access credentials
 
 ```
-Intercom.app_id = "my_app_id"
-Intercom.secret_key = "my-super-crazy-secret"
+Intercom.app_id = "my_app_iddd"
+Intercom.api_key = "my-super-crazy-api-key"
 ```
 
 ### Resources
 
-All methods in this API operate in the context of a single user. Users are identified by either an '''email''' address or a '''user_id'''.
-One of these is required as input to every operation.
+The API supports:
+
+```
+POST,PUT,GET https://api.intercom.io/v1/users
+POST,PUT,GET https://api.intercom.io/v1/users/messages
+POST https://api.intercom.io/v1/users/impressions
+```
 
 #### Users
 
+```ruby
 user = Intercom::User.find(:email => "bob@example.com")
 user = Intercom::User.create(params)
 user = Intercom::User.new(params)
 user.save
+```
 
 #### Messages
 
+```ruby
 Intercom::Message.create
 Intercom::Message.find
 Intercom::Message.find_all
 Intercom::Message.mark_as_read
+```
 
 #### Impressions
 
+```ruby
 Intercom::Impression.create
+```
 
 ### Errors
+
+```ruby
+Intercom::AuthenticationError
+Intercom::ServerError
+Intercom::ResourceNotFound
+```
