@@ -91,7 +91,7 @@ module Intercom
     end
 
     ##
-    # Get Time at which this User started using your application.
+    # Set Time at which this User started using your application.
     def created_at=(time)
       set_time_at("created_at", time)
     end
@@ -129,6 +129,10 @@ module Intercom
       @attributes["custom_data"] ||= ShallowHash.new
     end
 
+    def custom_data=(custom_data) #:nodoc:
+      @attributes["custom_data"] = ShallowHash.new.merge(custom_data)
+    end
+
     protected
     def social_profiles=(social_profiles) #:nodoc:
       @social_profiles = social_profiles.map { |account| SocialProfile.new(account) }.freeze
@@ -136,10 +140,6 @@ module Intercom
 
     def location_data=(hash) #:nodoc:
       @location_data = hash.freeze
-    end
-
-    def custom_data=(custom_data) #:nodoc:
-      @attributes["custom_data"] = ShallowHash.new.merge(custom_data)
     end
   end
 end
