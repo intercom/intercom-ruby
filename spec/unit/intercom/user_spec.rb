@@ -77,6 +77,7 @@ describe "Intercom::User" do
     user = Intercom::User.new()
     proc { user.custom_data["thing"] = [1] }.must_raise ArgumentError
     proc { user.custom_data["thing"] = {1 => 2} }.must_raise ArgumentError
+    proc { user.custom_data = {1 => {2 => 3}} }.must_raise ArgumentError
 
     user = Intercom::User.from_api(test_user)
     proc { user.custom_data["thing"] = [1] }.must_raise ArgumentError

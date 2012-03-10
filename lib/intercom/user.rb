@@ -1,5 +1,5 @@
 require 'intercom/user_resource'
-require 'intercom/shallow_hash'
+require 'intercom/user_custom_data'
 require 'intercom/social_profile'
 
 module Intercom
@@ -120,17 +120,23 @@ module Intercom
       @location_data ||= {}.freeze
     end
 
-    ##
-    # Get hash of custom attributes stored for this Intercom::User
+    # Custom attributes stored for this Intercom::User
     #
     # See http://docs.intercom.io/#CustomData for more information
-    # @return [Hash]
+    #
+    # This object behaves like a Hash.
+    #
+    # @return [UserCustomData]
     def custom_data
-      @attributes["custom_data"] ||= ShallowHash.new
+      @attributes["custom_data"] ||= UserCustomData.new
     end
 
-    def custom_data=(custom_data) #:nodoc:
-      @attributes["custom_data"] = ShallowHash.new.merge(custom_data)
+    # Set a {Hash} of custom data attributes to save/update on this user
+    #
+    # @param [Hash] custom_data
+    # @return [UserCustomData]
+    def custom_data=(custom_data)
+      @attributes["custom_data"] = UserCustomData.new(custom_data)
     end
 
     protected
