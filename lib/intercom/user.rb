@@ -124,7 +124,14 @@ module Intercom
     #
     # See http://docs.intercom.io/#CustomData for more information
     #
-    # This object behaves like a Hash.
+    # Example: Reading custom_data value for an existing user
+    #  user = Intercom::User.find(:email => "someone@example.com")
+    #  puts user.custom_data[:plan]
+    #
+    # Example: Setting some custom data for an existing user
+    #  user = Intercom::User.find(:email => "someone@example.com")
+    #  user.custom_data[:plan] = "pro"
+    #  user.save
     #
     # @return [UserCustomData]
     def custom_data
