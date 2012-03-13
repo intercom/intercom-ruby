@@ -137,4 +137,14 @@ describe "Intercom::User" do
     all = Intercom::User.all
     all.must_be_instance_of(Intercom::UserCollectionProxy)
   end
+
+  it "can find_by_email" do
+    Intercom::User.expects(:find).with(:email => "bob@example.com")
+    Intercom::User.find_by_email("bob@example.com")
+  end
+
+  it "can find_by_user_id" do
+    Intercom::User.expects(:find).with(:user_id => "abc123")
+    Intercom::User.find_by_user_id("abc123")
+  end
 end

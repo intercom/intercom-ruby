@@ -4,9 +4,23 @@ require 'intercom/user_collection_proxy'
 require 'intercom/social_profile'
 
 module Intercom
-  ##
   # Represents a user of your application on Intercom.
-  class User < UserResource
+  #
+  # == Example usage
+  # * Fetching a user
+  #    Intercom::User.find_by_email("bob@example.")
+  #
+  # * Getting the count of all users
+  #    Intercom::User.all.count
+  #
+  # * Fetching all users
+  #    Intercom::User.all.each {|user| puts user.email }
+  #
+  # * Updating custom data on a user
+  #    user = Intercom::User.find_by_email("bob@example.com")
+  #    user.custom_data["number_of_applications"] = 11
+  #    user.save
+class User < UserResource
     ##
     # Fetches an Intercom::User from our API.
     #
@@ -18,6 +32,26 @@ module Intercom
     def self.find(params)
       response = Intercom.get("users", params)
       User.from_api(response)
+    end
+
+    # Calls GET https://api.intercom.io/v1/users?email=EMAIL
+    #
+    # returns Intercom::User object representing the state on our servers.
+    #
+    # @param [String] email address of the user
+    # @return [User]
+    def self.find_by_email(email)
+      find({:email => email})
+    end
+
+    # Calls GET https://api.intercom.io/v1/users?user_id=USER-ID
+    #
+    # returns Intercom::User object representing the state on our servers.
+    #
+    # @param [String] user_id user id of the user
+    # @return [User]
+    def self.find_by_user_id(user_id)
+      find({:user_id => user_id})
     end
 
     # Creates (or updates when a user already exists for that email/user_id) a user record on your application.

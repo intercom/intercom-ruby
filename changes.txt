@@ -1,4 +1,5 @@
 0.0.5
+ - added Intercom::User.find_by_email, Intercom::User.find_by_user_id
  - add support for Intercom::User.all.each, Intercom::User.all.map, Intercom::User.all.count
 
 0.0.4
