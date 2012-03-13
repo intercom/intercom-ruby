@@ -2,16 +2,16 @@ require 'intercom'
 require 'minitest/autorun'
 require 'mocha'
 
-def test_user
+def test_user(email="bob@example.com")
   {
       :user_id => 'id-from-customers-app',
-      :email => "bo@example.com",
+      :email => email,
       :name => "Joe Schmoe",
       :created_at => 1323422442,
-      :last_seen_ip  => "1.2.3.4",
-      :last_seen_user_agent  => "Mozilla blah blah ie6",
+      :last_seen_ip => "1.2.3.4",
+      :last_seen_user_agent => "Mozilla blah blah ie6",
       :custom_data => {"a" => "b", "b" => 2},
-      :relationship_score  => 90,
+      :relationship_score => 90,
       :session_count => 123,
       :last_impression_at => 1323422442,
       :social_profiles => [
@@ -68,6 +68,22 @@ def test_message
               }
           }
       ]
+  }
+end
+
+def page_of_users(page=1, per_page=10)
+  all_users = [test_user("user1@example.com"), test_user("user2@example.com"), test_user("user3@example.com")]
+  offset = (page - 1) * per_page
+  limit = page * per_page
+  next_page = limit < all_users.size ? page + 1 : nil
+  previous_page = offset > 0 ? page - 1 : nil
+  {
+      "users" => all_users[offset..limit-1],
+      "total_count" => all_users.size,
+      "page" => page,
+      "next_page" => next_page,
+      "previous_page" => previous_page,
+      "total_pages" => (all_users.size.to_f / per_page).ceil.to_i
   }
 end
 

@@ -86,7 +86,7 @@ describe "Intercom::User" do
   it "fetches a user" do
     Intercom.expects(:get).with("users", {"email" => "bo@example.com"}).returns(test_user)
     user = Intercom::User.find("email" => "bo@example.com")
-    user.email.must_equal "bo@example.com"
+    user.email.must_equal "bob@example.com"
     user.name.must_equal "Joe Schmoe"
     user.session_count.must_equal 123
   end
@@ -122,7 +122,7 @@ describe "Intercom::User" do
     params = {"email" => "me@example.com", :user_id => "abc123", "name" => "Bob Smith", "last_seen_ip" => "1.2.3.4", "last_seen_user_agent" => "ie6", "created_at" => Time.now}
     user = Intercom::User.new(params)
     user.to_hash.keys.sort.must_equal params.keys.map(&:to_s).sort
-    params.keys.each do | key|
+    params.keys.each do |key|
       user.send(key).to_s.must_equal params[key].to_s
     end
   end
@@ -130,5 +130,11 @@ describe "Intercom::User" do
   it "will allow extra attributes in response from api" do
     user = Intercom::User.send(:from_api, {"new_param" => "some value"})
     user.new_param.must_equal "some value"
+  end
+
+  it "returns a UserCollectionProxy for all without making any requests" do
+    Intercom.expects(:execute_request).never
+    all = Intercom::User.all
+    all.must_be_instance_of(Intercom::UserCollectionProxy)
   end
 end

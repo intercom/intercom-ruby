@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe Intercom do
   it "has a version number" do
-    Intercom::VERSION.must_match /\d+\.\d+\.\d+/
+    Intercom::VERSION.must_match(/\d+\.\d+\.\d+/)
   end
 
   describe "API" do
@@ -47,9 +47,9 @@ describe Intercom do
   it "checks for email or user id" do
     proc { Intercom.require_email_or_user_id("else") }.must_raise ArgumentError, "Expected params Hash, got String"
     proc { Intercom.require_email_or_user_id(:something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
-    proc { Intercom.get("users", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
-    proc { Intercom.put("users", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
-    proc { Intercom.post("users", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
+    proc { Intercom.get("messages", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
+    proc { Intercom.put("messages", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
+    proc { Intercom.post("messages", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
     Intercom.require_email_or_user_id(:email => "bob@example.com", :something => "else")
     Intercom.require_email_or_user_id("email" => "bob@example.com", :something => "else")
     Intercom.require_email_or_user_id(:user_id => "123")

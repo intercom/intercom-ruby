@@ -1,5 +1,6 @@
 require 'intercom/user_resource'
 require 'intercom/user_custom_data'
+require 'intercom/user_collection_proxy'
 require 'intercom/social_profile'
 
 module Intercom
@@ -19,7 +20,6 @@ module Intercom
       User.from_api(response)
     end
 
-    ##
     # Creates (or updates when a user already exists for that email/user_id) a user record on your application.
     #
     # Calls POST https://api.intercom.io/v1/users
@@ -32,6 +32,22 @@ module Intercom
       User.new(params).save
     end
 
+    # Retrieve all the users
+    # Examples:
+    #   Intercom::User.all.count
+    #     > 5346
+    #   Intercom::User.each do |user|
+    #     puts user.inspect
+    #   end
+    #     > ["user1@example.com" ,"user2@example.com" ,....]
+    #   Intercom::User.map(&:email)
+    #     > ["user1@example.com" ,"user2@example.com" ,....]
+    #
+    # @return [UserCollectionProxy]
+    def self.all
+      UserCollectionProxy.new
+    end
+
     # instance method alternative to #create
     # @return [User]
     def save
@@ -39,11 +55,13 @@ module Intercom
       self.update_from_api_response(response)
     end
 
-    # @return {User}
+    # @return [String] the {User}'s name
     def name
       @attributes["name"]
     end
 
+    # @param [String] name {User}'s name
+    # @return [void]
     def name=(name)
       @attributes["name"]=name
     end
@@ -53,6 +71,7 @@ module Intercom
       @attributes["last_seen_ip"]
     end
 
+    # @return [void]
     def last_seen_ip=(last_seen_ip)
       @attributes["last_seen_ip"]=last_seen_ip
     end
@@ -62,6 +81,7 @@ module Intercom
       @attributes["last_seen_user_agent"]
     end
 
+    # @return [void]
     def last_seen_user_agent=(last_seen_user_agent)
       @attributes["last_seen_user_agent"]=last_seen_user_agent
     end
@@ -92,6 +112,7 @@ module Intercom
 
     ##
     # Set Time at which this User started using your application.
+    # @return [void]
     def created_at=(time)
       set_time_at("created_at", time)
     end
