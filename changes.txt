@@ -1,3 +1,9 @@
+0.0.5
+ - add support for Intercom::User.all.each, Intercom::User.all.map, Intercom::User.all.count
+
+0.0.4
+ - allow to directly set custom_data hash on Intercom::User user.custom_data = {...}
+
 0.0.3
  - renamed Intercom.secret_key to Intercom.api_key for consistency throughout our app and docs
 
