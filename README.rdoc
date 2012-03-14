@@ -24,12 +24,20 @@ The API supports:
     POST,PUT,GET https://api.intercom.io/v1/users/messages
     POST https://api.intercom.io/v1/users/impressions
 
-==== Users
+=== Examples:
 
-    user = Intercom::User.find(:email => "bob@example.com")
+==== Users
+    user = Intercom::User.find_by_email("bob@example.com")
+    user.custom_data["average_monthly_spend"] = 1234.56
+    user.save
+    user = Intercom::User.find_by_user_id("bob@example.com")
     user = Intercom::User.create(:email => "bob@example.com", :name => "Bob Smith")
     user = Intercom::User.new(params)
     user.save
+    Intercom::User.all.count
+    Intercom::User.all.each {|user| puts %Q(#{user.email} - #{user.custom_data["average_monthly_spend"]}) }
+    Intercom::User.all.map {|user| user.email }
+    
 
 ==== Messages
 
