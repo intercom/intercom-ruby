@@ -87,6 +87,10 @@ def page_of_users(page=1, per_page=10)
   }
 end
 
+def error_on_modify_frozen
+  RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
+end
+
 def capture_exception(&block)
   begin
     block.call

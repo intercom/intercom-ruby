@@ -19,8 +19,6 @@ Gem::Specification.new do |spec|
   spec.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency 'jruby-openssl', '>= 0.7' if spec.platform.to_s == 'java'
-  spec.add_dependency 'json-jruby', '>= 1.5' if spec.platform.to_s == 'java'
   spec.add_runtime_dependency "rest-client"
   spec.add_development_dependency 'minitest'
   spec.add_development_dependency 'rake'

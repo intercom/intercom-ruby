@@ -52,15 +52,15 @@ describe "Intercom::User" do
     twitter.url.must_equal "http://twitter.com/abc"
     twitter.username.must_equal "abc"
     user.to_hash["social_profiles"].must_equal nil
-    proc { user.social_profiles << "a" }.must_raise RuntimeError, "can't modify frozen array"
-    proc { Intercom::User.new.social_profiles << "a" }.must_raise RuntimeError, "can't modify frozen array"
+    proc { user.social_profiles << "a" }.must_raise error_on_modify_frozen, "can't modify frozen array"
+    proc { Intercom::User.new.social_profiles << "a" }.must_raise error_on_modify_frozen, "can't modify frozen array"
   end
 
   it "has read-only location data" do
     Intercom::User.new.location_data.must_equal({})
     user = Intercom::User.new(:location_data => {"city" => "Dublin"})
     user.location_data.must_equal({"city" => "Dublin"})
-    proc { user.location_data["change"] = "123" }.must_raise RuntimeError, "can't modify frozen hash"
+    proc { user.location_data["change"] = "123" }.must_raise error_on_modify_frozen, "can't modify frozen hash"
     user.to_hash["location_data"].must_equal nil
   end
 
