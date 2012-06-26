@@ -20,7 +20,7 @@ module Intercom
   #    user = Intercom::User.find_by_email("bob@example.com")
   #    user.custom_data["number_of_applications"] = 11
   #    user.save
-class User < UserResource
+  class User < UserResource
     ##
     # Fetches an Intercom::User from our API.
     #
@@ -202,12 +202,12 @@ class User < UserResource
     end
 
     protected
-    def social_profiles=(social_profiles) #:nodoc:
-      @social_profiles = social_profiles.map { |account| SocialProfile.new(account) }.freeze
-    end
+      def social_profiles=(social_profiles) #:nodoc:
+        @social_profiles = social_profiles.map { |account| SocialProfile.new(account) }.freeze
+      end
 
-    def location_data=(hash) #:nodoc:
-      @location_data = hash.freeze
-    end
+      def location_data=(hash) #:nodoc:
+        @location_data = hash.freeze
+      end
   end
 end
