@@ -45,13 +45,13 @@ describe Intercom do
   end
 
   it "checks for email or user id" do
-    proc { Intercom.require_email_or_user_id("else") }.must_raise ArgumentError, "Expected params Hash, got String"
-    proc { Intercom.require_email_or_user_id(:something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
+    proc { Intercom.check_required_params("else") }.must_raise ArgumentError, "Expected params Hash, got String"
+    proc { Intercom.check_required_params(:something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
     proc { Intercom.get("messages", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
     proc { Intercom.put("messages", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
     proc { Intercom.post("messages", :something => "else") }.must_raise ArgumentError, "Either email or user_id must be specified"
-    Intercom.require_email_or_user_id(:email => "bob@example.com", :something => "else")
-    Intercom.require_email_or_user_id("email" => "bob@example.com", :something => "else")
-    Intercom.require_email_or_user_id(:user_id => "123")
+    Intercom.check_required_params(:email => "bob@example.com", :something => "else")
+    Intercom.check_required_params("email" => "bob@example.com", :something => "else")
+    Intercom.check_required_params(:user_id => "123")
   end
 end

@@ -3,7 +3,7 @@ require "intercom/user_resource"
 require "intercom/user"
 require "intercom/message_thread"
 require "intercom/impression"
-require "rest_client"
+require "intercom/request"
 require "json"
 
 ##
@@ -42,7 +42,6 @@ module Intercom
     @api_key = api_key
   end
 
-
   private
   def self.url_for_path(path)
     raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom for usage examples." if [@app_id, @api_key].any?(&:nil?)
@@ -50,49 +49,21 @@ module Intercom
   end
 
   def self.post(path, payload_hash)
-    execute_request(:post, path, {}, {:content_type => :json, :accept => :json}, payload_hash)
+    Intercom::Request.post(url_for_path(path), payload_hash).execute
   end
 
   def self.put(path, payload_hash)
-    execute_request(:put, path, {}, {:content_type => :json, :accept => :json}, payload_hash)
+    Intercom::Request.put(url_for_path(path), payload_hash).execute
   end
 
   def self.get(path, params)
-    execute_request(:get, path, params)
+    Intercom::Request.get(url_for_path(path), params).execute
   end
 
-  def self.require_email_or_user_id(params)
+  def self.check_required_params(params, path=nil)
+    return if path.eql?("users")
     raise ArgumentError.new("Expected params Hash, got #{params.class}") unless params.is_a?(Hash)
     raise ArgumentError.new("Either email or user_id must be specified") unless params.keys.any? { |key| %W(email user_id).include?(key.to_s) }
-  end
-
-  def self.execute_request(method, path, params = {}, headers = {}, payload = nil)
-    method.eql?(:get) ? require_email_or_user_id(params) : require_email_or_user_id(payload) unless path.eql?("users")
-    args = rest_client_args(method, path, params, headers, payload)
-    begin
-      response = RestClient::Request.execute(args)
-      JSON.parse(response.body)
-    rescue RestClient::ResourceNotFound
-      raise ResourceNotFound.new
-    rescue RestClient::Unauthorized
-      raise AuthenticationError.new
-    rescue RestClient::InternalServerError
-      raise ServerError.new
-    end
-  end
-
-  def self.rest_client_args(method, path, params, headers, payload)
-    url = url_for_path(path)
-    {
-        :method => method,
-        :url => url,
-        :headers => {:params => params}.merge(headers).merge(:accept => :json),
-        :open_timeout => 10,
-        :payload => payload.nil? ? nil : payload.to_json,
-        :timeout => 30,
-        :verify_ssl => OpenSSL::SSL::VERIFY_PEER,
-        :ssl_ca_file => File.join(File.dirname(__FILE__), 'data/cacert.pem')
-    }
   end
 
   def self.protocol #nodoc

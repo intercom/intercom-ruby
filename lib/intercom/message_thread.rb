@@ -54,6 +54,11 @@ module Intercom
       self.update_from_api_response(response)
     end
 
+    # @return [Message]
+    def mark_as_read!
+      Intercom::MessageThread.mark_as_read(:thread_id => thread_id, :email => email)
+    end
+
     # Set the content of the message for new message creation.
     # @param [String] body of the message. Supports markdown syntax
     # @return [String]

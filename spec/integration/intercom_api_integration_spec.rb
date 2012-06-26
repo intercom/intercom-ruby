@@ -5,6 +5,12 @@ describe "api.intercom.io dummy data requests" do
   before :each do
     Intercom.app_id = "dummy-app-id"
     Intercom.api_key = "dummy-secret-key"
+    Intercom.protocol = "http"
+    Intercom.hostname = "intercom.dev"
+  end
+
+  it "should get all user" do
+    Intercom::User.all.count.must_be :>, 0
   end
 
   it "should get a user" do
@@ -27,6 +33,20 @@ describe "api.intercom.io dummy data requests" do
   end
 
   it "should find_all messages for a user" do
-    Intercom::MessageThread.find_all(:email => "somebody@example.com")
+    message_thread = Intercom::MessageThread.find_all(:email => "somebody@example.com").first
+    %w(thread_id read messages created_at updated_at created_by_user).each do |expected|
+      message_thread.send(expected).wont_be_nil
+    end
+  end
+
+  it "should mark message_thread as read" do
+    message_thread = Intercom::MessageThread.find_all(:email => "somebody@example.com").first
+    message_thread.mark_as_read!
+  end
+
+  it "should create some impression" do
+    impression = Intercom::Impression.create(:email => 'somebody@example.com')
+    impression.unread_messages.must_be :>, 0
+    impression.email.must_equal 'somebody@example.com'
   end
 end
