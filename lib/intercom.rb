@@ -68,7 +68,7 @@ module Intercom
 
   def self.execute_request(method, path, params = {}, headers = {}, payload = nil)
     method.eql?(:get) ? require_email_or_user_id(params) : require_email_or_user_id(payload) unless path.eql?("users")
-    args =rest_client_args(method, path, params, headers, payload)
+    args = rest_client_args(method, path, params, headers, payload)
     begin
       response = RestClient::Request.execute(args)
       JSON.parse(response.body)
