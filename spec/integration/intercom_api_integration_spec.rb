@@ -5,8 +5,6 @@ describe "api.intercom.io dummy data requests" do
   before :each do
     Intercom.app_id = "dummy-app-id"
     Intercom.api_key = "dummy-secret-key"
-    Intercom.protocol = "http"
-    Intercom.hostname = "intercom.dev"
   end
 
   it "should get all user" do
