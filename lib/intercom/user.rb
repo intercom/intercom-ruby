@@ -82,6 +82,19 @@ module Intercom
       UserCollectionProxy.new
     end
 
+    # Deletes a user record on your application.
+    #
+    # Calls DELETE https://api.intercom.io/v1/users
+    #
+    # returns Intercom::User object representing the user just before deletion.
+    #
+    # This operation is not idempotent.
+    # @return [User]
+    def self.delete(params)
+      response = Intercom.delete("users", params)
+      User.from_api(response)
+    end
+
     # instance method alternative to #create
     # @return [User]
     def save
