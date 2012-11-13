@@ -28,6 +28,11 @@ module Intercom
       new(uri, method_with_body(Net::HTTP::Post, uri, form_data))
     end
 
+    def self.delete(url, params)
+      uri = URI.parse(url)
+      new(uri, Net::HTTP::Delete.new(append_query_string_to_url(uri.path, params), default_headers))
+    end
+
     def self.put(url, form_data)
       uri = URI.parse(url)
       new(uri, method_with_body(Net::HTTP::Put, uri, form_data))

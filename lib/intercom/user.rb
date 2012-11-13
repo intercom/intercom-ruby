@@ -91,7 +91,7 @@ module Intercom
     # This operation is not idempotent.
     # @return [User]
     def self.delete(params)
-      response = Intercom.post("users/destroy", params)
+      response = Intercom.delete("users", params)
       User.from_api(response)
     end
 

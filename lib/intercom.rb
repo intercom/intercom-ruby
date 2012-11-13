@@ -52,6 +52,10 @@ module Intercom
     Intercom::Request.post(url_for_path(path), payload_hash).execute
   end
 
+  def self.delete(path, payload_hash)
+    Intercom::Request.delete(url_for_path(path), payload_hash).execute
+  end
+
   def self.put(path, payload_hash)
     Intercom::Request.put(url_for_path(path), payload_hash).execute
   end

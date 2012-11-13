@@ -98,8 +98,8 @@ describe "Intercom::User" do
   end
 
   it "deletes a user" do
-    Intercom.expects(:post).with("users/destroy", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
-    user = Intercom::User.delete("email" => "jo@example.com", :user_id => "i-1224242")
+    Intercom.expects(:delete).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    Intercom::User.delete("email" => "jo@example.com", "user_id" => "i-1224242")
   end
 
   it "can use User.create for convenience" do
