@@ -84,7 +84,7 @@ module Intercom
 
     # Deletes a user record on your application.
     #
-    # Calls POST https://api.intercom.io/v1/users/destroy
+    # Calls DELETE https://api.intercom.io/v1/users
     #
     # returns Intercom::User object representing the user just before deletion.
     #
