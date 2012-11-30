@@ -12,7 +12,7 @@ module Intercom
   #    Intercom::User.all.count
   #
   # Iterating over each user
-  #    Intercom::User.each do |user|
+  #    Intercom::User.all.each do |user|
   #      puts user.inspect
   #    end
   #
