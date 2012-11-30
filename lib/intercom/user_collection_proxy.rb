@@ -12,13 +12,16 @@ module Intercom
   #    Intercom::User.all.count
   #
   # Iterating over each user
-  #    Intercom::User.each do |user|
+  #    Intercom::User.all.each do |user|
   #      puts user.inspect
   #    end
   #
   class UserCollectionProxy
+    include Enumerable
+
     # @return [Integer] number of users tracked on Intercom for this application
     def count
+      raise ArgumentError.new("count doesn't support block argument") if block_given?
       response = Intercom.get("users", {:per_page => 1})
       response["total_count"]
     end
@@ -37,15 +40,5 @@ module Intercom
         fetch_another_page = !current_page["next_page"].nil?
       end
     end
-
-    # yields each {User} to the block provided and collects the output in the same way as Enumerable#map
-    # @return [Array<Object>]
-    def map
-      out = []
-      each { |e| out << yield(e) }
-      out
-    end
-
-    alias :collect :map
   end
 end
