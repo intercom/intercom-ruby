@@ -8,13 +8,13 @@ module Intercom
   #
   # == Example usage
   # * Fetching a user
-  #    Intercom::User.find_by_email("bob@example.")
+  #    Intercom::User.find_by_email("bob@example.com")
   #
   # * Getting the count of all users
   #    Intercom::User.all.count
   #
   # * Fetching all users
-  #    Intercom::User.all.each {|user| puts user.email }
+  #    Intercom::User.all.each { |user| puts user.email }
   #
   # * Updating custom data on a user
   #    user = Intercom::User.find_by_email("bob@example.com")
