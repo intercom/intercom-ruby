@@ -25,6 +25,12 @@ describe Intercom::UserCollectionProxy do
     Intercom::User.all.count.must_equal 3
   end
 
+  it "explicitly doesn't support block argument for count" do
+    assert_raises ArgumentError do
+      Intercom::User.all.count {|_| true }
+    end
+  end
+
   it "loads multiple pages" do
     Intercom.expects(:get).with("users", {:page => 1}).returns(page_of_users(1, 1))
     Intercom.expects(:get).with("users", {:page => 2}).returns(page_of_users(2, 1))

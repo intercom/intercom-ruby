@@ -17,8 +17,11 @@ module Intercom
   #    end
   #
   class UserCollectionProxy
+    include Enumerable
+
     # @return [Integer] number of users tracked on Intercom for this application
     def count
+      raise ArgumentError.new("count doesn't support block argument") if block_given?
       response = Intercom.get("users", {:per_page => 1})
       response["total_count"]
     end
@@ -37,7 +40,5 @@ module Intercom
         fetch_another_page = !current_page["next_page"].nil?
       end
     end
-
-    include Enumerable
   end
 end
