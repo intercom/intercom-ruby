@@ -70,11 +70,11 @@ module Intercom
     # Examples:
     #   Intercom::User.all.count
     #     > 5346
-    #   Intercom::User.each do |user|
+    #   Intercom::User.all.each do |user|
     #     puts user.inspect
     #   end
     #     > ["user1@example.com" ,"user2@example.com" ,....]
-    #   Intercom::User.map(&:email)
+    #   Intercom::User.all.map(&:email)
     #     > ["user1@example.com" ,"user2@example.com" ,....]
     #
     # @return [UserCollectionProxy]
