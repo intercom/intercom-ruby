@@ -18,8 +18,10 @@ describe Intercom::UserCollectionProxy do
     Intercom::User.all.collect { |user| user.email }.must_equal %W(user1@example.com user2@example.com user3@example.com)
   end
 
-  it "yields each user to the block" do
-    Intercom.expects(:get).with("users", {:per_page => 1}).returns(page_of_users(1,1))
+  it "counts users based on total_count in paged_response" do
+    paged_response = page_of_users(1, 1)
+    Intercom.expects(:get).with("users", {:per_page => 1}).returns(paged_response)
+    paged_response.expects(:[]).with("total_count").returns(3)
     Intercom::User.all.count.must_equal 3
   end
 
