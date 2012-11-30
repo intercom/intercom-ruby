@@ -38,14 +38,6 @@ module Intercom
       end
     end
 
-    # yields each {User} to the block provided and collects the output in the same way as Enumerable#map
-    # @return [Array<Object>]
-    def map
-      out = []
-      each { |e| out << yield(e) }
-      out
-    end
-
-    alias :collect :map
+    include Enumerable
   end
 end
