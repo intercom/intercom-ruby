@@ -115,7 +115,7 @@ describe "Intercom::User" do
   end
 
   it "raises argument error when trying to set a read only attribute" do
-    read_only_attributes = %w(relationship_score last_impression_at session_count)
+    read_only_attributes = %w(relationship_score session_count)
     read_only_attributes.each do |read_only|
       proc { Intercom::User.create("email" => "jo@example.com", read_only => "some value") }.must_raise NoMethodError
       user = Intercom::User.new
