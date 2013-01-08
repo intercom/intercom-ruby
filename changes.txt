@@ -1,3 +1,9 @@
+0.0.8
+ - add support for updating last request time for user through either last_request_at or last_impression_at
+
+0.0.7
+ - add support for deleting user
+
 0.0.6
  - drop rest-client, use pure net/http instead
 
