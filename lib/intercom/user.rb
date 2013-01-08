@@ -151,6 +151,27 @@ module Intercom
     end
 
     ##
+    # Set Time at which this User last made a request your application.
+    # @return [void]
+    def last_impression_at=(time)
+      set_time_at("last_impression_at", time)
+    end
+
+    ##
+    # Get last time this User interacted with your application
+    # @return [Time]
+    def last_request_at
+      time_at("last_request_at")
+    end
+
+    ##
+    # Set Time at which this User last made a request your application.
+    # @return [void]
+    def last_request_at=(time)
+      set_time_at("last_request_at", time)
+    end
+
+    ##
     # Get Time at which this User started using your application.
     # @return [Time]
     def created_at
