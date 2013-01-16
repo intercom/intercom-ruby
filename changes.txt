@@ -1,3 +1,6 @@
+0.0.9
+ - add support for settings/updating url attribute for message_threads
+
 0.0.8
  - add support for updating last request time for user through either last_request_at or last_impression_at
 

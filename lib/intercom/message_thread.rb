@@ -98,6 +98,17 @@ module Intercom
       @attributes["read"]
     end
 
+    # @return [String]
+    # @param [String] read the url that was being viewed when the comment was sent
+    def url=(url)
+      @attributes["url"] = url
+    end
+
+    # @return [String]
+    def url
+      @attributes["url"]
+    end
+
     # @return [Array<Message>]
     def messages
       @attributes["messages"].map {|message_hash| Message.new(message_hash)}

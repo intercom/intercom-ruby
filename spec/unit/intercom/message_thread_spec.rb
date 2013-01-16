@@ -34,10 +34,10 @@ describe "/v1/messages_threads" do
   end
 
   it "sets/gets allowed keys" do
-    params = {"email" => "me@example.com", :user_id => "abc123", "thread_id" => "123", "body" => "hello world", "read" => true}
+    params = {"email" => "me@example.com", :user_id => "abc123", "thread_id" => "123", "body" => "hello world", "read" => true, "url" => "http://example.com"}
     message_thread = Intercom::MessageThread.new(params)
     message_thread.to_hash.keys.sort.must_equal params.keys.map(&:to_s).sort
-    params.keys.each do | key|
+    params.keys.each do |key|
       message_thread.send(key).must_equal params[key]
     end
   end
