@@ -6,7 +6,7 @@ module Intercom
     end
 
     def set_time_at(attribute_name, time)
-      @attributes[attribute_name.to_s] = time.to_i
+      @attributes[attribute_name.to_s] = (time.nil?) ? nil : time.to_i
     end
   end
 end
