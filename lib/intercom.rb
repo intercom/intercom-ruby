@@ -3,6 +3,7 @@ require "intercom/user_resource"
 require "intercom/user"
 require "intercom/message_thread"
 require "intercom/impression"
+require "intercom/note"
 require "intercom/request"
 require "json"
 

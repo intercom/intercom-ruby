@@ -25,6 +25,7 @@ The API supports:
     POST,PUT,GET https://api.intercom.io/v1/users
     POST,PUT,GET https://api.intercom.io/v1/users/messages
     POST https://api.intercom.io/v1/users/impressions
+    POST https://api.intercom.io/v1/users/notes
 
 === Examples:
 
@@ -51,6 +52,10 @@ The API supports:
 ==== Impressions
 
     Intercom::Impression.create(:email => "bob@example.com", :location => "/path/in/my/app", :user_ip => "1.2.3.4", :user_agent => "my-savage-iphone-app-0.1"
+
+==== Notes
+
+    Intercom::Note.create(:email => "bob@example.com", :note => "This is the text of the note"
 
 === Errors
 
