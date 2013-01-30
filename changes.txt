@@ -1,3 +1,6 @@
+0.0.10
+ - add support for creating notes on users
+
 0.0.9
  - add support for settings/updating url attribute for message_threads
 

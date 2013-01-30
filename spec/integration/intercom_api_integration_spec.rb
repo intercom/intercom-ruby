@@ -47,4 +47,10 @@ describe "api.intercom.io dummy data requests" do
     impression.unread_messages.must_be :>, 0
     impression.email.must_equal 'somebody@example.com'
   end
+
+  it "should create some notes" do
+    note = Intercom::Note.create(:body => "This is a note", :email => "somebody@example.com")
+    note.html.must_equal "<p>This is a note</p>"
+    note.user.email.must_equal "somebody@example.com"
+  end
 end
