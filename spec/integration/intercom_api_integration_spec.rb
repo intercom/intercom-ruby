@@ -49,8 +49,8 @@ describe "api.intercom.io dummy data requests" do
   end
 
   it "should create some notes" do
-    note = Intercom::Note.create(:note => "This is a note", :email => "somebody@example.com")
-    note.note.must_equal "This is a note"
+    note = Intercom::Note.create(:body => "This is a note", :email => "somebody@example.com")
+    note.html.must_equal "<p>This is a note</p>"
     note.user.email.must_equal "somebody@example.com"
   end
 end

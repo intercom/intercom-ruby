@@ -9,11 +9,11 @@ module Intercom
   #
   # == Examples
   #
-  #  note = Intercom::Note.create(:email => "person@example.com", :note => "This is the note you want to make on the user account")
+  #  note = Intercom::Note.create(:email => "person@example.com", :body => "This is the note you want to make on the user account")
 
   # You can also create a note and save it like this:
   #  note = Intercom::Note.new
-  #  note.note = "This is the note you want to make on the user account"
+  #  note.body = "This is the note you want to make on the user account"
   #  note.save
 
   class Note < UserResource
@@ -21,7 +21,7 @@ module Intercom
     # Creates a new Note using params and saves it
     # @see #save
     def self.create(params)
-      requires_parameters(params, %W(note))
+      requires_parameters(params, %W(body))
       Note.new(params).save
     end
 
@@ -34,9 +34,12 @@ module Intercom
 
     ##
     # Set the text of the note for the user
-    def note=(note)
-      @attributes["note"] = note
+    def body=(body)
+      @attributes["body"] = body
     end
 
+    def user
+      User.from_api(@attributes['user'])
+    end
   end
 end
