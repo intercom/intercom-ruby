@@ -55,7 +55,7 @@ The API supports:
 
 ==== Notes
 
-    Intercom::Note.create(:email => "bob@example.com", :body => "This is the text of the note"
+    Intercom::Note.create(:email => "bob@example.com", :body => "This is the text of the note")
 
 === Errors
 
