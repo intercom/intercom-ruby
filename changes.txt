@@ -1,5 +1,8 @@
-0.0.10
+0.0.11
  - add support for creating notes on users
+
+0.0.10
+ - allow settings dates to nil
 
 0.0.9
  - add support for settings/updating url attribute for message_threads
