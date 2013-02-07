@@ -46,7 +46,7 @@ module Intercom
 
   private
   def self.url_for_path(path)
-    raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom for usage examples." if [@app_id, @api_key].any?(&:nil?)
+    raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples." if [@app_id, @api_key].any?(&:nil?)
     "#{target_base_url}/v1/#{path}"
   end
 
