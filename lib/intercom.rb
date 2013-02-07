@@ -54,7 +54,7 @@ module Intercom
 
   def self.send_request_to_path(request)
     request.execute(target_base_url)
-  rescue Intercom::ServiceReachableError => e
+  rescue Intercom::ServiceUnavailableError => e
     if endpoints.length > 1
       retry_on_alternative_endpoint(request)
     else
@@ -143,7 +143,7 @@ module Intercom
   end
 
   # Raised when we reach socket connect timeout
-  class ServiceReachableError < StandardError;
+  class ServiceUnavailableError < StandardError;
   end
 
   # Raised when requesting resources on behalf of a user that doesn't exist in your application on Intercom.

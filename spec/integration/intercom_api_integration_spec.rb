@@ -62,8 +62,8 @@ describe "api.intercom.io dummy data requests" do
 
   it "should raise error when endpoint(s) are un-reachable" do
     Intercom.endpoints = ["http://127.0.0.7"]
-    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceReachableError
+    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceUnavailableError
     Intercom.endpoints = ["http://127.0.0.7", "http://127.0.0.6"]
-    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceReachableError
+    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceUnavailableError
   end
 end
