@@ -29,12 +29,12 @@ describe Intercom do
       before do
         @protocol = Intercom.protocol
         @hostname = Intercom.hostname
+        Intercom.endpoints = nil
       end
 
       after do
         Intercom.protocol = @protocol
         Intercom.hostname = @hostname
-        Intercom.endpoints = nil
       end
 
       it "allows overriding of the endpoint and protocol" do
@@ -46,7 +46,7 @@ describe Intercom do
       it "prefers endpoints" do
         Intercom.endpoint = "https://localhost:7654"
         Intercom.target_base_url.must_equal "https://abc123:super-secret-key@localhost:7654"
-        Intercom.endpoints = ["http://example.com","https://localhost:7654"]
+        Intercom.endpoints = unshuffleable_array(["http://example.com","https://localhost:7654"])
         Intercom.target_base_url.must_equal "http://abc123:super-secret-key@example.com"
       end
 

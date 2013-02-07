@@ -1,5 +1,4 @@
-require 'intercom'
-require 'minitest/autorun'
+require "spec_helper"
 
 describe "api.intercom.io dummy data requests" do
   before :each do
@@ -56,7 +55,7 @@ describe "api.intercom.io dummy data requests" do
   end
 
   it "should failover to good endpoint when first one is un-reachable" do
-    Intercom.endpoints = ["http://127.0.0.7", "https://api.intercom.io"]
+    Intercom.endpoints = unshuffleable_array(["http://127.0.0.7", "https://api.intercom.io"])
     user = Intercom::User.find(:email => "somebody@example.com")
     user.name.must_equal "Somebody"
   end

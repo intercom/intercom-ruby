@@ -23,6 +23,7 @@ module Intercom
   @hostname = "api.intercom.io"
   @protocol = "https"
   @endpoints = nil
+  @current_endpoint = nil
   @app_id = nil
   @api_key = nil
 
@@ -48,17 +49,30 @@ module Intercom
   def self.target_base_url
     raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples." if [@app_id, @api_key].any?(&:nil?)
     basic_auth_part = "#{@app_id}:#{@api_key}@"
-    endpoints[0].gsub(/(https?:\/\/)(.*)/, "\\1#{basic_auth_part}\\2")
+    current_endpoint.gsub(/(https?:\/\/)(.*)/, "\\1#{basic_auth_part}\\2")
   end
 
   def self.send_request_to_path(request)
     request.execute(target_base_url)
   rescue Intercom::ServiceReachableError => e
-    if @endpoints && @endpoints.length > 1
+    if endpoints.length > 1
+      endpoint_unreachable
       request.execute(target_base_url)
     else
       raise e
     end
+  end
+
+  def self.current_endpoint
+    @current_endpoint ||= random_endpoint
+  end
+
+  def self.random_endpoint
+    (endpoints.shuffle - [@current_endpoint]).first
+  end
+
+  def self.endpoint_unreachable
+    @current_endpoint = random_endpoint
   end
 
   def self.post(path, payload_hash)
@@ -101,10 +115,12 @@ module Intercom
 
   def self.endpoint=(endpoint) #nodoc
     self.endpoints = [endpoint]
+    @current_endpoint = nil
   end
 
   def self.endpoints=(endpoints) #nodoc
     @endpoints = endpoints
+    @current_endpoint = nil
   end
 
   def self.endpoints
