@@ -98,3 +98,10 @@ def capture_exception(&block)
     return e
   end
 end
+
+def unshuffleable_array(array)
+  def array.shuffle
+    self
+  end
+  array
+end

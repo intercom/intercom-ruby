@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "/v1/messages_threads" do
   it "loads messages for a user" do
-    Intercom.expects(:get).with("users/message_threads", {"email" => "bo@example.com"}).returns(test_messages)
+    Intercom.expects(:get).with("/v1/users/message_threads", {"email" => "bo@example.com"}).returns(test_messages)
     message_threads = Intercom::MessageThread.find_all("email" => "bo@example.com")
     message_threads.size.must_equal 2
     message_threads.first.messages.size.must_equal 3
@@ -10,25 +10,25 @@ describe "/v1/messages_threads" do
   end
 
   it "loads message for a thread id" do
-    Intercom.expects(:get).with("users/message_threads", {"email" => "bo@example.com", "thread_id" => 123}).returns(test_message)
+    Intercom.expects(:get).with("/v1/users/message_threads", {"email" => "bo@example.com", "thread_id" => 123}).returns(test_message)
     message_thread = Intercom::MessageThread.find("email" => "bo@example.com", "thread_id" => 123)
     message_thread.messages.size.must_equal 3
   end
 
   it "creates a new message" do
-    Intercom.expects(:post).with("users/message_threads", {"email" => "jo@example.com", "body" => "Hello World"}).returns(test_message)
+    Intercom.expects(:post).with("/v1/users/message_threads", {"email" => "jo@example.com", "body" => "Hello World"}).returns(test_message)
     message_thread = Intercom::MessageThread.create("email" => "jo@example.com", "body" => "Hello World")
     message_thread.messages.size.must_equal 3
   end
 
   it "creates a comment on existing thread" do
-    Intercom.expects(:post).with("users/message_threads", {"email" => "jo@example.com", "body" => "Hello World", "thread_id" => 123}).returns(test_message)
+    Intercom.expects(:post).with("/v1/users/message_threads", {"email" => "jo@example.com", "body" => "Hello World", "thread_id" => 123}).returns(test_message)
     message_thread = Intercom::MessageThread.create("email" => "jo@example.com", "body" => "Hello World", "thread_id" => 123)
     message_thread.messages.size.must_equal 3
   end
 
   it "marks a thread as read... " do
-    Intercom.expects(:put).with("users/message_threads", {"read" => true, "email" => "jo@example.com", "thread_id" => 123}).returns(test_message)
+    Intercom.expects(:put).with("/v1/users/message_threads", {"read" => true, "email" => "jo@example.com", "thread_id" => 123}).returns(test_message)
     message_thread = Intercom::MessageThread.mark_as_read("email" => "jo@example.com", "thread_id" => 123)
     message_thread.messages.size.must_equal 3
   end
