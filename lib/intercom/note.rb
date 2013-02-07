@@ -28,7 +28,7 @@ module Intercom
     ##
     # Records a note on a user of your application
     def save
-      response = Intercom.post("users/notes", to_hash)
+      response = Intercom.post("/v1/users/notes", to_hash)
       self.update_from_api_response(response)
     end
 

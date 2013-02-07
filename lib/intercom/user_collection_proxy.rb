@@ -19,7 +19,7 @@ module Intercom
   class UserCollectionProxy
     # @return [Integer] number of users tracked on Intercom for this application
     def count
-      response = Intercom.get("users", {:per_page => 1})
+      response = Intercom.get("/v1/users", {:per_page => 1})
       response["total_count"]
     end
 
@@ -29,7 +29,7 @@ module Intercom
       page = 1
       fetch_another_page = true
       while fetch_another_page
-        current_page = Intercom.get("users", {:page => page})
+        current_page = Intercom.get("/v1/users", {:page => page})
         current_page["users"].each do |user|
           block.call User.from_api(user)
         end

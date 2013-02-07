@@ -30,7 +30,7 @@ module Intercom
     #
     # @return [User]
     def self.find(params)
-      response = Intercom.get("users", params)
+      response = Intercom.get("/v1/users", params)
       User.from_api(response)
     end
 
@@ -91,14 +91,14 @@ module Intercom
     # This operation is not idempotent.
     # @return [User]
     def self.delete(params)
-      response = Intercom.delete("users", params)
+      response = Intercom.delete("/v1/users", params)
       User.from_api(response)
     end
 
     # instance method alternative to #create
     # @return [User]
     def save
-      response = Intercom.post("users", to_hash)
+      response = Intercom.post("/v1/users", to_hash)
       self.update_from_api_response(response)
     end
 
