@@ -22,6 +22,7 @@ require "json"
 module Intercom
   @hostname = "api.intercom.io"
   @protocol = "https"
+  @endpoints = nil
   @app_id = nil
   @api_key = nil
 
@@ -46,7 +47,17 @@ module Intercom
   private
   def self.url_for_path(path)
     raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom for usage examples." if [@app_id, @api_key].any?(&:nil?)
-    "#{protocol}://#{@app_id}:#{@api_key}@#{hostname}/v1/#{path}"
+    "#{target_base_url}/v1/#{path}"
+  end
+
+  def self.target_base_url
+    basic_auth_part = "#{@app_id}:#{@api_key}@"
+    if @endpoints.nil? || @endpoints.empty?
+      "#{protocol}://#{basic_auth_part}#{hostname}"
+    else
+      endpoint = @endpoints[0]
+      endpoint.gsub(/(https?:\/\/)(.*)/, "\\1#{basic_auth_part}\\2")
+    end
   end
 
   def self.post(path, payload_hash)
@@ -85,6 +96,14 @@ module Intercom
 
   def self.hostname=(override)
     @hostname = override
+  end
+
+  def self.endpoint=(endpoint)
+    self.endpoints = [endpoint]
+  end
+
+  def self.endpoints=(endpoints)
+    @endpoints = endpoints
   end
 
   # Raised when the credentials you provide don't match a valid account on Intercom.

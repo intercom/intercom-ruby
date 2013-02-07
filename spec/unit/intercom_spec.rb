@@ -34,12 +34,20 @@ describe Intercom do
       after do
         Intercom.protocol = @protocol
         Intercom.hostname = @hostname
+        Intercom.endpoints = nil
       end
 
       it "allows overriding of the endpoint and protocol" do
         Intercom.protocol = "http"
         Intercom.hostname = "localhost:3000"
         Intercom.url_for_path("some/resource/path").must_equal "http://abc123:super-secret-key@localhost:3000/v1/some/resource/path"
+      end
+
+      it "prefers endpoints" do
+        Intercom.endpoint = "https://localhost:7654"
+        Intercom.url_for_path("some/resource/path").must_equal "https://abc123:super-secret-key@localhost:7654/v1/some/resource/path"
+        Intercom.endpoints = ["http://example.com","https://localhost:7654"]
+        Intercom.url_for_path("some/resource/path").must_equal "http://abc123:super-secret-key@example.com/v1/some/resource/path"
       end
     end
   end
