@@ -48,12 +48,7 @@ module Intercom
   def self.target_base_url
     raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples." if [@app_id, @api_key].any?(&:nil?)
     basic_auth_part = "#{@app_id}:#{@api_key}@"
-    if @endpoints.nil? || @endpoints.empty?
-      "#{protocol}://#{basic_auth_part}#{hostname}"
-    else
-      endpoint = @endpoints[0]
-      endpoint.gsub(/(https?:\/\/)(.*)/, "\\1#{basic_auth_part}\\2")
-    end
+    endpoints[0].gsub(/(https?:\/\/)(.*)/, "\\1#{basic_auth_part}\\2")
   end
 
   def self.send_request_to_path(request)
@@ -63,6 +58,7 @@ module Intercom
       @endpoints = @endpoints.rotate
       request.execute(target_base_url)
     end
+
   end
 
   def self.post(path, payload_hash)
@@ -109,6 +105,10 @@ module Intercom
 
   def self.endpoints=(endpoints) #nodoc
     @endpoints = endpoints
+  end
+
+  def self.endpoints
+    @endpoints || ["#{@protocol}://#{hostname}"]
   end
 
   # Raised when the credentials you provide don't match a valid account on Intercom.

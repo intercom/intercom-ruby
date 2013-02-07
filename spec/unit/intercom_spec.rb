@@ -49,6 +49,12 @@ describe Intercom do
         Intercom.endpoints = ["http://example.com","https://localhost:7654"]
         Intercom.target_base_url.must_equal "http://abc123:super-secret-key@example.com"
       end
+
+      it "has endpoints" do
+        Intercom.endpoints.must_equal ["https://api.intercom.io"]
+        Intercom.endpoints = ["http://example.com","https://localhost:7654"]
+        Intercom.endpoints.must_equal ["http://example.com","https://localhost:7654"]
+      end
     end
   end
 
