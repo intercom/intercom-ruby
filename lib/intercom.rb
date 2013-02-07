@@ -58,6 +58,11 @@ module Intercom
 
   def self.send_request_to_path(request)
     request.execute(target_base_url)
+  rescue Intercom::ServiceReachableError
+    if @endpoints && @endpoints.length > 1
+      @endpoints = @endpoints.rotate
+      request.execute(target_base_url)
+    end
   end
 
   def self.post(path, payload_hash)
@@ -76,7 +81,7 @@ module Intercom
     send_request_to_path(Intercom::Request.get(path, params))
   end
 
-  def self.check_required_params(params, path=nil)
+  def self.check_required_params(params, path=nil) #nodoc
     return if path.eql?("users")
     raise ArgumentError.new("Expected params Hash, got #{params.class}") unless params.is_a?(Hash)
     raise ArgumentError.new("Either email or user_id must be specified") unless params.keys.any? { |key| %W(email user_id).include?(key.to_s) }
@@ -86,23 +91,23 @@ module Intercom
     @protocol
   end
 
-  def self.protocol=(override)
+  def self.protocol=(override) #nodoc
     @protocol = override
   end
 
-  def self.hostname
+  def self.hostname #nodoc
     @hostname
   end
 
-  def self.hostname=(override)
+  def self.hostname=(override) #nodoc
     @hostname = override
   end
 
-  def self.endpoint=(endpoint)
+  def self.endpoint=(endpoint) #nodoc
     self.endpoints = [endpoint]
   end
 
-  def self.endpoints=(endpoints)
+  def self.endpoints=(endpoints) #nodoc
     @endpoints = endpoints
   end
 
@@ -113,6 +118,10 @@ module Intercom
 
   # Raised when something does wrong on within the Intercom API service.
   class ServerError < StandardError;
+  end
+
+  # Raised when we reach socket connect timeout
+  class ServiceReachableError < StandardError;
   end
 
   # Raised when requesting resources on behalf of a user that doesn't exist in your application on Intercom.

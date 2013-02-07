@@ -51,7 +51,7 @@ module Intercom
         net.ca_file = File.join(File.dirname(__FILE__), '../data/cacert.pem')
       end
       net.read_timeout = 30
-      net.open_timeout = 10
+      net.open_timeout = 3
       net
     end
 
@@ -64,6 +64,8 @@ module Intercom
         decoded = decode(response['content-encoding'], response.body)
         JSON.parse(decoded)
       end
+    rescue Timeout::Error
+      raise Intercom::ServiceReachableError
     end
 
     def decode(content_encoding, body)

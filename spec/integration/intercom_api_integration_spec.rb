@@ -5,6 +5,7 @@ describe "api.intercom.io dummy data requests" do
   before :each do
     Intercom.app_id = "dummy-app-id"
     Intercom.api_key = "dummy-secret-key"
+    Intercom.endpoint = "https://api.intercom.io"
   end
 
   it "should get all user" do
@@ -52,5 +53,12 @@ describe "api.intercom.io dummy data requests" do
     note = Intercom::Note.create(:body => "This is a note", :email => "somebody@example.com")
     note.html.must_equal "<p>This is a note</p>"
     note.user.email.must_equal "somebody@example.com"
+  end
+
+  it "should failover to good endpoint when first one is un-reachable" do
+    Intercom.endpoints = ["http://127.0.0.7", "https://api.intercom.io"]
+
+    user = Intercom::User.find(:email => "somebody@example.com")
+    user.name.must_equal "Somebody"
   end
 end
