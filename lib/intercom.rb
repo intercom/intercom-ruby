@@ -68,7 +68,9 @@ module Intercom
   end
 
   def self.current_endpoint
-    @current_endpoint ||= random_endpoint
+    return @current_endpoint if @current_endpoint && @endpoint_randomized_at > (Time.now - (60 * 5))
+    @endpoint_randomized_at = Time.now
+    @current_endpoint = random_endpoint
   end
 
   def self.random_endpoint

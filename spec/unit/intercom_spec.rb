@@ -55,8 +55,19 @@ describe Intercom do
         Intercom.endpoints = ["http://example.com","https://localhost:7654"]
         Intercom.endpoints.must_equal ["http://example.com","https://localhost:7654"]
       end
+
+      it "should randomize endpoints if last checked endpoint is > 5 minutes ago" do
+        Intercom.instance_variable_set(:@current_endpoint, "http://start")
+        Intercom.instance_variable_set(:@endpoints, ["http://alternative"])
+        Intercom.instance_variable_set(:@endpoint_randomized_at, Time.now - 120)
+        Intercom.current_endpoint.must_equal "http://start"
+        Intercom.instance_variable_set(:@endpoint_randomized_at, Time.now - 360)
+        Intercom.current_endpoint.must_equal "http://alternative"
+        Intercom.instance_variable_get(:@endpoint_randomized_at).to_i.must_be_close_to Time.now.to_i
+      end
     end
   end
+
 
   it "checks for email or user id" do
     proc { Intercom.check_required_params("else") }.must_raise ArgumentError, "Expected params Hash, got String"
