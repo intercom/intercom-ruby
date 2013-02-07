@@ -56,11 +56,15 @@ module Intercom
     request.execute(target_base_url)
   rescue Intercom::ServiceReachableError => e
     if endpoints.length > 1
-      endpoint_unreachable
-      request.execute(target_base_url)
+      retry_on_alternative_endpoint(request)
     else
       raise e
     end
+  end
+
+  def self.retry_on_alternative_endpoint(request)
+    @current_endpoint = alternative_random_endpoint
+    request.execute(target_base_url)
   end
 
   def self.current_endpoint
@@ -68,11 +72,11 @@ module Intercom
   end
 
   def self.random_endpoint
-    (endpoints.shuffle - [@current_endpoint]).first
+    endpoints.shuffle.first
   end
 
-  def self.endpoint_unreachable
-    @current_endpoint = random_endpoint
+  def self.alternative_random_endpoint
+    (endpoints.shuffle - [@current_endpoint]).first
   end
 
   def self.post(path, payload_hash)
