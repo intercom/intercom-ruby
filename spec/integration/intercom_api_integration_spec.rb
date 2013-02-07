@@ -57,8 +57,14 @@ describe "api.intercom.io dummy data requests" do
 
   it "should failover to good endpoint when first one is un-reachable" do
     Intercom.endpoints = ["http://127.0.0.7", "https://api.intercom.io"]
-
     user = Intercom::User.find(:email => "somebody@example.com")
     user.name.must_equal "Somebody"
+  end
+
+  it "should raise error when endpoint(s) are un-reachable" do
+    Intercom.endpoints = ["http://127.0.0.7"]
+    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceReachableError
+    Intercom.endpoints = ["http://127.0.0.7", "http://127.0.0.6"]
+    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceReachableError
   end
 end

@@ -53,12 +53,12 @@ module Intercom
 
   def self.send_request_to_path(request)
     request.execute(target_base_url)
-  rescue Intercom::ServiceReachableError
+  rescue Intercom::ServiceReachableError => e
     if @endpoints && @endpoints.length > 1
-      @endpoints = @endpoints.rotate
       request.execute(target_base_url)
+    else
+      raise e
     end
-
   end
 
   def self.post(path, payload_hash)
