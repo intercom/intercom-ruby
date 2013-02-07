@@ -84,7 +84,7 @@ describe "Intercom::User" do
   end
 
   it "fetches a user" do
-    Intercom.expects(:get).with("users", {"email" => "bo@example.com"}).returns(test_user)
+    Intercom.expects(:get).with("/v1/users", {"email" => "bo@example.com"}).returns(test_user)
     user = Intercom::User.find("email" => "bo@example.com")
     user.email.must_equal "bob@example.com"
     user.name.must_equal "Joe Schmoe"
@@ -93,23 +93,23 @@ describe "Intercom::User" do
 
   it "saves a user" do
     user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242")
-    Intercom.expects(:post).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
     user.save
   end
 
   it "deletes a user" do
-    Intercom.expects(:delete).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    Intercom.expects(:delete).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
     Intercom::User.delete("email" => "jo@example.com", "user_id" => "i-1224242")
   end
 
   it "can use User.create for convenience" do
-    Intercom.expects(:post).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
     user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
     user.email.must_equal "jo@example.com"
   end
 
   it "updates the @user with attributes as set by the server" do
-    Intercom.expects(:post).with("users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "session_count" => 4})
+    Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "session_count" => 4})
     user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
     user.session_count.must_equal 4
   end
@@ -124,7 +124,7 @@ describe "Intercom::User" do
   end
 
   it "allows setting dates to nil without converting them to 0" do
-    Intercom.expects(:post).with("users", {"email" => "jo@example.com", "created_at" => nil}).returns({"email" => "jo@example.com"})
+    Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "created_at" => nil}).returns({"email" => "jo@example.com"})
     user = Intercom::User.create("email" => "jo@example.com", "created_at" => nil)
     user.created_at.must_equal nil
   end

@@ -45,12 +45,8 @@ module Intercom
   end
 
   private
-  def self.url_for_path(path)
-    raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples." if [@app_id, @api_key].any?(&:nil?)
-    "#{target_base_url}/v1/#{path}"
-  end
-
   def self.target_base_url
+    raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples." if [@app_id, @api_key].any?(&:nil?)
     basic_auth_part = "#{@app_id}:#{@api_key}@"
     if @endpoints.nil? || @endpoints.empty?
       "#{protocol}://#{basic_auth_part}#{hostname}"
@@ -60,20 +56,24 @@ module Intercom
     end
   end
 
+  def self.send_request_to_path(request)
+    request.execute(target_base_url)
+  end
+
   def self.post(path, payload_hash)
-    Intercom::Request.post(url_for_path(path), payload_hash).execute
+    send_request_to_path(Intercom::Request.post(path, payload_hash))
   end
 
   def self.delete(path, payload_hash)
-    Intercom::Request.delete(url_for_path(path), payload_hash).execute
+    send_request_to_path(Intercom::Request.delete(path, payload_hash))
   end
 
   def self.put(path, payload_hash)
-    Intercom::Request.put(url_for_path(path), payload_hash).execute
+    send_request_to_path(Intercom::Request.put(path, payload_hash))
   end
 
   def self.get(path, params)
-    Intercom::Request.get(url_for_path(path), params).execute
+    send_request_to_path(Intercom::Request.get(path, params))
   end
 
   def self.check_required_params(params, path=nil)

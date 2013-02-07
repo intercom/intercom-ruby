@@ -14,11 +14,11 @@ describe Intercom do
     it "raises ArgumentError if no app_id or api_key specified" do
       Intercom.app_id = nil
       Intercom.api_key = nil
-      proc { Intercom.url_for_path("something") }.must_raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples."
+      proc { Intercom.target_base_url }.must_raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples."
     end
 
     it "defaults to https to api.intercom.io" do
-      Intercom.url_for_path("some/resource/path").must_equal "https://abc123:super-secret-key@api.intercom.io/v1/some/resource/path"
+      Intercom.target_base_url.must_equal "https://abc123:super-secret-key@api.intercom.io"
     end
 
     it "raises ResourceNotFound if get a 404" do
@@ -40,14 +40,14 @@ describe Intercom do
       it "allows overriding of the endpoint and protocol" do
         Intercom.protocol = "http"
         Intercom.hostname = "localhost:3000"
-        Intercom.url_for_path("some/resource/path").must_equal "http://abc123:super-secret-key@localhost:3000/v1/some/resource/path"
+        Intercom.target_base_url.must_equal "http://abc123:super-secret-key@localhost:3000"
       end
 
       it "prefers endpoints" do
         Intercom.endpoint = "https://localhost:7654"
-        Intercom.url_for_path("some/resource/path").must_equal "https://abc123:super-secret-key@localhost:7654/v1/some/resource/path"
+        Intercom.target_base_url.must_equal "https://abc123:super-secret-key@localhost:7654"
         Intercom.endpoints = ["http://example.com","https://localhost:7654"]
-        Intercom.url_for_path("some/resource/path").must_equal "http://abc123:super-secret-key@example.com/v1/some/resource/path"
+        Intercom.target_base_url.must_equal "http://abc123:super-secret-key@example.com"
       end
     end
   end

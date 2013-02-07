@@ -30,7 +30,7 @@ module Intercom
     ##
     # Records that a user has interacted with your application, including the 'location' within the app they used
     def save
-      response = Intercom.post("users/impressions", to_hash)
+      response = Intercom.post("/v1/users/impressions", to_hash)
       self.update_from_api_response(response)
     end
 

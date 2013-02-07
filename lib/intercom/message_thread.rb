@@ -23,14 +23,14 @@ module Intercom
     # @return [Message]
     def self.find(params)
       requires_parameters(params, %W(thread_id))
-      api_response = Intercom.get("users/message_threads", params)
+      api_response = Intercom.get("/v1/users/message_threads", params)
       MessageThread.from_api(api_response)
     end
 
     # Finds all Messages to show a particular user
     # @return [Array<Message>]
     def self.find_all(params)
-      response = Intercom.get("users/message_threads", params)
+      response = Intercom.get("/v1/users/message_threads", params)
       response.map { |message| MessageThread.from_api(message) }
     end
 
@@ -50,7 +50,7 @@ module Intercom
 
     # @return [Message]
     def save(method=:post)
-      response = Intercom.send(method, "users/message_threads", to_hash)
+      response = Intercom.send(method, "/v1/users/message_threads", to_hash)
       self.update_from_api_response(response)
     end
 
