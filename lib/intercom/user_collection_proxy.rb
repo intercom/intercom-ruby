@@ -1,5 +1,5 @@
 require 'intercom/user_resource'
-require 'intercom/user_custom_data'
+# require 'intercom/user_custom_data'
 require 'intercom/social_profile'
 
 module Intercom

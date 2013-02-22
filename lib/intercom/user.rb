@@ -1,5 +1,5 @@
 require 'intercom/user_resource'
-require 'intercom/user_custom_data'
+require 'intercom/flat_store'
 require 'intercom/user_collection_proxy'
 require 'intercom/social_profile'
 
@@ -224,7 +224,7 @@ module Intercom
     #
     # @return [UserCustomData]
     def custom_data
-      @attributes["custom_data"] ||= UserCustomData.new
+      @attributes["custom_data"] ||= FlatStore.new
     end
 
     # Set a {Hash} of custom data attributes to save/update on this user
@@ -232,7 +232,15 @@ module Intercom
     # @param [Hash] custom_data
     # @return [UserCustomData]
     def custom_data=(custom_data)
-      @attributes["custom_data"] = UserCustomData.new(custom_data)
+      @attributes["custom_data"] = FlatStore.new(custom_data)
+    end
+
+    def company
+      @attributes["company"] ||= FlatStore.new
+    end
+
+    def company=(company)
+      @attributes["company"] = FlatStore.new(company)
     end
 
     protected
