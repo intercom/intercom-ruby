@@ -1,6 +1,6 @@
 require 'intercom'
 require 'minitest/autorun'
-require 'mocha'
+require 'mocha/setup'
 
 def test_user(email="bob@example.com")
   {

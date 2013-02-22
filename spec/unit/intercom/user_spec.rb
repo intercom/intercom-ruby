@@ -73,6 +73,14 @@ describe "Intercom::User" do
     user.to_hash["custom_data"].must_equal "mad" => 123, "other" => now, "thing" => "yay"
   end
 
+  it "allows easy setting of company data" do
+    now = Time.now
+    user = Intercom::User.new()
+    user.company["name"] = "Intercom"
+    user.company["id"] = 6
+    user.to_hash["company"].must_equal "name" => "Intercom", "id" => 6
+  end
+
   it "rejects nested data structures in custom_data" do
     user = Intercom::User.new()
     proc { user.custom_data["thing"] = [1] }.must_raise ArgumentError
@@ -94,6 +102,12 @@ describe "Intercom::User" do
   it "saves a user" do
     user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242")
     Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    user.save
+  end
+
+  it "saves a user with a company" do
+    user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242", :company => {:id => 6, :name => "Intercom"})
+    Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "company" => {"id" => 6, "name" => "Intercom"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
     user.save
   end
 
