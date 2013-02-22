@@ -222,7 +222,7 @@ module Intercom
     #  user.custom_data[:plan] = "pro"
     #  user.save
     #
-    # @return [UserCustomData]
+    # @return [FlatStore]
     def custom_data
       @attributes["custom_data"] ||= FlatStore.new
     end
@@ -230,15 +230,30 @@ module Intercom
     # Set a {Hash} of custom data attributes to save/update on this user
     #
     # @param [Hash] custom_data
-    # @return [UserCustomData]
+    # @return [FlatStore]
     def custom_data=(custom_data)
       @attributes["custom_data"] = FlatStore.new(custom_data)
     end
 
+    # Custom attributes stored for this Intercom::User
+    #
+    # See http://docs.intercom.io/#Companies for more information
+    #
+    # Example: Setting a company for an existing user
+    #  user = Intercom::User.find(:email => "someone@example.com")
+    #  user.company[:id] = 6
+    #  user.company[:name] = "Intercom"
+    #  user.save
+    #
+    # @return [FlatStore]
     def company
       @attributes["company"] ||= FlatStore.new
     end
 
+    # Set a {Hash} of company attributes to save/update on this user
+    #
+    # @param [Hash] company
+    # @return [FlatStore]
     def company=(company)
       @attributes["company"] = FlatStore.new(company)
     end
