@@ -1,10 +1,10 @@
-require 'intercom'
-require 'minitest/autorun'
+require "spec_helper"
 
 describe "api.intercom.io dummy data requests" do
   before :each do
     Intercom.app_id = "dummy-app-id"
     Intercom.api_key = "dummy-secret-key"
+    Intercom.endpoint = "https://api.intercom.io"
   end
 
   it "should get all user" do
@@ -46,5 +46,24 @@ describe "api.intercom.io dummy data requests" do
     impression = Intercom::Impression.create(:email => 'somebody@example.com')
     impression.unread_messages.must_be :>, 0
     impression.email.must_equal 'somebody@example.com'
+  end
+
+  it "should create some notes" do
+    note = Intercom::Note.create(:body => "This is a note", :email => "somebody@example.com")
+    note.html.must_equal "<p>This is a note</p>"
+    note.user.email.must_equal "somebody@example.com"
+  end
+
+  it "should failover to good endpoint when first one is un-reachable" do
+    Intercom.endpoints = unshuffleable_array(["http://127.0.0.7", "https://api.intercom.io"])
+    user = Intercom::User.find(:email => "somebody@example.com")
+    user.name.must_equal "Somebody"
+  end
+
+  it "should raise error when endpoint(s) are un-reachable" do
+    Intercom.endpoints = ["http://127.0.0.7"]
+    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceUnavailableError
+    Intercom.endpoints = ["http://127.0.0.7", "http://127.0.0.6"]
+    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceUnavailableError
   end
 end

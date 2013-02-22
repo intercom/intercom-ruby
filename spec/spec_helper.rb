@@ -1,6 +1,6 @@
 require 'intercom'
 require 'minitest/autorun'
-require 'mocha'
+require 'mocha/setup'
 
 def test_user(email="bob@example.com")
   {
@@ -97,4 +97,11 @@ def capture_exception(&block)
   rescue => e
     return e
   end
+end
+
+def unshuffleable_array(array)
+  def array.shuffle
+    self
+  end
+  array
 end

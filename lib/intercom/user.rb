@@ -1,5 +1,5 @@
 require 'intercom/user_resource'
-require 'intercom/user_custom_data'
+require 'intercom/flat_store'
 require 'intercom/user_collection_proxy'
 require 'intercom/social_profile'
 
@@ -30,7 +30,7 @@ module Intercom
     #
     # @return [User]
     def self.find(params)
-      response = Intercom.get("users", params)
+      response = Intercom.get("/v1/users", params)
       User.from_api(response)
     end
 
@@ -91,14 +91,14 @@ module Intercom
     # This operation is not idempotent.
     # @return [User]
     def self.delete(params)
-      response = Intercom.delete("users", params)
+      response = Intercom.delete("/v1/users", params)
       User.from_api(response)
     end
 
     # instance method alternative to #create
     # @return [User]
     def save
-      response = Intercom.post("users", to_hash)
+      response = Intercom.post("/v1/users", to_hash)
       self.update_from_api_response(response)
     end
 
@@ -222,17 +222,40 @@ module Intercom
     #  user.custom_data[:plan] = "pro"
     #  user.save
     #
-    # @return [UserCustomData]
+    # @return [FlatStore]
     def custom_data
-      @attributes["custom_data"] ||= UserCustomData.new
+      @attributes["custom_data"] ||= FlatStore.new
     end
 
     # Set a {Hash} of custom data attributes to save/update on this user
     #
     # @param [Hash] custom_data
-    # @return [UserCustomData]
+    # @return [FlatStore]
     def custom_data=(custom_data)
-      @attributes["custom_data"] = UserCustomData.new(custom_data)
+      @attributes["custom_data"] = FlatStore.new(custom_data)
+    end
+
+    # Custom attributes stored for this Intercom::User
+    #
+    # See http://docs.intercom.io/#Companies for more information
+    #
+    # Example: Setting a company for an existing user
+    #  user = Intercom::User.find(:email => "someone@example.com")
+    #  user.company[:id] = 6
+    #  user.company[:name] = "Intercom"
+    #  user.save
+    #
+    # @return [FlatStore]
+    def company
+      @attributes["company"] ||= FlatStore.new
+    end
+
+    # Set a {Hash} of company attributes to save/update on this user
+    #
+    # @param [Hash] company
+    # @return [FlatStore]
+    def company=(company)
+      @attributes["company"] = FlatStore.new(company)
     end
 
     protected
