@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name        = "intercom"
   spec.version     = Intercom::VERSION
   spec.authors     = ["Ben McRedmond", "Ciaran Lee", "Darragh Curran",]
-  spec.email       = ["ben@intercom.io", "ciaran@intercom.io", "darragh@intercom.io"]
+  spec.email       = ["ben@intercom.io", "ciaran@intercom.io", "darragh@intercom.io", "kyle@digitalworkbox.com"]
   spec.homepage    = "http://www.intercom.io"
   spec.summary     = %q{Ruby bindings for the Intercom API}
   spec.description = %Q{Intercom (https://www.intercom.io) is a customer relationship management and messaging tool for web app owners. This library wraps the api provided by Intercom. See http://docs.intercom.io/api for more details. }
