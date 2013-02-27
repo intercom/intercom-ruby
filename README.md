@@ -1,24 +1,29 @@
-Ruby bindings for the Intercom API (https://api.intercom.io). See http://docs.intercom.io/api for more details.
+# intercom-ruby
 
-Yardoc is available at http://rubydoc.info/github/intercom/intercom-ruby/master/frames
+Ruby bindings for the Intercom API (https://api.intercom.io).
 
-For generating Intercom javascript script tags, please see https://github.com/intercom/intercom-rails
+[API Documentation](https://api.intercom.io)
 
-== Installation
+[Gem Documentation](http://rubydoc.info/github/intercom/intercom-ruby/master/frames)
+
+For generating Intercom javascript script tags for Rails, please see https://github.com/intercom/intercom-rails
+
+## Installation
+
     gem install intercom
 
 Using bundler:
 
     gem 'intercom'
 
-== Basic Usage
+## Basic Usage
 
-=== Configure your access credentials
+### Configure your access credentials
 
     Intercom.app_id = "my_app_iddd"
     Intercom.api_key = "my-super-crazy-api-key"
 
-=== Resources
+### Resources
 
 The API supports:
 
@@ -27,9 +32,9 @@ The API supports:
     POST https://api.intercom.io/v1/users/impressions
     POST https://api.intercom.io/v1/users/notes
 
-=== Examples:
+### Examples
 
-==== Users
+#### Users
     user = Intercom::User.find_by_email("bob@example.com")
     user.custom_data["average_monthly_spend"] = 1234.56
     user.save
@@ -41,23 +46,31 @@ The API supports:
     Intercom::User.all.each {|user| puts %Q(#{user.email} - #{user.custom_data["average_monthly_spend"]}) }
     Intercom::User.all.map {|user| user.email }
 
+#### Companies
+    user = Intercom::User.find_by_email("bob@example.com")
+    user.company = {:id => 6, :name => "Intercom"}
+    user.companies = [{:id => 6, :name => "Intercom"}, {:id => 9, :name => "Test Company"}]
 
-==== Messages
+You can also pass custom data within a company:
+
+    user.company = {:id => 6, :name => "Intercom", :referral_source => "Google"}
+
+#### Messages
 
     Intercom::Message.create(:email => "bob@example.com", :body => "Example message from bob@example.com to your application on Intercom.")
     Intercom::Message.find(:email => "bob@example.com", :thread_id => 123)
     Intercom::Message.find_all(:email => "bob@example.com")
     Intercom::Message.mark_as_read(:email => "bob@example.com", :thread_id => 123)
 
-==== Impressions
+#### Impressions
 
     Intercom::Impression.create(:email => "bob@example.com", :location => "/path/in/my/app", :user_ip => "1.2.3.4", :user_agent => "my-savage-iphone-app-0.1"
 
-==== Notes
+#### Notes
 
     Intercom::Note.create(:email => "bob@example.com", :body => "This is the text of the note")
 
-=== Errors
+### Errors
 
     Intercom::AuthenticationError
     Intercom::ServerError
