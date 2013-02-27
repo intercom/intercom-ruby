@@ -258,6 +258,15 @@ module Intercom
       @attributes["company"] = FlatStore.new(company)
     end
 
+    def companies
+      @attributes["companies"] ||= []
+    end
+
+    def companies=(companies)
+      raise ArgumentError.new("Companies requires an array of hashes of companies") unless companies.is_a?(Array) && companies.all? {|company| company.is_a?(Hash)}
+      @attributes["companies"] = companies.collect {|company| FlatStore.new(company) }
+    end
+
     protected
       def social_profiles=(social_profiles) #:nodoc:
         @social_profiles = social_profiles.map { |account| SocialProfile.new(account) }.freeze
