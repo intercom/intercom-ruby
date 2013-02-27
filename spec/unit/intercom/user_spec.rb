@@ -81,6 +81,22 @@ describe "Intercom::User" do
     user.to_hash["company"].must_equal "name" => "Intercom", "id" => 6
   end
 
+  it "allows easy setting of multiple companies" do
+    user = Intercom::User.new()
+    companies = [
+      {"name" => "Intercom", "id" => "6"},
+      {"name" => "Test", "id" => "9"}
+    ]
+    user.companies = companies
+    user.to_hash["companies"].must_equal companies
+  end
+
+  it "rejects setting companies without an array of hashes" do
+    user = Intercom::User.new()
+    proc { user.companies = {"name" => "test"} }.must_raise ArgumentError
+    proc { user.companies = [ ["name", "test"] ]}.must_raise ArgumentError
+  end
+
   it "rejects nested data structures in custom_data" do
     user = Intercom::User.new()
     proc { user.custom_data["thing"] = [1] }.must_raise ArgumentError
@@ -108,6 +124,12 @@ describe "Intercom::User" do
   it "saves a user with a company" do
     user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242", :company => {:id => 6, :name => "Intercom"})
     Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "company" => {"id" => 6, "name" => "Intercom"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    user.save
+  end
+
+  it "saves a user with a companies" do
+    user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242", :companies => [{:id => 6, :name => "Intercom"}])
+    Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "companies" => [{"id" => 6, "name" => "Intercom"}]}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
     user.save
   end
 
