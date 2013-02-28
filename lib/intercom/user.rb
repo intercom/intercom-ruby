@@ -235,7 +235,7 @@ module Intercom
       @attributes["custom_data"] = FlatStore.new(custom_data)
     end
 
-    # Custom attributes stored for this Intercom::User
+    # Company stored for this Intercom::User
     #
     # See http://docs.intercom.io/#Companies for more information
     #
@@ -256,6 +256,29 @@ module Intercom
     # @return [FlatStore]
     def company=(company)
       @attributes["company"] = FlatStore.new(company)
+    end
+
+    # Multiple companies for this Intercom::User
+    #
+    # See http://docs.intercom.io/#Companies for more information
+    #
+    # Example: Setting a company for an existing user
+    #  user = Intercom::User.find(:email => "someone@example.com")
+    #  user.companies = [{:id => 6, :name => "intercom"}, {:id => 9, :name => "Test Company"}]
+    #  user.save
+    #
+    # @return [Array]
+    def companies
+      @attributes["companies"] ||= []
+    end
+
+    # Set an {Array} of {Hash} company attributes to save/update on this user
+    #
+    # @param [Array] companies
+    # @return [Array]
+    def companies=(companies)
+      raise ArgumentError.new("Companies requires an array of hashes of companies") unless companies.is_a?(Array) && companies.all? {|company| company.is_a?(Hash)}
+      @attributes["companies"] = companies.collect {|company| FlatStore.new(company) }
     end
 
     protected
