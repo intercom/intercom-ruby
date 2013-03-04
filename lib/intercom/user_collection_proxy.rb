@@ -30,5 +30,14 @@ module Intercom
     end
 
     include Enumerable
+
+    # This method exists as an optimisation of Enumerable#count,
+    # which would potentially fetch multiple pages of users.
+    def count(item=nil) #:nodoc:
+      return super unless item.nil?
+      return super if block_given?
+
+      Intercom::User.count
+    end
   end
 end
