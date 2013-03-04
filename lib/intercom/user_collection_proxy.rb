@@ -8,21 +8,12 @@ module Intercom
   #
   # == Examples:
   #
-  # Fetching a count of all Users tracked on Intercom
-  #    Intercom::User.all.count
-  #
   # Iterating over each user
   #    Intercom::User.all.each do |user|
   #      puts user.inspect
   #    end
   #
   class UserCollectionProxy
-    # @return [Integer] number of users tracked on Intercom for this application
-    def count
-      response = Intercom.get("/v1/users", {:per_page => 1})
-      response["total_count"]
-    end
-
     # yields each {User} to the block provided
     # @return [void]
     def each(&block)
