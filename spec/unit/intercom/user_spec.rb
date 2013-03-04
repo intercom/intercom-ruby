@@ -74,7 +74,6 @@ describe "Intercom::User" do
   end
 
   it "allows easy setting of company data" do
-    now = Time.now
     user = Intercom::User.new()
     user.company["name"] = "Intercom"
     user.company["id"] = 6
