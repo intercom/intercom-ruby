@@ -68,8 +68,6 @@ module Intercom
 
     # Retrieve all the users
     # Examples:
-    #   Intercom::User.all.count
-    #     > 5346
     #   Intercom::User.all.each do |user|
     #     puts user.inspect
     #   end
@@ -80,6 +78,14 @@ module Intercom
     # @return [UserCollectionProxy]
     def self.all
       UserCollectionProxy.new
+    end
+
+    # Fetches a count of all Users tracked on Intercom.
+    #
+    # @return [Integer]
+    def self.count
+      response = Intercom.get("/v1/users", {:per_page => 1})
+      response["total_count"]
     end
 
     # Deletes a user record on your application.
