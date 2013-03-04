@@ -81,6 +81,9 @@ module Intercom
     end
 
     # Fetches a count of all Users tracked on Intercom.
+    # Example:
+    #   Intercom::User.all.count
+    #     > 5346
     #
     # @return [Integer]
     def self.count
