@@ -1,3 +1,6 @@
+0.1.4
+ - Intercom::User.all now includes Enumerable
+
 0.0.12
  - add support for multiple endpoints, with failover on service unavailable / socket connect timeout. (only relevant to customers who must use static ip addresses to access our API)
 
