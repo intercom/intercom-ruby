@@ -8,13 +8,13 @@ module Intercom
   #
   # == Example usage
   # * Fetching a user
-  #    Intercom::User.find_by_email("bob@example.")
+  #    Intercom::User.find_by_email("bob@example.com")
   #
   # * Getting the count of all users
   #    Intercom::User.all.count
   #
   # * Fetching all users
-  #    Intercom::User.all.each {|user| puts user.email }
+  #    Intercom::User.all.each { |user| puts user.email }
   #
   # * Updating custom data on a user
   #    user = Intercom::User.find_by_email("bob@example.com")
@@ -68,18 +68,27 @@ module Intercom
 
     # Retrieve all the users
     # Examples:
-    #   Intercom::User.all.count
-    #     > 5346
-    #   Intercom::User.each do |user|
+    #   Intercom::User.all.each do |user|
     #     puts user.inspect
     #   end
     #     > ["user1@example.com" ,"user2@example.com" ,....]
-    #   Intercom::User.map(&:email)
+    #   Intercom::User.all.map(&:email)
     #     > ["user1@example.com" ,"user2@example.com" ,....]
     #
     # @return [UserCollectionProxy]
     def self.all
       UserCollectionProxy.new
+    end
+
+    # Fetches a count of all Users tracked on Intercom.
+    # Example:
+    #   Intercom::User.all.count
+    #     > 5346
+    #
+    # @return [Integer]
+    def self.count
+      response = Intercom.get("/v1/users", {:per_page => 1})
+      response["total_count"]
     end
 
     # Deletes a user record on your application.

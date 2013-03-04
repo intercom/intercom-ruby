@@ -8,21 +8,12 @@ module Intercom
   #
   # == Examples:
   #
-  # Fetching a count of all Users tracked on Intercom
-  #    Intercom::User.all.count
-  #
   # Iterating over each user
-  #    Intercom::User.each do |user|
+  #    Intercom::User.all.each do |user|
   #      puts user.inspect
   #    end
   #
   class UserCollectionProxy
-    # @return [Integer] number of users tracked on Intercom for this application
-    def count
-      response = Intercom.get("/v1/users", {:per_page => 1})
-      response["total_count"]
-    end
-
     # yields each {User} to the block provided
     # @return [void]
     def each(&block)
@@ -38,14 +29,15 @@ module Intercom
       end
     end
 
-    # yields each {User} to the block provided and collects the output in the same way as Enumerable#map
-    # @return [Array<Object>]
-    def map
-      out = []
-      each { |e| out << yield(e) }
-      out
-    end
+    include Enumerable
 
-    alias :collect :map
+    # This method exists as an optimisation of Enumerable#count,
+    # which would potentially fetch multiple pages of users.
+    def count(item=nil) #:nodoc:
+      return super unless item.nil?
+      return super if block_given?
+
+      Intercom::User.count
+    end
   end
 end
