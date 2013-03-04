@@ -184,6 +184,11 @@ describe "Intercom::User" do
     all.must_be_instance_of(Intercom::UserCollectionProxy)
   end
 
+  it "returns the total number of users" do
+    Intercom.expects(:get).with("/v1/users", {:per_page => 1}).returns(page_of_users)
+    Intercom::User.count.must_be_kind_of(Integer)
+  end
+
   it "can find_by_email" do
     Intercom::User.expects(:find).with(:email => "bob@example.com")
     Intercom::User.find_by_email("bob@example.com")
