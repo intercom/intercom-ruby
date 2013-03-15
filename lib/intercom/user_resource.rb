@@ -63,6 +63,7 @@ module Intercom
       return object.for_wire if object.respond_to?(:for_wire)
       return object.map { |item| for_wire(item) } if object.is_a?(Array)
       return object.inject({}) { |result, (k, value)| result[k] = for_wire(value); result } if object.is_a?(Hash)
+      return object.to_i if object.is_a?(Time)
       object
     end
 
