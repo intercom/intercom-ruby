@@ -68,9 +68,9 @@ describe "Intercom::User" do
     now = Time.now
     user = Intercom::User.new()
     user.custom_data["mad"] = 123
-    user.custom_data["other"] = now
+    user.custom_data["other"] = now.to_i
     user.custom_data["thing"] = "yay"
-    user.to_hash["custom_data"].must_equal "mad" => 123, "other" => now, "thing" => "yay"
+    user.to_hash["custom_data"].must_equal "mad" => 123, "other" => now.to_i, "thing" => "yay"
   end
 
   it "allows easy setting of company data" do
@@ -197,5 +197,21 @@ describe "Intercom::User" do
   it "can find_by_user_id" do
     Intercom::User.expects(:find).with(:user_id => "abc123")
     Intercom::User.find_by_user_id("abc123")
+  end
+
+  it "converts company created_at values to unix timestamps" do
+    time = Time.now
+
+    user = Intercom::User.new("companies" => [
+      { "created_at" => time },
+      { "created_at" => time.to_i }
+    ])
+
+    as_hash = user.to_hash
+    first_company_as_hash = as_hash["companies"][0]
+    second_company_as_hash = as_hash["companies"][1]
+
+    first_company_as_hash["created_at"].must_equal time.to_i
+    second_company_as_hash["created_at"].must_equal time.to_i
   end
 end
