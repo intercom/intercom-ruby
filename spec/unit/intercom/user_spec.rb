@@ -184,6 +184,18 @@ describe "Intercom::User" do
     all.must_be_instance_of(Intercom::UserCollectionProxy)
   end
 
+  describe "tagging and untagging" do
+    it "tags a group of users" do
+      Intercom.expects(:post).with("/v1/users/tag", {:user_ids => ["abc123", "def456"], :tag => "Test Tag"}).returns(tagging_response)
+      Intercom::User.tag(:user_ids => ["abc123", "def456"], :tag => "Test Tag")
+    end
+
+    it "untags a group of users" do
+      Intercom.expects(:post).with("/v1/users/untag", {:user_ids => ["abc123", "def456"], :tag => "Test Tag"}).returns(untagging_response)
+      Intercom::User.untag(:user_ids => ["abc123", "def456"], :tag => "Test Tag")
+    end
+  end
+
   it "returns the total number of users" do
     Intercom.expects(:get).with("/v1/users", {:per_page => 1}).returns(page_of_users)
     Intercom::User.count.must_be_kind_of(Integer)
