@@ -92,8 +92,7 @@ module Intercom
     #
     # @return [Hash]
     def self.tag(params)
-      response = Intercom.post("/v1/users/tag", params)
-      JSON.parse(response)
+      Intercom.post("/v1/users/tag", params)
     end
 
     # Untags a group of users with a tag on your application.
@@ -108,8 +107,7 @@ module Intercom
     #
     # @return [Hash]
     def self.untag(params)
-      response = Intercom.post("/v1/users/untag", params)
-      JSON.parse(response)
+      Intercom.post("/v1/users/untag", params)
     end
 
     # Fetches a count of all Users tracked on Intercom.
