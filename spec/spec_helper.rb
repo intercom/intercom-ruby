@@ -1,6 +1,6 @@
 require 'intercom'
 require 'minitest/autorun'
-require 'mocha/setup'
+require 'mocha'
 
 def test_user(email="bob@example.com")
   {
@@ -85,6 +85,26 @@ def page_of_users(page=1, per_page=10)
       "previous_page" => previous_page,
       "total_pages" => (all_users.size.to_f / per_page).ceil.to_i
   }
+end
+
+def tagging_response
+  {
+    :tag => "Test Tag",
+    :users => [
+      "abc123",
+      "def456"
+    ]
+  }.to_json
+end
+
+def untagging_response
+  {
+    :untag => "Test Tag",
+    :users => [
+      "abc123",
+      "def456"
+    ]
+  }.to_json
 end
 
 def error_on_modify_frozen

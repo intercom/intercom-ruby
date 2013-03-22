@@ -80,6 +80,36 @@ module Intercom
       UserCollectionProxy.new
     end
 
+    # Tags a group of users with a tag on your application.
+    #
+    # Calls POST https://api.intercom.io/v1/users/tag
+    #
+    # Examples:
+    #   Intercom::User.tag(:user_ids => ["abc123", "def456"], :tag => "Test Tag")
+    #   Intercom::User.tag(:user_ids => ["joe@example.com", "bob@example.com"], :tag => "Test Tag")
+    #
+    # returns a hash of the tag name and the users tagged.
+    #
+    # @return [Hash]
+    def self.tag(params)
+      Intercom.post("/v1/users/tag", params)
+    end
+
+    # Untags a group of users with a tag on your application.
+    #
+    # Calls POST https://api.intercom.io/v1/users/untag
+    #
+    # Examples:
+    #   Intercom::User.untag(:user_ids => ["abc123", "def456"], :tag => "Test Tag")
+    #   Intercom::User.untag(:user_ids => ["joe@example.com", "bob@example.com"], :tag => "Test Tag")
+    #
+    # returns a hash of the tag name and the users untagged.
+    #
+    # @return [Hash]
+    def self.untag(params)
+      Intercom.post("/v1/users/untag", params)
+    end
+
     # Fetches a count of all Users tracked on Intercom.
     # Example:
     #   Intercom::User.all.count

@@ -1,5 +1,8 @@
+0.1.6
+ - add support for tagging and untagging of users
+
 0.1.5
- - Always convert times to unix timestamps for the wire (thanks @jgwhite)
+ - always convert times to unix timestamps for the wire (thanks @jgwhite)
 
 0.1.4
  - Intercom::User.all now includes Enumerable
