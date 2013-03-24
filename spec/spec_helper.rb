@@ -87,6 +87,17 @@ def page_of_users(page=1, per_page=10)
   }
 end
 
+def test_tag
+  {
+    "name" => "Test Tag",
+    "color" => "red",
+    "users" => [
+      {"email" => "bob@example.com", "user_id" => "abc123"},
+      {"email" => "tom@example.com", "user_id" => "def456"}
+    ]
+  }
+end
+
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
 end

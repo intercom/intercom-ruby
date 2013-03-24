@@ -21,8 +21,21 @@ module Intercom
 
   class Tag < UserResource
 
-    def initialize(params)
-      @attributes = params
+    def initialize(attributes={})
+      @attributes = attributes
+    end
+
+    ##
+    # Finds a Tag using params
+    def self.find(params)
+      response = Intercom.get("/v1/tags", params)
+      Tag.from_api(response)
+    end
+
+    ##
+    # Finds a Tag using a name
+    def self.find_by_name(name)
+      find({:name => name})
     end
 
     ##
