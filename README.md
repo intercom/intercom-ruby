@@ -74,4 +74,5 @@ You can also pass custom data within a company:
 
     Intercom::AuthenticationError
     Intercom::ServerError
+    Intercom::ServiceUnavailableError
     Intercom::ResourceNotFound
