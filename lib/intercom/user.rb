@@ -195,6 +195,20 @@ module Intercom
     end
 
     ##
+    # Get whether user has unsubscribed from email
+    # @return [Boolean]
+    def unsubscribed_from_emails
+      @attributes['unsubscribed_from_emails']
+    end
+
+    ##
+    # Set whether user has unsubscribed from email
+    # @return [void]
+    def unsubscribed_from_emails=(unsubscribed_from_emails)
+      @attributes['unsubscribed_from_emails'] = unsubscribed_from_emails
+    end
+
+    ##
     # Get array of Intercom::SocialProfile objects attached to this Intercom::User
     #
     # See http://docs.intercom.io/#SocialProfiles for more information
