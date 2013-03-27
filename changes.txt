@@ -1,3 +1,6 @@
+0.1.6
+ - Add unsubscribed_from_emails and unsubscribed_from_emails= to user
+
 0.1.5
  - Always convert times to unix timestamps for the wire (thanks @jgwhite)
 
