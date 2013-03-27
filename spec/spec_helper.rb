@@ -14,6 +14,7 @@ def test_user(email="bob@example.com")
       :relationship_score => 90,
       :session_count => 123,
       :last_impression_at => 1323422442,
+      :unsubscribed_from_emails => true,
       :social_profiles => [
           {"type" => "twitter", "url" => "http://twitter.com/abc", "username" => "abc"},
           {"type" => "twitter", "username" => "abc2", "url" => "http://twitter.com/abc2"},
