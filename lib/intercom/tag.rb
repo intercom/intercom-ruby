@@ -17,6 +17,14 @@ module Intercom
   #  tag.name = "Super Tag"
   #  tag.color = "red"
   #  tag.user_ids = ['abc123', 'def456']
+  #  tag.tag_or_untag = "tag"
+  #  tag.save
+  #
+  #  Or update a tag and save it like this:
+  #  tag = Intercom::Tag.find_by_name "Super Tag"
+  #  tag.color = "green"
+  #  tag.user_ids = ['abc123', 'def456']
+  #  tag.tag_or_untag = "untag"
   #  tag.save
 
   class Tag < UserResource
@@ -47,7 +55,7 @@ module Intercom
     end
 
     ##
-    # Saves a note on your application
+    # Saves a Tag on your application
     def save
       response = Intercom.post("/v1/tags", to_hash)
       self.update_from_api_response(response)
@@ -75,6 +83,13 @@ module Intercom
     # An array of emails of the users you'd like to tag or untag
     def emails=(emails)
       @attributes["emails"] = emails
+    end
+
+    ##
+    # A string to specify whether to tag or untag the specified users, can be left out if only creating a new tag.
+    def tag_or_untag=(tag_or_untag)
+      return unless ["tag", "untag"].include?(tag_or_untag)
+      @attributes["tag_or_untag"] = tag_or_untag
     end
 
   end
