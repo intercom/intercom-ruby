@@ -42,6 +42,7 @@ describe "Intercom::User" do
     user.relationship_score.must_equal 90
     user.last_seen_ip.must_equal "1.2.3.4"
     user.last_seen_user_agent.must_equal "Mozilla blah blah ie6"
+    user.unsubscribed_from_emails.must_equal true
   end
 
   it "has read-only social accounts" do

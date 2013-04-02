@@ -1,5 +1,8 @@
-0.1.6
+0.1.7
  - add support for creating, updating, and fetching tags
+
+0.1.6
+ - add unsubscribed_from_emails and unsubscribed_from_emails= to user
 
 0.1.5
  - always convert times to unix timestamps for the wire (thanks @jgwhite)
