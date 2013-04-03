@@ -4,6 +4,7 @@ require "intercom/user"
 require "intercom/message_thread"
 require "intercom/impression"
 require "intercom/note"
+require "intercom/tag"
 require "intercom/request"
 require "json"
 

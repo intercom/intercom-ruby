@@ -1,6 +1,6 @@
 require 'intercom'
 require 'minitest/autorun'
-require 'mocha/setup'
+require 'mocha'
 
 def test_user(email="bob@example.com")
   {
@@ -85,6 +85,17 @@ def page_of_users(page=1, per_page=10)
       "next_page" => next_page,
       "previous_page" => previous_page,
       "total_pages" => (all_users.size.to_f / per_page).ceil.to_i
+  }
+end
+
+def test_tag
+  {
+    "name" => "Test Tag",
+    "color" => "red",
+    "users" => [
+      {"email" => "bob@example.com", "user_id" => "abc123"},
+      {"email" => "tom@example.com", "user_id" => "def456"}
+    ]
   }
 end
 
