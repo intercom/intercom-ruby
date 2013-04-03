@@ -1,8 +1,11 @@
+0.1.7
+ - add support for creating, updating, and fetching tags
+
 0.1.6
- - Add unsubscribed_from_emails and unsubscribed_from_emails= to user
+ - add unsubscribed_from_emails and unsubscribed_from_emails= to user
 
 0.1.5
- - Always convert times to unix timestamps for the wire (thanks @jgwhite)
+ - always convert times to unix timestamps for the wire (thanks @jgwhite)
 
 0.1.4
  - Intercom::User.all now includes Enumerable
