@@ -104,5 +104,11 @@ module Intercom
       @attributes["tag_or_untag"] = tag_or_untag
     end
 
+    ##
+    # An enumerable UserCollectionProxy of User::Intercom objects for users already contained in the tag
+    def users
+      UserCollectionProxy.new(@attributes["users"].map{|user| user["email"]})
+    end
+
   end
 end
