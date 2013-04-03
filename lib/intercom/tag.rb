@@ -23,7 +23,7 @@ module Intercom
   #  Or update a tag and save it like this:
   #  tag = Intercom::Tag.find_by_name "Super Tag"
   #  tag.color = "green"
-  #  tag.user_ids = ['abc123', 'def456']
+  #  tag.user_ids << 'abc123'
   #  tag.tag_or_untag = "untag"
   #  tag.save
 
@@ -71,6 +71,18 @@ module Intercom
     # The color of the tag
     def color=(color)
       @attributes["color"] = color
+    end
+
+    ##
+    # An array of user_ids of the users you'd like to tag or untag
+    def user_ids
+      @attributes["user_ids"] ||= []
+    end
+
+    ##
+    # An array of user_ids of the users you'd like to tag or untag
+    def emails
+      @attributes["emails"] ||= []
     end
 
     ##
