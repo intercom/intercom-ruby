@@ -14,9 +14,20 @@ module Intercom
   #    end
   #
   class UserCollectionProxy
+
+    def initialize(emails = nil)
+      @emails = emails
+    end
+
+    def emails_each(&block)
+      @emails.each do |email|
+        block.call User.find_by_email(email)
+      end
+    end
+
     # yields each {User} to the block provided
     # @return [void]
-    def each(&block)
+    def all_each(&block)
       page = 1
       fetch_another_page = true
       while fetch_another_page
@@ -29,6 +40,10 @@ module Intercom
       end
     end
 
+    def each(&block)
+      @emails ? emails_each(&block) : all_each(&block)
+    end
+
     include Enumerable
 
     # This method exists as an optimisation of Enumerable#count,
@@ -37,7 +52,7 @@ module Intercom
       return super unless item.nil?
       return super if block_given?
 
-      Intercom::User.count
+      @emails ? @emails.count : Intercom::User.count
     end
   end
 end
