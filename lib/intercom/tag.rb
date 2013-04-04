@@ -110,5 +110,9 @@ module Intercom
       UserCollectionProxy.new(@attributes["users"].map{|user| user["email"]})
     end
 
+    def user_emails
+      @attributes["users"].map{|user| user["email"]}
+    end
+
   end
 end
