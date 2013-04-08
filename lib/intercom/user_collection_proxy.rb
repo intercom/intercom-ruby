@@ -1,7 +1,6 @@
 require 'intercom/user_resource'
 require 'intercom/flat_store'
 require 'intercom/social_profile'
-require 'intercom/hashable_object'
 
 module Intercom
   # A collection of your Users from Intercom
@@ -15,7 +14,6 @@ module Intercom
   #    end
   #
   class UserCollectionProxy
-    include HashableObject
 
     QUERYABLE_ATTRIBUTES = [:tag_id, :tag_name]
 
