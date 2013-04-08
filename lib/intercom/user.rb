@@ -82,6 +82,22 @@ module Intercom
       UserCollectionProxy.new
     end
 
+    # Retrieve all the users that match a query
+    # Examples:
+    #   Intercom::User.where(:tag_name => 'Free Trial').each do |user|
+    #     puts user.inspect
+    #   end
+    #     > ["user1@example.com" ,"user2@example.com" ,....]
+    #   Intercom::User.where(:tag_name => 'Free Trial').map(&:email)
+    #     > ["user1@example.com" ,"user2@example.com" ,....]
+    #
+    # Currently only supports tag_name and tag_id querying
+    #
+    # @return [UserCollectionProxy]
+    def self.where(params)
+      UserCollectionProxy.new(params)
+    end
+
     # Fetches a count of all Users tracked on Intercom.
     # Example:
     #   Intercom::User.all.count
