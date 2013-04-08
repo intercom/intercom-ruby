@@ -47,13 +47,8 @@ module Intercom
 
     def self.from_api(api_response)
       tag = Tag.new
-      tag.update_from_api_response(api_response)
+      tag.from_hash(api_response)
       tag
-    end
-
-    def update_from_api_response(api_response)
-      from_hash(api_response)
-      self
     end
 
     ##
@@ -74,8 +69,8 @@ module Intercom
     # Saves a Tag on your application
     def save
       response = Intercom.post("/v1/tags", to_hash)
-      update_from_api_response(response)
+      self.from_hash(response)
+      self
     end
-
   end
 end
