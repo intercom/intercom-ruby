@@ -22,7 +22,7 @@ module Intercom
     attr_accessor :query
 
     def initialize(attributes={})
-      self.query = attributes.select{ |key, value| QUERYABLE_ATTRIBUTES.include?(key) }
+      self.query = attributes.reject{ |key, value| !QUERYABLE_ATTRIBUTES.include?(key) }
     end
 
     # yields each {User} to the block provided
