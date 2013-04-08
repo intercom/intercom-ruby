@@ -90,12 +90,11 @@ end
 
 def test_tag
   {
+    "id" => "4f73428b5e4dfc000b000112",
     "name" => "Test Tag",
     "color" => "red",
-    "users" => [
-      {"email" => "bob@example.com", "user_id" => "abc123"},
-      {"email" => "tom@example.com", "user_id" => "def456"}
-    ]
+    "segment" => false,
+    "tagged_user_count" => 2
   }
 end
 

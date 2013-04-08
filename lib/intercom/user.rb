@@ -21,6 +21,8 @@ module Intercom
   #    user.custom_data["number_of_applications"] = 11
   #    user.save
   class User < UserResource
+
+
     ##
     # Fetches an Intercom::User from our API.
     #
@@ -78,6 +80,22 @@ module Intercom
     # @return [UserCollectionProxy]
     def self.all
       UserCollectionProxy.new
+    end
+
+    # Retrieve all the users that match a query
+    # Examples:
+    #   Intercom::User.where(:tag_name => 'Free Trial').each do |user|
+    #     puts user.inspect
+    #   end
+    #     > ["user1@example.com" ,"user2@example.com" ,....]
+    #   Intercom::User.where(:tag_name => 'Free Trial').map(&:email)
+    #     > ["user1@example.com" ,"user2@example.com" ,....]
+    #
+    # Currently only supports tag_name and tag_id querying
+    #
+    # @return [UserCollectionProxy]
+    def self.where(params)
+      UserCollectionProxy.new(params)
     end
 
     # Fetches a count of all Users tracked on Intercom.
