@@ -21,6 +21,8 @@ module Intercom
   #    user.custom_data["number_of_applications"] = 11
   #    user.save
   class User < UserResource
+
+
     ##
     # Fetches an Intercom::User from our API.
     #
