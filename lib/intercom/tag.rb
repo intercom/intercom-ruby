@@ -1,11 +1,12 @@
-require 'intercom/user_resource'
+require 'intercom/requires_parameters'
+require 'intercom/hashable_object'
 
 module Intercom
 
   ##
   # Represents a tag
   #
-  # A tag consists of a name, and (optionally) a color and users that you would like to tag.
+  # A tag consists of a name, and (optionally) a color and users that you would like to tag. Returns details about the tag and a count of the number of users currently tagged.
   #
   # == Examples
   #
@@ -27,17 +28,27 @@ module Intercom
   #  tag.tag_or_untag = "untag"
   #  tag.save
 
-  class Tag < UserResource
+  class Tag
+    extend RequiresParameters
+    include HashableObject
+
+    attr_accessor :name, :color, :user_ids, :emails, :tag_or_untag, :segment, :tagged_user_count, :id
 
     def initialize(attributes={})
-      @attributes = attributes
+      from_hash(attributes)
     end
 
     ##
     # Finds a Tag using params
     def self.find(params)
       response = Intercom.get("/v1/tags", params)
-      Tag.from_api(response)
+      from_api(response)
+    end
+
+    def self.from_api(api_response)
+      tag = Tag.new
+      tag.from_hash(api_response)
+      tag
     end
 
     ##
@@ -58,51 +69,8 @@ module Intercom
     # Saves a Tag on your application
     def save
       response = Intercom.post("/v1/tags", to_hash)
-      self.update_from_api_response(response)
+      self.from_hash(response)
+      self
     end
-
-    ##
-    # The name of the tag
-    def name=(name)
-      @attributes["name"] = name
-    end
-
-    ##
-    # The color of the tag
-    def color=(color)
-      @attributes["color"] = color
-    end
-
-    ##
-    # An array of user_ids of the users you'd like to tag or untag
-    def user_ids
-      @attributes["user_ids"] ||= []
-    end
-
-    ##
-    # An array of user_ids of the users you'd like to tag or untag
-    def emails
-      @attributes["emails"] ||= []
-    end
-
-    ##
-    # An array of user_ids of the users you'd like to tag or untag
-    def user_ids=(user_ids)
-      @attributes["user_ids"] = user_ids
-    end
-
-    ##
-    # An array of emails of the users you'd like to tag or untag
-    def emails=(emails)
-      @attributes["emails"] = emails
-    end
-
-    ##
-    # A string to specify whether to tag or untag the specified users, can be left out if only creating a new tag.
-    def tag_or_untag=(tag_or_untag)
-      return unless ["tag", "untag"].include?(tag_or_untag)
-      @attributes["tag_or_untag"] = tag_or_untag
-    end
-
   end
 end

@@ -1,8 +1,10 @@
 require 'intercom/unix_timestamp_unwrapper'
+require 'intercom/requires_parameters'
 
 module Intercom
   # Base class for resources tied off a {User}, all of which are scoped by either the users :email or :user_id.
   class UserResource
+    extend RequiresParameters
     include UnixTimestampUnwrapper
 
     def initialize(attributes={})
@@ -75,11 +77,6 @@ module Intercom
     def method_missing(method, *args, &block)
       return @attributes[method.to_s] if @attributes.has_key?(method.to_s)
       super
-    end
-
-    def self.requires_parameters(parameters, required)
-      missing = Array(required) - parameters.keys.map(&:to_s)
-      raise ArgumentError.new("Missing required parameters (#{missing.join(', ')}).") unless missing.empty?
     end
   end
 end
