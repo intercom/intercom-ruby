@@ -1,3 +1,6 @@
+0.1.8
+ - change tag response to match the new api response. add support to query users that are tagged with a specific tag
+
 0.1.7
  - add support for creating, updating, and fetching tags
 
