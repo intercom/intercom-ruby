@@ -24,7 +24,7 @@ module Intercom
   #  Or update a tag and save it like this:
   #  tag = Intercom::Tag.find_by_name "Super Tag"
   #  tag.color = "green"
-  #  tag.user_ids << 'abc123'
+  #  tag.user_ids = ['abc123']
   #  tag.tag_or_untag = "untag"
   #  tag.save
 
@@ -32,7 +32,7 @@ module Intercom
     extend RequiresParameters
     include HashableObject
 
-    attr_accessor :name, :color, :user_ids, :emails, :tag_or_untag, :segment, :tagged_user_count, :id
+    attr_reader :name, :color, :segment, :tagged_user_count, :id
 
     def initialize(attributes={})
       from_hash(attributes)
@@ -48,7 +48,7 @@ module Intercom
     def self.from_api(api_response)
       tag = Tag.new
       tag.from_hash(api_response)
-      tag
+      tag.displayable_self
     end
 
     ##
@@ -70,7 +70,13 @@ module Intercom
     def save
       response = Intercom.post("/v1/tags", to_hash)
       self.from_hash(response)
-      self
+      displayable_self
+    end
+
+    ##
+    # Create a new clean instance to return (only showing the readable attributes)
+    def displayable_self
+      Tag.new(self.displayable_attributes)
     end
   end
 end
