@@ -1,5 +1,3 @@
-require 'intercom/user_resource'
-
 module Intercom
 
   ##
@@ -16,30 +14,17 @@ module Intercom
   #  note.body = "This is the note you want to make on the user account"
   #  note.save
 
-  class Note < UserResource
-    ##
-    # Creates a new Note using params and saves it
-    # @see #save
-    def self.create(params)
-      requires_parameters(params, %W(body))
-      Note.new(params).save
-    end
+  class Note < IntercomBaseObject
 
-    ##
-    # Records a note on a user of your application
-    def save
-      response = Intercom.post("/v1/users/notes", to_hash)
-      self.update_from_api_response(response)
-    end
+    ENDPOINT = "/v1/users/notes"
+    REQUIRED_PARAMS = %W(body)
 
-    ##
-    # Set the text of the note for the user
-    def body=(body)
-      @attributes["body"] = body
-    end
+    attr_accessor :body
+    attr_reader :html, :user
+    attr_writer :user_id, :email
 
     def user
-      User.from_api(@attributes['user'])
+      Intercom::User.from_api(@user)
     end
   end
 end

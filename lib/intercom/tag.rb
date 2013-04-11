@@ -1,6 +1,3 @@
-require 'intercom/requires_parameters'
-require 'intercom/hashable_object'
-
 module Intercom
 
   ##
@@ -28,17 +25,14 @@ module Intercom
   #  tag.tag_or_untag = "untag"
   #  tag.save
 
-  class Tag
-    extend RequiresParameters
-    include HashableObject
+  class Tag < IntercomBaseObject
+
+    ENDPOINT = "/v1/tags"
+    REQUIRED_PARAMS = %W(name)
 
     attr_accessor :name, :color
     attr_reader :segment, :tagged_user_count, :id
     attr_writer :user_ids, :emails, :tag_or_untag
-
-    def initialize(attributes={})
-      from_hash(attributes)
-    end
 
     ##
     # Finds a Tag using params
@@ -47,38 +41,11 @@ module Intercom
       from_api(response)
     end
 
-    def self.from_api(api_response)
-      tag = Tag.new
-      tag.from_hash(api_response)
-      tag.displayable_self
-    end
-
     ##
     # Finds a Tag using a name
     def self.find_by_name(name)
       find({:name => name})
     end
 
-    ##
-    # Creates a new Tag using params and saves it
-    # @see #save
-    def self.create(params)
-      requires_parameters(params, %W(name))
-      Tag.new(params).save
-    end
-
-    ##
-    # Saves a Tag on your application
-    def save
-      response = Intercom.post("/v1/tags", to_wire)
-      self.from_hash(response)
-      displayable_self
-    end
-
-    ##
-    # Create a new clean instance to return (only showing the readable attributes)
-    def displayable_self
-      Tag.new(self.displayable_attributes)
-    end
   end
 end

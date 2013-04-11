@@ -1,12 +1,13 @@
+require "json"
+require "intercom/request"
 require "intercom/version"
+require "intercom/intercom_base_object"
 require "intercom/user_resource"
 require "intercom/user"
 require "intercom/message_thread"
 require "intercom/impression"
 require "intercom/note"
 require "intercom/tag"
-require "intercom/request"
-require "json"
 
 ##
 # Intercom is a customer relationship management and messaging tool for web app owners
