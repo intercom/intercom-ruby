@@ -30,4 +30,13 @@ describe "Intercom::Tag" do
     tag.tagged_user_count.must_equal 2
   end
 
+  it "updates tags" do
+    Intercom.expects(:get).with("/v1/tags", {:name => "Test Tag"}).returns(test_tag)
+    tag = Intercom::Tag.find_by_name "Test Tag"
+    tag.color.must_equal "red"
+    tag.color = "green"
+    Intercom.expects(:post).with("/v1/tags", {:name => "Test Tag", :color => "green"}).returns(updated_test_tag)
+    tag.save
+  end
+
 end

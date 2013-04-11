@@ -32,7 +32,9 @@ module Intercom
     extend RequiresParameters
     include HashableObject
 
-    attr_reader :name, :color, :segment, :tagged_user_count, :id
+    attr_accessor :name, :color
+    attr_reader :segment, :tagged_user_count, :id
+    attr_writer :user_ids, :emails, :tag_or_untag
 
     def initialize(attributes={})
       from_hash(attributes)
@@ -68,7 +70,7 @@ module Intercom
     ##
     # Saves a Tag on your application
     def save
-      response = Intercom.post("/v1/tags", to_hash)
+      response = Intercom.post("/v1/tags", to_wire)
       self.from_hash(response)
       displayable_self
     end

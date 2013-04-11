@@ -98,6 +98,16 @@ def test_tag
   }
 end
 
+def updated_test_tag
+  {
+    "id" => "4f73428b5e4dfc000b000112",
+    "name" => "Test Tag",
+    "color" => "green",
+    "segment" => false,
+    "tagged_user_count" => 2
+  }
+end
+
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
 end
