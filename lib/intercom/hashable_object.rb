@@ -1,9 +1,7 @@
 module Intercom
   module HashableObject
     def from_hash(hash)
-      hash.each do |key,value|
-        instance_variable_set("@#{key}".to_sym, value)
-      end
+      hash.each {|attribute, value| instance_variable_set("@#{attribute}".to_sym, value) }
     end
 
     def to_hash
@@ -14,7 +12,11 @@ module Intercom
     end
 
     def displayable_attributes
-      to_hash.delete_if {|k, v| !self.respond_to?(k) }
+      to_hash.select {|attribute, value| self.respond_to?(attribute) }
+    end
+
+    def to_wire
+      to_hash.select {|attribute, value| self.respond_to?("#{attribute.to_s}=") }
     end
   end
 end
