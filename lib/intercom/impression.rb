@@ -1,5 +1,3 @@
-require 'intercom/user_resource'
-
 module Intercom
 
   ##
@@ -19,45 +17,30 @@ module Intercom
   #  impression.location = "person@example.com"
   #  ....
   #  impression.save
-  class Impression < UserResource
-    ##
-    # Creates a new Impression using params and saves it
-    # @see #save
-    def self.create(params)
-      Impression.new(params).save
-    end
+  class Impression < IntercomBaseObject
+
+    ENDPOINT = "/v1/users/impressions"
+    REQUIRED_PARAMS = []
+
+    attr_accessor :user_ip, :location, :user_agent
+    attr_reader :unread_messages
+    attr_writer :user_id, :email
 
     ##
-    # Records that a user has interacted with your application, including the 'location' within the app they used
-    def save
-      response = Intercom.post("/v1/users/impressions", to_hash)
-      self.update_from_api_response(response)
-    end
-
-    ##
+    # user_ip
     # Set the ip address of the user for this impression
-    def user_ip=(user_ip)
-      @attributes["user_ip"] = user_ip
-    end
 
     ##
-    # Set the location in your application that this impression occurred. E.g. the url in a web app, or perhaps the screen in a desktop  or phone application.
-    def location=(location)
-      @attributes["location"] = location
-    end
+    # location
+    # Set the location in your application that this impression occurred. E.g. the url in a web app, or perhaps the screen in a desktop or phone application.
 
     ##
+    # user_agent
     # Set the user agent of the user this impression (E.g. their browser user agent, or the name and version of a desktop or phone application)
-    def user_agent=(user_agent)
-      @attributes["user_agent"] = user_agent
-    end
 
     ##
     # For convenience, after saving, the unread_messages count will be updated with the number of unread messages for the user for their current location.
     #
     # Remember, Auto Messages (http://docs.intercom.io/#AutoMessages) can be targeted to only show when a user views a particular page in your application.
-    def unread_messages
-      @attributes["unread_messages"]
-    end
   end
 end
