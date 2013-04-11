@@ -14,11 +14,11 @@ module Intercom
     end
 
     def displayable_attributes
-      to_hash.delete_if {|k, v| !self.respond_to?(k) }
+      to_hash.select {|k, v| self.respond_to?(k) }
     end
 
     def to_wire
-      to_hash.delete_if {|k, v| !self.respond_to?("#{k.to_s}=") }
+      to_hash.select {|k, v| self.respond_to?("#{k.to_s}=") }
     end
   end
 end
