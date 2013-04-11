@@ -19,9 +19,8 @@ module Intercom
     ENDPOINT = "/v1/users/notes"
     REQUIRED_PARAMS = %W(body)
 
-    attr_accessor :body
     attr_reader :html, :user
-    attr_writer :user_id, :email
+    attr_writer :user_id, :email, :body
 
     def user
       Intercom::User.from_api(@user)
