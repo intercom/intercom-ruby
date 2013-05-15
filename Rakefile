@@ -19,4 +19,4 @@ end
 
 task :spec => "spec:unit"
 task :integration => "spec:integration"
-task :default => [:spec, :integration]
+task :default => :spec
