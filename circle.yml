@@ -1,4 +1,5 @@
 test:
   minitest_globs:
-    - spec/integration/**/*.rb
-    - spec/unit/**/*.rb
+    - spec/integration/*.rb
+    - spec/unit/intercom_spec.rb
+    - spec/unit/intercom/*.rb
