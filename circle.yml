@@ -1,0 +1,4 @@
+test:
+  minitest_globs:
+    - spec/integration/**/*.rb
+    - spec/unit/**/*.rb
