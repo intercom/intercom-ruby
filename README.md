@@ -8,6 +8,16 @@ Ruby bindings for the Intercom API (https://api.intercom.io).
 
 For generating Intercom javascript script tags for Rails, please see https://github.com/intercom/intercom-rails
 
+## Ruby Version
+The following versions of ruby are fully supported:
+
+* 1.9.2
+* 1.9.3
+* jruby-19mode
+* rbx-19mode
+
+You may find that other versions for Ruby are compatible and we will add to this list once they are.
+
 ## Installation
 
     gem install intercom
