@@ -37,6 +37,10 @@ module Intercom
     @app_id = app_id
   end
 
+  def self.app_id
+    @app_id
+  end
+
   ##
   # Set the api key to gain access to your application data.
   # When logged into your intercom console, you can view/create api keys in the settings menu
@@ -44,6 +48,10 @@ module Intercom
   # @return [String]
   def self.api_key=(api_key)
     @api_key = api_key
+  end
+
+  def self.api_key
+    @api_key
   end
 
   private
