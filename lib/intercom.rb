@@ -55,6 +55,7 @@ module Intercom
   end
 
   private
+  
   def self.target_base_url
     raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples." if [@app_id, @api_key].any?(&:nil?)
     basic_auth_part = "#{@app_id}:#{@api_key}@"
