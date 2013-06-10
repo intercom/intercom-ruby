@@ -12,11 +12,11 @@ module Intercom
     end
 
     def displayable_attributes
-      to_hash.select {|attribute, value| self.respond_to?(attribute) }
+      Hash[ to_hash.select {|attribute, value| self.respond_to?(attribute) } ]
     end
 
     def to_wire
-      to_hash.select {|attribute, value| self.respond_to?("#{attribute.to_s}=") }
+      Hash[ to_hash.select {|attribute, value| self.respond_to?("#{attribute.to_s}=") } ]
     end
   end
 end
