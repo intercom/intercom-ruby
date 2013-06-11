@@ -17,6 +17,11 @@ describe Intercom do
       proc { Intercom.target_base_url }.must_raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples."
     end
 
+    it "returns the app_id and api_key previously set" do
+      Intercom.app_id.must_equal "abc123"
+      Intercom.api_key.must_equal "super-secret-key"
+    end
+
     it "defaults to https to api.intercom.io" do
       Intercom.target_base_url.must_equal "https://abc123:super-secret-key@api.intercom.io"
     end

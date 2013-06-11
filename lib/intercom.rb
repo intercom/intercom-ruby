@@ -37,6 +37,10 @@ module Intercom
     @app_id = app_id
   end
 
+  def self.app_id
+    @app_id
+  end
+
   ##
   # Set the api key to gain access to your application data.
   # When logged into your intercom console, you can view/create api keys in the settings menu
@@ -46,7 +50,12 @@ module Intercom
     @api_key = api_key
   end
 
+  def self.api_key
+    @api_key
+  end
+
   private
+
   def self.target_base_url
     raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples." if [@app_id, @api_key].any?(&:nil?)
     basic_auth_part = "#{@app_id}:#{@api_key}@"
