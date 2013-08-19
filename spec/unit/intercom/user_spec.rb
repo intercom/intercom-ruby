@@ -74,6 +74,14 @@ describe "Intercom::User" do
     user.to_hash["custom_data"].must_equal "mad" => 123, "other" => now.to_i, "thing" => "yay"
   end
 
+  it "allows easy setting of custom data increments" do
+    user = Intercom::User.new()
+    user.increments["number_of_photos"] = 1
+    user.increments["number_of_projects"] = -1
+    user.increments["number_of_invoices"] = 3
+    user.to_hash["custom_data"]["increments"].must_equal "number_of_photos" => 1, "number_of_projects" => -1, "number_of_invoices" => 3
+  end
+
   it "allows easy setting of company data" do
     user = Intercom::User.new()
     user.company["name"] = "Intercom"
