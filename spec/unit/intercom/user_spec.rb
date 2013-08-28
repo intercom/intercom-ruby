@@ -144,6 +144,12 @@ describe "Intercom::User" do
       @user.increment("new_field", 3)
       @user.to_hash["increments"].must_equal "new_field" => 3
     end
+
+    it "can call increment on the same key twice and increment by 2" do
+      @user.increment("mad")
+      @user.increment("mad")
+      @user.to_hash["increments"].must_equal "mad" => 2
+    end
   end
 
   it "fetches a user" do

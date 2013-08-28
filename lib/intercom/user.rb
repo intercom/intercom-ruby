@@ -132,7 +132,8 @@ module Intercom
     # Increment a custom data value on a user
     # @return [User]
     def increment(key, value=1)
-      increments[key] = value
+      increment_to_add = {key => value}
+      self.increments = [self.increments, increment_to_add].inject{ |hash, element| hash.merge( element ){ |k, old_v, new_v| old_v + new_v } }
     end
 
     # @return [String] the {User}'s name
@@ -342,7 +343,7 @@ module Intercom
       end
 
       def increments=(hash)
-        @attributes["increments"].merge(hash)
+        @attributes["increments"] = hash
       end
   end
 end
