@@ -144,7 +144,7 @@ module Intercom
 
   # each {Message} in a {MessageThread} has a {MessageAuthor}
   #
-  # Admin authors have a name, and an avatar_path_50. Non-admin authors have a name, user_id and email.
+  # Admin authors have a name, avatar_path_25, avatar_path_50, and avatar_path_128. Non-admin authors have a name, user_id and email.
   class MessageAuthor
     # Used to create a {MessageAuthor} from part of the response from the API
     def initialize(params)
@@ -166,9 +166,19 @@ module Intercom
       @attributes['user_id']
     end
 
+    # @return [String] url of 25x25 avatar of the admin who posted this message (only available when {#admin?} is true)
+    def avatar_path_25
+      self.admin? ? @attributes['avatar']['square_25'] : nil
+    end
+
     # @return [String] url of 50x50 avatar of the admin who posted this message (only available when {#admin?} is true)
     def avatar_path_50
-      @attributes['avatar_path_50']
+      self.admin? ? @attributes['avatar']['square_50'] : nil
+    end
+
+    # @return [String] url of 128x128 avatar of the admin who posted this message (only available when {#admin?} is true)
+    def avatar_path_128
+      self.admin? ? @attributes['avatar']['square_128'] : nil
     end
 
     # @return [String] real name of the Admin/User, when available.

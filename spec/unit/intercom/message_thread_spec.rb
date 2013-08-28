@@ -68,7 +68,7 @@ describe "/v1/messages_threads" do
       message_thread.messages[1].from.name.must_equal from_1['name']
       message_thread.messages[1].from.admin?.must_equal from_1['is_admin']
       message_thread.messages[1].from.user_id.must_equal from_1['user_id']
-      message_thread.messages[1].from.avatar_path_50.must_equal from_1['avatar_path_50']
+      message_thread.messages[1].from.avatar_path_50.must_equal from_1['avatar']['square_50']
     end
   end
 end
