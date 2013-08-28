@@ -1,3 +1,10 @@
+0.1.12
+ - Fix the admin avatar attributes for MessageAuthor
+ - Add ability to send increments
+
+0.1.11
+ - Add getters/setters https://github.com/intercom/intercom-ruby/pull/35
+
 0.1.10
  - fix broken tag updating :(
 
