@@ -132,9 +132,7 @@ module Intercom
     # Increment a custom data value on a user
     # @return [User]
     def increment(key, value=1)
-      original_value = self.custom_data[key]
-      raise ArgumentError.new("You can only increment numeric custom data fields") unless original_value.is_a?(Fixnum)
-      self.increments[key] = value
+      increments[key] = value
     end
 
     # @return [String] the {User}'s name
