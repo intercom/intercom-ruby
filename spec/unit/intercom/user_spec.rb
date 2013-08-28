@@ -107,6 +107,32 @@ describe "Intercom::User" do
     proc { user.custom_data["thing"] = [1] }.must_raise ArgumentError
   end
 
+  describe "incrementing custom_data fields" do
+    before :each do
+      @now = Time.now
+      @user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242", :custom_data => {"mad" => 123, "other" => @now.to_i, :thing => "yay"})
+    end
+
+    it "increments up by 1 with no args" do
+      Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 124, "other" => @now.to_i, "thing" => "yay"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 124, "other" => @now.to_i, "thing" => "yay"}})
+      @user.increment("mad")
+    end
+
+    it "increments up by given value" do
+      Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 127, "other" => @now.to_i, "thing" => "yay"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 127, "other" => @now.to_i, "thing" => "yay"}})
+      @user.increment("mad", 4)
+    end
+
+    it "increments down by given value" do
+      Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 122, "other" => @now.to_i, "thing" => "yay"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 122, "other" => @now.to_i, "thing" => "yay"}})
+      @user.increment("mad", -1)
+    end
+
+    it "Raises if you try an increment non-numeric fields" do
+      proc { @user.increment("thing") }.must_raise ArgumentError
+    end
+  end
+
   it "fetches a user" do
     Intercom.expects(:get).with("/v1/users", {"email" => "bo@example.com"}).returns(test_user)
     user = Intercom::User.find("email" => "bo@example.com")
