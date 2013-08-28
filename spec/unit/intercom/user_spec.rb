@@ -114,23 +114,29 @@ describe "Intercom::User" do
     end
 
     it "increments up by 1 with no args" do
-      Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 124, "other" => @now.to_i, "thing" => "yay"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 124, "other" => @now.to_i, "thing" => "yay"}})
       @user.increment("mad")
+      @user.to_hash["increments"].must_equal "mad" => 1
     end
 
     it "increments up by given value" do
-      Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 127, "other" => @now.to_i, "thing" => "yay"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 127, "other" => @now.to_i, "thing" => "yay"}})
       @user.increment("mad", 4)
+      @user.to_hash["increments"].must_equal "mad" => 4
     end
 
     it "increments down by given value" do
-      Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 122, "other" => @now.to_i, "thing" => "yay"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "custom_data" => {"mad" => 122, "other" => @now.to_i, "thing" => "yay"}})
       @user.increment("mad", -1)
+      @user.to_hash["increments"].must_equal "mad" => -1
     end
 
     it "Raises if you try an increment non-numeric fields" do
       proc { @user.increment("thing") }.must_raise ArgumentError
     end
+
+    it "doesn't allow direct access to increments hash" do
+      proc { @user.increments["mad"] = 1 }.must_raise NoMethodError
+      proc { @user.increments }.must_raise NoMethodError
+    end
+
   end
 
   it "fetches a user" do

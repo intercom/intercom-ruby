@@ -134,8 +134,7 @@ module Intercom
     def increment(key, value=1)
       original_value = self.custom_data[key]
       raise ArgumentError.new("You can only increment numeric custom data fields") unless original_value.is_a?(Fixnum)
-      self.custom_data[key] = original_value + value
-      save
+      self.increments[key] = value
     end
 
     # @return [String] the {User}'s name
@@ -338,6 +337,14 @@ module Intercom
 
       def location_data=(hash) #:nodoc:
         @location_data = hash.freeze
+      end
+
+      def increments
+        @attributes["increments"] ||= {}
+      end
+
+      def increments=(hash)
+        @attributes["increments"].merge(hash)
       end
   end
 end
