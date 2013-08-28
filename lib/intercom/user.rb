@@ -129,6 +129,13 @@ module Intercom
       self.update_from_api_response(response)
     end
 
+    # Increment a custom data value on a user
+    # @return [User]
+    def increment(key, value=1)
+      increments[key] ||= 0
+      increments[key] += value
+    end
+
     # @return [String] the {User}'s name
     def name
       @attributes["name"]
@@ -329,6 +336,14 @@ module Intercom
 
       def location_data=(hash) #:nodoc:
         @location_data = hash.freeze
+      end
+
+      def increments
+        @attributes["increments"] ||= {}
+      end
+
+      def increments=(hash)
+        @attributes["increments"] = hash
       end
   end
 end
