@@ -107,6 +107,51 @@ describe "Intercom::User" do
     proc { user.custom_data["thing"] = [1] }.must_raise ArgumentError
   end
 
+  describe "incrementing custom_data fields" do
+    before :each do
+      @now = Time.now
+      @user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242", :custom_data => {"mad" => 123, "another" => 432, "other" => @now.to_i, :thing => "yay"})
+    end
+
+    it "increments up by 1 with no args" do
+      @user.increment("mad")
+      @user.to_hash["increments"].must_equal "mad" => 1
+    end
+
+    it "increments up by given value" do
+      @user.increment("mad", 4)
+      @user.to_hash["increments"].must_equal "mad" => 4
+    end
+
+    it "increments down by given value" do
+      @user.increment("mad", -1)
+      @user.to_hash["increments"].must_equal "mad" => -1
+    end
+
+    it "doesn't allow direct access to increments hash" do
+      proc { @user.increments["mad"] = 1 }.must_raise NoMethodError
+      proc { @user.increments }.must_raise NoMethodError
+    end
+
+    it "can update the increments hash without losing previous changes" do
+      @user.increment("mad")
+      @user.to_hash["increments"].must_equal "mad" => 1
+      @user.increment("another", -2)
+      @user.to_hash["increments"].must_equal "mad" => 1, "another" => -2
+    end
+
+    it "can increment new custom data fields" do
+      @user.increment("new_field", 3)
+      @user.to_hash["increments"].must_equal "new_field" => 3
+    end
+
+    it "can call increment on the same key twice and increment by 2" do
+      @user.increment("mad")
+      @user.increment("mad")
+      @user.to_hash["increments"].must_equal "mad" => 2
+    end
+  end
+
   it "fetches a user" do
     Intercom.expects(:get).with("/v1/users", {"email" => "bo@example.com"}).returns(test_user)
     user = Intercom::User.find("email" => "bo@example.com")

@@ -54,7 +54,11 @@ def test_message
               "rendered_body" => "<p>Not much, you?</p>\n",
               "from" => {
                   "name" => "Super Duper Admin",
-                  "avatar_path_50" => "https//s3.amazonaws.com/intercom-prod/app/public/system/avatars/1454/medium/intercom-ben-avatar.jpg?1326725052",
+                  "avatar" => {
+                    "square_25" => "https://static.intercomcdn.com/avatars/13347/square_25/Ruairi_Profile.png?1375368166",
+                    "square_50" => "https://static.intercomcdn.com/avatars/13347/square_50/Ruairi_Profile.png?1375368166",
+                    "square_128" => "https://static.intercomcdn.com/avatars/13347/square_128/Ruairi_Profile.png?1375368166"
+                  },
                   "is_admin" => true
               }
           },
