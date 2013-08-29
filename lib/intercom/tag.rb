@@ -6,24 +6,22 @@ module Intercom
   ##
   # Represents a tag
   #
-  # A tag consists of a name, and (optionally) a color and users that you would like to tag. Returns details about the tag and a count of the number of users currently tagged.
+  # A tag consists of a name, and (optionally) users that you would like to tag. Returns details about the tag and a count of the number of users currently tagged.
   #
   # == Examples
   #
-  #  tag = Intercom::Tag.create(:name => "Super Tag", :color => "red", :user_ids => ['abc123', 'def456'])
-  #  tag = Intercom::Tag.create(:name => "Super Tag", :color => "red", :emails => ['bob@example.com', 'joe@example.com'])
+  #  tag = Intercom::Tag.create(:name => "Super Tag", :user_ids => ['abc123', 'def456'])
+  #  tag = Intercom::Tag.create(:name => "Super Tag", :emails => ['bob@example.com', 'joe@example.com'])
   #
   #  You can also create a tag and save it like this:
   #  tag = Intercom::Tag.new
   #  tag.name = "Super Tag"
-  #  tag.color = "red"
   #  tag.user_ids = ['abc123', 'def456']
   #  tag.tag_or_untag = "tag"
   #  tag.save
   #
   #  Or update a tag and save it like this:
   #  tag = Intercom::Tag.find_by_name "Super Tag"
-  #  tag.color = "green"
   #  tag.user_ids = ['abc123']
   #  tag.tag_or_untag = "untag"
   #  tag.save
@@ -32,7 +30,7 @@ module Intercom
     extend RequiresParameters
     include HashableObject
 
-    attr_accessor :name, :color
+    attr_accessor :name
     attr_reader :segment, :tagged_user_count, :id
     attr_writer :user_ids, :emails, :tag_or_untag
 
