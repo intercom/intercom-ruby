@@ -1,5 +1,6 @@
 require 'intercom/user_resource'
 require 'intercom/flat_store'
+require 'intercom/increments_store'
 require 'intercom/user_collection_proxy'
 require 'intercom/social_profile'
 
@@ -281,6 +282,28 @@ module Intercom
     # @return [FlatStore]
     def custom_data=(custom_data)
       @attributes["custom_data"] = FlatStore.new(custom_data)
+    end
+
+    # Increments stored for this Intercom::User
+    #
+    # See http://docs.intercom.io/#CustomData for more information
+    #
+    # Example: Setting some increments for an existing user
+    #  user = Intercom::User.find(:email => "someone@example.com")
+    #  user.increments[:number_of_photos] = 1
+    #  user.save
+    #
+    # @return [IncrementsStore]
+    def increments
+      custom_data["increments"] ||= IncrementsStore.new
+    end
+
+    # Set a {Hash} of increments to save/update on this user
+    #
+    # @param [Hash] increments
+    # @return [IncrementsStore]
+    def increments=(increments)
+      custom_data["increments"] = IncrementsStore.new(increments)
     end
 
     # Company stored for this Intercom::User

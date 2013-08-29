@@ -26,4 +26,11 @@ describe Intercom::FlatStore do
     data["b"].must_equal 2
     data[:b].must_equal 2
   end
+
+  it "allows increments value" do
+    data = Intercom::FlatStore.new()
+    data["increments"] = Intercom::IncrementsStore.new("number_of_photos" => 1)
+    data["increments"]["number_of_photos"].must_equal 1
+  end
+
 end
