@@ -18,4 +18,5 @@ Rake::TestTask.new("spec:integration") do |spec|
 end
 
 task :spec => "spec:unit"
+task :integration => "spec:integration"
 task :default => :spec
