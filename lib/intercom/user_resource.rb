@@ -43,7 +43,7 @@ module Intercom
     def update_from_api_response(api_response)
       api_response.each do |key, value|
         setter_method = "#{key.to_s}="
-        if self.respond_to?(setter_method)
+        if self.respond_to?(setter_method, true)
           self.send(setter_method, value)
         else
           @attributes[key.to_s] = value
