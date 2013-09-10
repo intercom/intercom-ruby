@@ -3,6 +3,7 @@ source "http://rubygems.org"
 gemspec
 
 group :development, :test do
+  gem 'fakeweb', "~> 1.3"
   platforms :jruby do
     gem 'json-jruby'
     gem 'jruby-openssl'
