@@ -338,11 +338,11 @@ module Intercom
         @location_data = hash.freeze
       end
 
-      def increments
+      def increments #:nodoc:
         @attributes["increments"] ||= {}
       end
 
-      def increments=(hash)
+      def increments=(hash) #:nodoc:
         @attributes["increments"] = hash
       end
   end
