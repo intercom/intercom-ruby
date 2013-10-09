@@ -55,12 +55,12 @@ You can also pass custom data within a company:
 
     user.company = {:id => 6, :name => "Intercom", :referral_source => "Google"}
 
-#### Messages
+#### Message Threads
 
-    Intercom::Message.create(:email => "bob@example.com", :body => "Example message from bob@example.com to your application on Intercom.")
-    Intercom::Message.find(:email => "bob@example.com", :thread_id => 123)
-    Intercom::Message.find_all(:email => "bob@example.com")
-    Intercom::Message.mark_as_read(:email => "bob@example.com", :thread_id => 123)
+    Intercom::MessageThread.create(:email => "bob@example.com", :body => "Example message from bob@example.com to your application on Intercom.")
+    Intercom::MessageThread.find(:email => "bob@example.com", :thread_id => 123)
+    Intercom::MessageThread.find_all(:email => "bob@example.com")
+    Intercom::MessageThread.mark_as_read(:email => "bob@example.com", :thread_id => 123)
 
 #### Impressions
 
