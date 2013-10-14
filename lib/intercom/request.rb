@@ -78,7 +78,7 @@ module Intercom
         raise Intercom::ResourceNotFound
       elsif res.code.to_i.eql?(401)
         raise Intercom::AuthenticationError
-      elsif res.code.to_i.eql?(503)
+      elsif res.code.to_i.eql?(502) || res.code.to_i.eql?(503)
         raise Intercom::ServiceUnavailableError
       elsif res.code.to_i.eql?(500)
         raise Intercom::ServerError

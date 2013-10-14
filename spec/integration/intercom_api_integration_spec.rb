@@ -62,10 +62,15 @@ describe "api.intercom.io dummy data requests" do
   end
 
   it "should raise error when endpoint(s) are un-reachable" do
-    FakeWeb.register_uri(:get, %r|example\.com/|, :status => ["503", "Service Unavailable"])
-    Intercom.endpoints = ["http://example.com"]
-    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceUnavailableError
-    Intercom.endpoints = ["http://example.com", "http://api.example.com"]
-    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceUnavailableError
+    [
+      ["502", "Bad Gateway"],
+      ["503", "Service Unavailable"]
+    ].each do |status|
+      FakeWeb.register_uri(:get, %r|example\.com/|, :status => status)
+      Intercom.endpoints = ["http://example.com"]
+      proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceUnavailableError
+      Intercom.endpoints = ["http://example.com", "http://api.example.com"]
+      proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceUnavailableError
+    end
   end
 end
