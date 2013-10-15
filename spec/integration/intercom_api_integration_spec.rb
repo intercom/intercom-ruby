@@ -68,4 +68,13 @@ describe "api.intercom.io dummy data requests" do
     Intercom.endpoints = ["http://example.com", "http://api.example.com"]
     proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::ServiceUnavailableError
   end
+
+  it "should raise gateway error when the request returns a 502" do
+    FakeWeb.register_uri(:get, %r|example\.com/|, :status => ["502", "Bad Gateway"])
+    Intercom.endpoints = ["http://example.com"]
+    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::BadGatewayError
+    Intercom.endpoints = ["http://example.com", "http://api.example.com"]
+    proc { Intercom::User.find(:email => "somebody@example.com")}.must_raise Intercom::BadGatewayError
+
+  end
 end
