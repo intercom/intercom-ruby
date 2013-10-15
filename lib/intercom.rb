@@ -152,6 +152,10 @@ module Intercom
   class ServerError < StandardError;
   end
 
+  # Raised when we have bad gateway errors.
+  class BadGatewayError < StandardError;
+  end
+
   # Raised when we reach socket connect timeout
   class ServiceUnavailableError < StandardError;
   end
