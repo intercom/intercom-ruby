@@ -227,6 +227,13 @@ module Intercom
     end
 
     ##
+    # Get url for user's avatar, if present. Otherwise, nil.
+    # @return [String]
+    def avatar_url
+      @attributes["avatar_url"]
+    end
+
+    ##
     # Set whether user has unsubscribed from email
     # @return [void]
     def unsubscribed_from_emails=(unsubscribed_from_emails)
