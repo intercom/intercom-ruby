@@ -42,6 +42,7 @@ describe "Intercom::User" do
     user.relationship_score.must_equal 90
     user.last_seen_ip.must_equal "1.2.3.4"
     user.last_seen_user_agent.must_equal "Mozilla blah blah ie6"
+    user.avatar_url.must_equal "http://google.com/logo.png"
     user.unsubscribed_from_emails.must_equal true
     user.location_data['country_code'].must_equal "IRL"
   end
