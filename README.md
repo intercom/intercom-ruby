@@ -38,7 +38,7 @@ The API supports:
     user = Intercom::User.find_by_email("bob@example.com")
     user.custom_data["average_monthly_spend"] = 1234.56
     user.save
-    user = Intercom::User.find_by_user_id("bob@example.com")
+    user = Intercom::User.find_by_user_id("1")
     user = Intercom::User.create(:email => "bob@example.com", :name => "Bob Smith")
     user = Intercom::User.new(params)
     user.save
