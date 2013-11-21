@@ -2,7 +2,7 @@
 
 Ruby bindings for the Intercom API (https://api.intercom.io).
 
-[API Documentation](https://api.intercom.io)
+[API Documentation](https://api.intercom.io/docs)
 
 [Gem Documentation](http://rubydoc.info/github/intercom/intercom-ruby/master/frames)
 
