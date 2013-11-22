@@ -8,3 +8,4 @@ pkg/*
 .yardoc
 spike.rb
 html
+.idea

@@ -1,0 +1,46 @@
+[
+  {
+    "created_at": 1385114400,
+    "updated_at": 1385028000,
+    "read": true,
+    "created_by_user": true,
+    "thread_id": 5591,
+    "message_id": 5591,
+    "message_type": "conversation",
+    "interrupt": true,
+    "messages": [
+      {
+        "created_at": 1385114400,
+        "url": null,
+        "html": "<p>Hey Intercom, What is up?</p>\n\n<p></p>",
+        "subject": "",
+        "from": {
+          "email": "somebody@example.com",
+          "user_id": "123",
+          "name": "Somebody",
+          "is_admin": false,
+          "avatar": {
+          }
+        }
+      },
+      {
+        "created_at": 1384941600,
+        "url": null,
+        "html": "<p>Not much, you?\n</p>"
+      },
+      {
+        "created_at": 1385028000,
+        "url": null,
+        "html": "<p>Not much either :(</p>\n\n<p></p>",
+        "from": {
+          "email": "somebody@example.com",
+          "user_id": "123",
+          "name": "Somebody",
+          "is_admin": false,
+          "avatar": {
+          }
+        }
+      }
+    ]
+  }
+]
