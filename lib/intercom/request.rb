@@ -50,8 +50,8 @@ module Intercom
         net.verify_mode = OpenSSL::SSL::VERIFY_PEER
         net.ca_file = File.join(File.dirname(__FILE__), '../data/cacert.pem')
       end
-      net.read_timeout = 30
-      net.open_timeout = 3
+      net.read_timeout = 90
+      net.open_timeout = 30
       net
     end
 
