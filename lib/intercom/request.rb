@@ -25,7 +25,7 @@ module Intercom
     end
 
     def self.delete(path, params)
-      new(path, Net::HTTP::Delete.new(append_query_string_to_url(path, params), default_headers))
+      new(path, method_with_body(Net::HTTP::Delete, path, params))
     end
 
     def self.put(path, form_data)
