@@ -262,4 +262,11 @@ describe "Intercom::User" do
     first_company_as_hash["created_at"].must_equal time.to_i
     second_company_as_hash["created_at"].must_equal time.to_i
   end
+
+  it "creates a note" do
+    Intercom.expects(:post).with("/v1/users/notes", {'email' => 'bob@example.com', "body" => "Note to leave on user"}).returns({"html" => "<p>Note to leave on user</p>", "created_at" => 1234567890})
+    user = Intercom::User.from_api(test_user)
+    note = user.add_note("Note to leave on user")
+    note.html.must_equal "<p>Note to leave on user</p>"
+  end
 end
