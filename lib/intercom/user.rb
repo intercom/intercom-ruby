@@ -336,6 +336,14 @@ module Intercom
       @attributes["companies"] = companies.collect {|company| FlatStore.new(company) }
     end
 
+    # Convenience method to create a {Note} for the user
+    #
+    # @param [String] note body
+    # @return [Note]
+    def add_note(body)
+      Note.create(:email => self.email, :body => body)
+    end
+
     protected
       def social_profiles=(social_profiles) #:nodoc:
         @social_profiles = social_profiles.map { |account| SocialProfile.new(account) }.freeze
