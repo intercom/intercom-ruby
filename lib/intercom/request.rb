@@ -62,7 +62,7 @@ module Intercom
         response = http.request(net_http_method)
         raise_errors_on_failure(response)
         decoded = decode(response['content-encoding'], response.body)
-        JSON.parse(decoded)
+        JSON.parse(decoded) unless decoded.empty?
       end
     rescue Timeout::Error
       raise Intercom::ServiceUnavailableError
