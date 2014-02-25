@@ -74,7 +74,7 @@ describe "api.intercom.io dummy data requests" do
     FakeWeb.register_uri(:get, %r(v1/users\?email=), :body => fixture('v1-user'))
     user = Intercom::User.find(:email => "somebody@example.com")
     FakeWeb.register_uri(:post, %r(/events), :status => ["202", "Created"])
-    Intercom::UserEvent.create(:event_name => "signup", :created => 1391691571, :user => user).event_name.must_equal "signup"
+    Intercom::UserEvent.create(:event_name => "signup", :created_at => 1391691571, :user => user).event_name.must_equal "signup"
   end
   
   it "should create batch user events" do
@@ -83,12 +83,12 @@ describe "api.intercom.io dummy data requests" do
     
     first_event = Intercom::UserEvent.new
     first_event.event_name = "first event"
-    first_event.created = Time.now
+    first_event.created_at = Time.now
     first_event.user = user
     
     second_event = Intercom::UserEvent.new
     second_event.event_name = "second event"
-    second_event.created = Time.now
+    second_event.created_at = Time.now
     
     FakeWeb.register_uri(:post, %r(/events), :status => ["202", "Created"])
     Intercom::UserEvent.save_batch_events([first_event, second_event], user)
