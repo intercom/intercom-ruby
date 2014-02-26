@@ -12,13 +12,13 @@ module Intercom
   #
   # == Examples
   #
-  #  user_event = Intercom::UserEvent.create(:event_name => "post", :user => current_user, :created => Time.now)
+  #  user_event = Intercom::UserEvent.create(:event_name => "post", :user => current_user, :created_at => Time.now)
   #
   #  You can also create an user-event and save it like this:
   #  user_event = Intercom::UserEvent.new
   #  user_event.event_name = "publish-post"
   #  user_event.user = current_user
-  #  user_event.created = Time.now
+  #  user_event.created_at = Time.now
   #  user_event.metadata = {
   #   :title => 'Gravity Review',
   #   :link => 'https://example.org/posts/22',

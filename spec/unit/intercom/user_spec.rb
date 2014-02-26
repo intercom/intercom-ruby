@@ -268,7 +268,7 @@ describe "Intercom::User" do
     Intercom::UserEvent.expects(:create).with(:event_name => 'registration', :user => user)
     event = user.log_event('registration')
     
-    Intercom::UserEvent.expects(:create).with(:event_name => 'another', :user => user, :created => 1391691571, :company_id => "6")
-    event = user.log_event("another", {:created => 1391691571, :company_id => "6"})
+    Intercom::UserEvent.expects(:create).with(:event_name => 'another', :user => user, :created_at => 1391691571)
+    event = user.log_event("another", {:created_at => 1391691571})
   end
 end
