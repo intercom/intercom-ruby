@@ -9,10 +9,10 @@ describe "Intercom::UserEvent" do
     Intercom.expects(:post).with("/events",
                                  { :type => 'event.list',
                                    :data => [ {:event_name => "signup", :created => created_time.to_i, :type => 'event', 
-                                      :user => { :user_id => user.user_id}, :metadata => {:some => "data"}
+                                      :user => { :user_id => user.user_id},
                                     }]}).returns(:status => 200)
 
-    Intercom::UserEvent.create({ :event_name => "signup", :user => user, :created_at => created_time, :metadata => {:some => "data"} })
+    Intercom::UserEvent.create({ :event_name => "signup", :user => user, :created_at => created_time })
   end
 
   it 'automatically adds a created time upon creation' do
@@ -37,6 +37,17 @@ describe "Intercom::UserEvent" do
     user_event.event_name = "some event"
     user_event.created_at = Time.now
     proc { user_event.save }.must_raise ArgumentError, "Missing User"
+  end
+  
+  it 'uses the user.email if no user.id found' do
+    user2 = Intercom::User.new("email" => "jim@example.com", :created_at => Time.now, :name => "Jim Bob")
+    Intercom.expects(:post).with("/events",
+                                 { :type => 'event.list',
+                                   :data => [ {:event_name => "signup", :created => created_time.to_i, :type => 'event', 
+                                      :user => { :email => user2.email}
+                                    }]}).returns(:status => 200)
+
+    Intercom::UserEvent.create({ :event_name => "signup", :user => user2, :created_at => created_time })
   end
   
   describe 'while batching events' do
