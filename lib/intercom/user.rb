@@ -335,6 +335,16 @@ module Intercom
       raise ArgumentError.new("Companies requires an array of hashes of companies") unless companies.is_a?(Array) && companies.all? {|company| company.is_a?(Hash)}
       @attributes["companies"] = companies.collect {|company| FlatStore.new(company) }
     end
+    
+    ##
+    # Creates a UserEvent for the given User
+    # @param {Hash} options, keys for :created (Unix timestamp) and :company_id (String)
+    def log_event(event_name, options={})
+      attributes = {:event_name => event_name, :user => self}
+      attributes[:created] = options[:created] unless options[:created].nil?
+      attributes[:company_id] = options[:company_id] unless options[:company_id].nil? 
+      UserEvent.create(attributes)
+    end
 
     protected
       def social_profiles=(social_profiles) #:nodoc:

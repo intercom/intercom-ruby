@@ -6,6 +6,7 @@ require "intercom/impression"
 require "intercom/note"
 require "intercom/tag"
 require "intercom/request"
+require "intercom/user_event"
 require "json"
 
 ##
