@@ -76,11 +76,15 @@ module Intercom
     # Save a list of User Events, with an optional base_user
     def self.save_batch_events(events, base_user=nil)
       hash = { :type => 'event.list', :data => []}
-      hash[:user] = { :user_id => base_user.user_id } if base_user
+      hash[:user] = user_hash(base_user) if base_user
       events.each do |event|
         hash[:data] << event.event_hash
       end
       post_to_intercom(hash)
+    end
+    
+    def self.user_hash(user)
+      user.user_id ? { :user_id => user.user_id } : { :email => user.email }
     end
 
     def self.post_to_intercom(hash)
@@ -88,7 +92,7 @@ module Intercom
     end
         
     def user_hash
-      { :user_id => user.user_id }
+      UserEvent.user_hash(user)
     end
     
     def event_hash
