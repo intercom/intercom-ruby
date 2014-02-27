@@ -48,6 +48,12 @@ describe "api.intercom.io dummy data requests" do
       message_thread.send(expected).wont_be_nil
     end
   end
+  
+  it "handles blank string bodies" do
+    FakeWeb.register_uri(:get, %r(v1/users\?email=), :body => fixture('v1-user'))
+    user = Intercom::User.find(:email => "somebody@example.com")
+    FakeWeb.register_uri(:post, %r(/events), :status => ["202", "Created"], :body => ' ')
+  end
 
   it "should mark message_thread as read" do
     FakeWeb.register_uri(:get, %r(v1/users/message_threads\?email=somebody), :body => fixture('v1-users-message_threads'))
