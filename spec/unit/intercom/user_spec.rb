@@ -263,12 +263,12 @@ describe "Intercom::User" do
     second_company_as_hash["created_at"].must_equal time.to_i
   end
   
-  it "logs user events" do
+  it "tracks events" do
     user = Intercom::User.new("email" => "jim@example.com", :user_id => "12345", :created_at => Time.now, :name => "Jim Bob")
-    Intercom::UserEvent.expects(:create).with(:event_name => 'registration', :user => user)
-    event = user.log_event('registration')
+    Intercom::Event.expects(:create).with(:event_name => 'registration', :user => user)
+    event = user.track_event('registration')
     
-    Intercom::UserEvent.expects(:create).with(:event_name => 'another', :user => user, :created_at => 1391691571)
-    event = user.log_event("another", {:created_at => 1391691571})
+    Intercom::Event.expects(:create).with(:event_name => 'another', :user => user, :created_at => 1391691571)
+    event = user.track_event("another", {:created_at => 1391691571})
   end
 end

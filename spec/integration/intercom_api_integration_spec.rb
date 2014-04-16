@@ -76,35 +76,35 @@ describe "api.intercom.io dummy data requests" do
     note.user.email.must_equal "somebody@example.com"
   end
   
-  it "should create a user event" do
+  it "should create an event" do
     FakeWeb.register_uri(:get, %r(v1/users\?email=), :body => fixture('v1-user'))
     user = Intercom::User.find(:email => "somebody@example.com")
     FakeWeb.register_uri(:post, %r(/events), :status => ["202", "Created"])
-    Intercom::UserEvent.create(:event_name => "signup", :created_at => 1391691571, :user => user).event_name.must_equal "signup"
+    Intercom::Event.create(:event_name => "signup", :created_at => 1391691571, :user => user).event_name.must_equal "signup"
   end
   
-  it "should create batch user events" do
+  it "should create batch events" do
     FakeWeb.register_uri(:get, %r(v1/users\?email=), :body => fixture('v1-user'))
     user = Intercom::User.find(:email => "somebody@example.com")
     
-    first_event = Intercom::UserEvent.new
+    first_event = Intercom::Event.new
     first_event.event_name = "first event"
     first_event.created_at = Time.now
     first_event.user = user
     
-    second_event = Intercom::UserEvent.new
+    second_event = Intercom::Event.new
     second_event.event_name = "second event"
     second_event.created_at = Time.now
     
     FakeWeb.register_uri(:post, %r(/events), :status => ["202", "Created"])
-    Intercom::UserEvent.save_batch_events([first_event, second_event], user)
+    Intercom::Event.save_batch_events([first_event, second_event], user)
   end
   
-  it "should create a user event from a user" do
+  it "should create an event from a user" do
     FakeWeb.register_uri(:get, %r(v1/users\?email=), :body => fixture('v1-user'))
     user = Intercom::User.find(:email => "somebody@example.com")
     FakeWeb.register_uri(:post, %r(/events), :status => ["202", "Created"])
-    user.log_event("signup").event_name.must_equal "signup"
+    user.track_event("signup").event_name.must_equal "signup"
   end
 
   it "should failover to good endpoint when first one is un-reachable" do

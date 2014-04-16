@@ -82,6 +82,54 @@ Intercom::Impression.create(:email => "bob@example.com", :location => "/path/in/
 Intercom::Note.create(:email => "bob@example.com", :body => "This is the text of the note")
 ```
 
+#### Events
+The simplest way to create an event is directly on the user
+```ruby
+user = Intercom::User.find_by_email("bob@example.com")
+user.track_event("invited-friend")
+```
+
+For more control create events through Intercom::Event
+```ruby
+Intercom::Event.create(:event_name => "invited-friend", :user => user)
+
+# With an explicit event creation date
+Intercom::Event.create(:event_name => "invited-friend", :user => user, :created_at => 1391691571)
+
+# With metadata
+Intercom::Event.create(:event_name => "invited-friend", :user => user,
+  metadata => { 
+    :invitee_email => 'pi@example.org',  
+    :invite_code => 'ADDAFRIEND'
+  }
+)
+```
+
+Metadata Objects support a few simple types that Intercom can present on your behalf 
+
+```ruby
+Intercom::Event.create(:event_name => "placed-order", :user => current_user,
+  metadata => { 
+    :order_date => Time.now.to_i,  
+    :stripe_invoice => 'inv_3434343434', 
+    :order_number => { 
+      :value => '3434-3434', 
+      :url => 'https://example.org/orders/3434-3434' 
+    },
+    price: { 
+      :currency => 'usd',  
+      :amount => 2999 
+    }    
+  }
+)
+```
+
+The metadata key values in the example are treated as follows-
+- order_date: a Date (key ends with '_date').
+- stripe_invoice: The identifier of the Stripe invoice (has a 'stripe_invoice' key)
+- order_number: a Rich Link (value contains 'url' and 'value' keys)
+- price: An Amount in US Dollars (value contains 'amount' and 'currency' keys)
+
 ### Errors
 ```ruby
 Intercom::AuthenticationError

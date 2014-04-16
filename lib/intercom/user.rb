@@ -337,13 +337,13 @@ module Intercom
     end
     
     ##
-    # Creates a UserEvent for the given User
+    # Creates an Event for the given User
     # @param {Hash} options, keys for :created_at (Unix timestamp) and metadata
-    def log_event(event_name, options={})
+    def track_event(event_name, options={})
       attributes = {:event_name => event_name, :user => self}
       attributes[:created_at] = options[:created_at] unless options[:created_at].nil?
       attributes[:metadata] = options[:metadata] unless options[:metadata].nil?
-      UserEvent.create(attributes)
+      Event.create(attributes)
     end
 
     protected

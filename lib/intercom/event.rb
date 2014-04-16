@@ -5,46 +5,46 @@ require 'intercom/hashable_object'
 module Intercom
   
   ##
-  # Represents a User Event
+  # Represents an Event
   #
-  # A user event consists of an event_name and a user the event applies to. The user is identified via email or id.
+  # An event consists of an event_name and a user the event applies to. The user is identified via email or id.
   # Additionally, a created timestamp is required.
   #
   # == Examples
   #
-  #  user_event = Intercom::UserEvent.create(:event_name => "post", :user => current_user, :created_at => Time.now)
+  #  event = Intercom::Event.create(:event_name => "post", :user => current_user, :created_at => Time.now)
   #
   #  You can also create an user-event and save it like this:
-  #  user_event = Intercom::UserEvent.new
-  #  user_event.event_name = "publish-post"
-  #  user_event.user = current_user
-  #  user_event.created_at = Time.now
-  #  user_event.metadata = {
+  #  event = Intercom::Event.new
+  #  event.event_name = "publish-post"
+  #  event.user = current_user
+  #  event.created_at = Time.now
+  #  event.metadata = {
   #   :title => 'Gravity Review',
   #   :link => 'https://example.org/posts/22',
   #   :comments => 'https://example.org/posts/22/comments'
   # }
-  #  user_event.save
+  #  event.save
   #
   # == Batch
   #
-  # User events can be created in batches, and sent as one request. To do some, create user events
+  # Events can be created in batches, and sent as one request. To do some, create events
   # without calling .create, as follows:
   # 
-  # user_event = Intercom::UserEvent.new
-  # user_event.event_name = "publish-post"
-  # user_event.user = current_user
+  # event = Intercom::Event.new
+  # event.event_name = "publish-post"
+  # event.user = current_user
   #
   # Then pass them to the save_batch_events class method, along with an (optional) default user:
   #
-  # Intercom::UserEvent.save_batch_events(events, default_user)
+  # Intercom::Event.save_batch_events(events, default_user)
   #
   # Any events without a user will be assigned to the default_user.
   #
   # Note: if you do not supply a created time, the current time in UTC will be used. Events that have the same 
   # user, name, and created time (to second granularity) may be treated as duplicates by the server.
   
-  class UserEvent
+  class Event
     extend RequiresParameters
     include HashableObject
     
@@ -56,24 +56,24 @@ module Intercom
     end
     
     ##
-    # Creates a new User Event using params and saves it
+    # Creates a new Event using params and saves it
     # @see #save
     def self.create(params)
       params[:created_at] ||= Time.now
       requires_parameters(params, %W(event_name user created_at))
-      UserEvent.new(params).save
+      Event.new(params).save
     end
         
     ##
-    # Save the User Event
+    # Save the Event
     def save
       raise ArgumentError.new("Missing User") if user.nil?
-      UserEvent.save_batch_events([self])
+      Event.save_batch_events([self])
       self
     end
     
     ##
-    # Save a list of User Events, with an optional base_user
+    # Save a list of Events, with an optional base_user
     def self.save_batch_events(events, base_user=nil)
       hash = { :type => 'event.list', :data => []}
       hash[:user] = user_hash(base_user) if base_user
@@ -92,7 +92,7 @@ module Intercom
     end
         
     def user_hash
-      UserEvent.user_hash(user)
+      Event.user_hash(user)
     end
     
     def event_hash
