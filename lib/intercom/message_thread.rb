@@ -135,6 +135,11 @@ module Intercom
     def html
       @attributes["html"]
     end
+    
+    # @return [Integer]
+    def comment_id
+      @attributes["comment_id"]
+    end
 
     # @return [Time] when this message was posted
     def created_at
