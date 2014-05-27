@@ -1,3 +1,6 @@
+1.0.0
+- Bumped to a 1.0.0 version. No functional changes.
+
 0.3.0
 - Renamed UserEvents to Events
 
