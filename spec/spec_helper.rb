@@ -4,27 +4,57 @@ require 'mocha/setup'
 
 def test_user(email="bob@example.com")
   {
-      :user_id => 'id-from-customers-app',
-      :email => email,
-      :name => "Joe Schmoe",
-      :created_at => 1323422442,
-      :last_seen_ip => "1.2.3.4",
-      :last_seen_user_agent => "Mozilla blah blah ie6",
-      :custom_data => {"a" => "b", "b" => 2},
-      :relationship_score => 90,
-      :session_count => 123,
-      :last_impression_at => 1323422442,
-      :unsubscribed_from_emails => true,
-      :avatar_url => "http://google.com/logo.png",
-      :social_profiles => [
-          {"type" => "twitter", "url" => "http://twitter.com/abc", "username" => "abc"},
-          {"type" => "twitter", "username" => "abc2", "url" => "http://twitter.com/abc2"},
-          {"type" => "facebook", "url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"},
-          {"type" => "quora", "url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"}
-      ],
-      :location_data => {
-          "country_code" => "IRL"
-      }
+    "type" =>"user",
+    "id" =>"aaaaaaaaaaaaaaaaaaaaaaaa",
+    "user_id" => 'id-from-customers-app',
+    "email" => email,
+    "name" => "Joe Schmoe",
+    "avatar" => {"type"=>"avatar", "image_url"=>"https://graph.facebook.com/1/picture?width=24&height=24"},
+    "app_id" => "the-app-id",
+    "created_at" => 1323422442,
+    "custom_attributes" => {"a" => "b", "b" => 2},
+    "companies" =>
+     {"type"=>"company.list",
+      "companies"=>
+       [{"type"=>"company",
+         "company_id"=>"123",
+         "id"=>"bbbbbbbbbbbbbbbbbbbbbbbb",
+         "app_id"=>"the-app-id",
+         "name"=>"Company 1",
+         "remote_created_at"=>1390936440,
+         "created_at"=>1401970114,
+         "updated_at"=>1401970114,
+         "last_request_at"=>1401970113,
+         "monthly_spend"=>0,
+         "session_count"=>0,
+         "user_count"=>1,
+         "tag_ids"=>[],
+         "custom_attributes"=>{"category"=>"Tech"}}]},
+    "session_count" => 123,
+    "unsubscribed_from_emails" => true,
+    "last_request_at" =>1401970113,
+    "created_at" =>1401970114,
+    "remote_created_at" =>1393613864,
+    "updated_at" =>1401970114,
+    "user_agent_data" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11",
+    "social_profiles" =>{"type"=>"social_profile.list",
+       "social_profiles" => [
+           {"type" => "social_profile", "name" => "twitter", "url" => "http://twitter.com/abc", "username" => "abc", "id" => nil},
+           {"type" => "social_profile", "name" => "twitter", "username" => "abc2", "url" => "http://twitter.com/abc2", "id" => nil},
+           {"type" => "social_profile", "name" => "facebook", "url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"},
+           {"type" => "social_profile", "name" => "quora", "url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"}
+       ]},
+   "location_data"=>
+    {"type"=>"location_data",
+     "city_name"=> 'Dublin',
+     "continent_code"=> 'EU',
+     "country_name"=> 'Ireland',
+     "latitude"=> '90',
+     "longitude"=> '10',
+     "postal_code"=> 'IE',
+     "region_name"=> 'Europe',
+     "timezone"=> '+1000',
+     "country_code" => "IRL"}
   }
 end
 
@@ -77,19 +107,20 @@ def test_message
   }
 end
 
-def page_of_users(page=1, per_page=10)
-  all_users = [test_user("user1@example.com"), test_user("user2@example.com"), test_user("user3@example.com")]
-  offset = (page - 1) * per_page
-  limit = page * per_page
-  next_page = limit < all_users.size ? page + 1 : nil
-  previous_page = offset > 0 ? page - 1 : nil
+def page_of_users(include_next_link: false)
+  all_user =
   {
-      "users" => all_users[offset..limit-1],
-      "total_count" => all_users.size,
-      "page" => page,
-      "next_page" => next_page,
-      "previous_page" => previous_page,
-      "total_pages" => (all_users.size.to_f / per_page).ceil.to_i
+     "type"=>"user.list",
+     "pages"=>
+      {
+        "type"=>"pages",
+        "next"=> (include_next_link ? "https://api.intercom.io/users?per_page=50&page=2" : nil),
+        "page"=>1,
+        "per_page"=>50,
+        "total_pages"=>7
+      },
+      "users"=> [test_user("user1@example.com"), test_user("user2@example.com"), test_user("user3@example.com")],
+      "total_count"=>314
   }
 end
 

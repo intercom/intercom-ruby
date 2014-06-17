@@ -1,3 +1,6 @@
+2.0.0
+- Bumped to 2.0.0.
+
 1.0.0
 - Bumped to a 1.0.0 version. No functional changes.
 

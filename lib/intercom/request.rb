@@ -12,7 +12,6 @@ module Intercom
 
     def set_common_headers(method, base_uri)
       method.basic_auth(CGI.unescape(base_uri.user), CGI.unescape(base_uri.password))
-      method.add_field('Accept', 'application/json')
       method.add_field('AcceptEncoding', 'gzip, deflate')
     end
 
@@ -40,7 +39,7 @@ module Intercom
     end
 
     def self.default_headers
-      {'Accept-Encoding' => 'gzip, deflate', 'Accept' => 'application/json'}
+      {'Accept-Encoding' => 'gzip, deflate', 'Accept' => 'application/vnd.intercom.3+json'}
     end
 
     def client(uri)
@@ -60,9 +59,13 @@ module Intercom
       set_common_headers(net_http_method, base_uri)
       client(base_uri).start do |http|
         response = http.request(net_http_method)
-        raise_errors_on_failure(response)
         decoded = decode(response['content-encoding'], response.body)
-        JSON.parse(decoded) unless decoded.strip.empty?
+        unless decoded.strip.empty?
+          parsed_body = JSON.parse(decoded)
+          raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
+        end
+        raise_errors_on_failure(response)
+        parsed_body
       end
     rescue Timeout::Error
       raise Intercom::ServiceUnavailableError
@@ -85,6 +88,39 @@ module Intercom
       elsif res.code.to_i.eql?(503)
         raise Intercom::ServiceUnavailableError
       end
+    end
+
+    def raise_application_errors_on_failure(error_list_details, http_code)
+      # Currently, we don't support multiple errors
+      error_details = error_list_details['errors'].first
+      error_code = error_details['type'] || error_details['code']
+      parsed_http_code = (http_code > 0 ? http_code : nil)
+      error_context = {
+        :http_code => parsed_http_code,
+        :application_error_code => error_code
+      }
+      case error_code
+      when 'unauthorized'
+        raise Intercom::AuthenticationError.new(error_details['message'], error_context)
+      when "bad_request", "missing_parameter", 'parameter_invalid'
+        raise Intercom::BadRequestError.new(error_details['message'], error_context)
+      when "not_found"
+        raise Intercom::ResourceNotFound.new(error_details['message'], error_context)
+      when "rate_limit_exceeded"
+        raise Intercom::RateLimitExceeded.new(error_details['message'], error_context)
+      when nil, ''
+        raise Intercom::UnexpectedError.new(message_for_unexpected_error_without_type(error_details, parsed_http_code), error_context)
+      else
+        raise Intercom::UnexpectedError.new(message_for_unexpected_error_with_type(error_details, parsed_http_code), error_context)
+      end
+    end
+
+    def message_for_unexpected_error_with_type(error_details, parsed_http_code)
+      "The error of type '#{error_details['type']}' is not recognized. It occurred with the message: #{error_details['message']} and http_code: '#{parsed_http_code}'. Please contact Intercom with these details."
+    end
+
+    def message_for_unexpected_error_without_type(error_details, parsed_http_code)
+      "An unexpected error occured. It occurred with the message: #{error_details['message']} and http_code: '#{parsed_http_code}'. Please contact Intercom with these details."
     end
 
     def self.append_query_string_to_url(url, params)
