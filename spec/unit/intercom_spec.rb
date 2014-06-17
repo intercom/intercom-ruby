@@ -8,18 +8,18 @@ describe Intercom do
   describe "API" do
     before do
       Intercom.app_id = "abc123"
-      Intercom.api_key = "super-secret-key"
+      Intercom.app_api_key = "super-secret-key"
     end
 
-    it "raises ArgumentError if no app_id or api_key specified" do
+    it "raises ArgumentError if no app_id or app_api_key specified" do
       Intercom.app_id = nil
-      Intercom.api_key = nil
-      proc { Intercom.target_base_url }.must_raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples."
+      Intercom.app_api_key = nil
+      proc { Intercom.target_base_url }.must_raise ArgumentError, "You must set both Intercom.app_id and Intercom.app_api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples."
     end
 
-    it "returns the app_id and api_key previously set" do
+    it "returns the app_id and app_api_key previously set" do
       Intercom.app_id.must_equal "abc123"
-      Intercom.api_key.must_equal "super-secret-key"
+      Intercom.app_api_key.must_equal "super-secret-key"
     end
 
     it "defaults to https to api.intercom.io" do

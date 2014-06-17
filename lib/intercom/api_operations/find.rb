@@ -1,0 +1,22 @@
+module Intercom
+  module ApiOperations
+    module Find
+      module ClassMethods
+        def find(params)
+          raise BadRequestError, "#{self}#find takes a hash as it's parameter but you supplied #{params.inspect}" unless params.is_a? Hash
+          collection_name = Utils.resource_class_to_collection_name(self)
+          if params[:id]
+            response = Intercom.get("/#{collection_name}/#{params[:id]}", {})
+          else
+            response = Intercom.get("/#{collection_name}", params)
+          end
+          from_api(response)
+        end
+      end
+
+      def self.included(base)
+        base.extend(ClassMethods)
+      end
+    end
+  end
+end

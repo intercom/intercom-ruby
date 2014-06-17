@@ -1,12 +1,16 @@
 require "intercom/version"
-require "intercom/user_resource"
 require "intercom/user"
-require "intercom/message_thread"
-require "intercom/impression"
+require "intercom/company"
 require "intercom/note"
 require "intercom/tag"
-require "intercom/request"
+require "intercom/segment"
 require "intercom/event"
+require "intercom/conversation"
+require "intercom/message"
+require "intercom/count"
+require "intercom/request"
+require "intercom/utils"
+require "intercom/errors"
 require "json"
 
 ##
@@ -17,23 +21,19 @@ require "json"
 # == Basic Usage
 # === Configure Intercom with your access credentials
 #   Intercom.app_id = "my_app_id"
-#   Intercom.api_key = "my_api_key"
+#   Intercom.app_api_key = "my_api_key"
 # === Make requests to the API
 #   Intercom::User.find(:email => "bob@example.com")
 #
 module Intercom
   @hostname = "api.intercom.io"
   @protocol = "https"
+
   @endpoints = nil
   @current_endpoint = nil
   @app_id = nil
-  @api_key = nil
+  @app_api_key = nil
 
-  ##
-  # Set the id of the application you want to interact with.
-  # When logged into your intercom console, the app_id is in the url after /apps (eg https://www.intercom.io/apps/<app-id>)
-  # @param [String] app_id
-  # @return [String]
   def self.app_id=(app_id)
     @app_id = app_id
   end
@@ -42,25 +42,40 @@ module Intercom
     @app_id
   end
 
-  ##
-  # Set the api key to gain access to your application data.
-  # When logged into your intercom console, you can view/create api keys in the settings menu
-  # @param [String] api_key
-  # @return [String]
-  def self.api_key=(api_key)
-    @api_key = api_key
+  def self.app_api_key=(app_api_key)
+    @app_api_key = app_api_key
+  end
+  def self.app_api_key
+    @app_api_key
   end
 
-  def self.api_key
-    @api_key
+  # This method is obsolete and used to warn of backwards incompatible changes on upgrading
+  def self.api_key=(val)
+    raise ArgumentError, "#{compatibility_warning_text} #{compatibility_workaround_text} #{related_docs_text}"
   end
 
   private
 
   def self.target_base_url
-    raise ArgumentError, "You must set both Intercom.app_id and Intercom.api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples." if [@app_id, @api_key].any?(&:nil?)
-    basic_auth_part = "#{@app_id}:#{@api_key}@"
+    raise ArgumentError, "#{configuration_required_text} #{related_docs_text}" if [@app_id, @app_api_key].any?(&:nil?)
+    basic_auth_part = "#{@app_id}:#{@app_api_key}@"
     current_endpoint.gsub(/(https?:\/\/)(.*)/, "\\1#{basic_auth_part}\\2")
+  end
+
+  def self.related_docs_text
+    "See https://github.com/intercom/intercom-ruby for usage examples."
+  end
+
+  def self.compatibility_warning_text
+    "It looks like you are upgrading from an older version of the intercom-ruby gem. Please note that this new version (#{Intercom::VERSION}) is not backwards compatible. "
+  end
+
+  def self.compatibility_workaround_text
+    "To get rid of this error please set Intercom.app_api_key and don't set Intercom.api_key."
+  end
+
+  def self.configuration_required_text
+    "You must set both Intercom.app_id and Intercom.app_api_key to use this client."
   end
 
   def self.send_request_to_path(request)
@@ -144,24 +159,4 @@ module Intercom
     @endpoints || ["#{@protocol}://#{hostname}"]
   end
 
-  # Raised when the credentials you provide don't match a valid account on Intercom.
-  # Check that you have set <b>Intercom.app_id=</b> and <b>Intercom.api_key=</b> correctly.
-  class AuthenticationError < StandardError;
-  end
-
-  # Raised when something does wrong on within the Intercom API service.
-  class ServerError < StandardError;
-  end
-
-  # Raised when we have bad gateway errors.
-  class BadGatewayError < StandardError;
-  end
-
-  # Raised when we reach socket connect timeout
-  class ServiceUnavailableError < StandardError;
-  end
-
-  # Raised when requesting resources on behalf of a user that doesn't exist in your application on Intercom.
-  class ResourceNotFound < StandardError;
-  end
 end
