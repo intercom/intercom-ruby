@@ -166,6 +166,10 @@ conversation.conversation_parts[1].body
 conversation.reply(:type => 'user', :email => 'joe@example.com', :message_type => 'comment', :body => 'foo')
 # Admin (identified by email) replies with a comment
 conversation.reply(:type => 'admin', :email => 'bob@example.com', :message_type => 'comment', :body => 'bar')
+
+# MARKING A CONVERSATION AS READ
+conversation.read = true
+conversation.save
 ```
 
 #### Counts
