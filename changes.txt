@@ -1,5 +1,11 @@
+2.0.3
+- Fix for bug caused by "type" in custom attributes
+
 2.0.2
 - Mark conversations as read
+
+2.0.1
+- Move ruby version to gemspec
 
 2.0.0
 - Bumped to 2.0.0.
