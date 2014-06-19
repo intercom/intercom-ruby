@@ -9,3 +9,4 @@ pkg/*
 spike.rb
 html
 .idea
+*.swp
