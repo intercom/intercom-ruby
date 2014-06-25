@@ -11,6 +11,8 @@ For generating Intercom javascript script tags for Rails, please see https://git
 ## Upgrading information
 Version 2 of intercom-ruby is not backwards compatible with previous versions. Be sure to test this new version before deploying to production. One other change you will need to make as part of the upgrade is to set `Intercom.app_api_key` and not set `Intercom.api_key` (you can continue to use your existing API key).
 
+Additionally, the new version uses Ruby 2.
+
 ## Installation
 
     gem install intercom
