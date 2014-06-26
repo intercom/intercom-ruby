@@ -20,14 +20,14 @@ module Intercom
 
       def constantize_resource_name(resource_name)
         class_name = Utils.singularize(resource_name.capitalize)
-        define_lightweight_class(class_name) unless Intercom.const_defined?(class_name)
+        define_lightweight_class(class_name) unless Intercom.const_defined?(class_name, false)
         namespaced_class_name = "Intercom::#{class_name}"
         Object.const_get(namespaced_class_name)
       end
 
       def constantize_singular_resource_name(resource_name)
         class_name = resource_name.split('_').map(&:capitalize).join
-        define_lightweight_class(class_name) unless Intercom.const_defined?(class_name)
+        define_lightweight_class(class_name) unless Intercom.const_defined?(class_name, false)
         namespaced_class_name = "Intercom::#{class_name}"
         Object.const_get(namespaced_class_name )
       end
