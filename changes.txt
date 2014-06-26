@@ -1,3 +1,7 @@
+2.1.0
+- Added Admin listing (thanks to @javiercr)
+- Fix ancestor lookup of constants (thanks to @javiercr)
+
 2.0.3
 - Fix for bug caused by "type" in custom attributes
 
