@@ -66,6 +66,12 @@ Intercom::User.all.each {|user| puts %Q(#{user.email} - #{user.custom_attributes
 Intercom::User.all.map {|user| user.email }
 ```
 
+#### Admins
+```ruby
+# Iterate over all admins
+Intercom::Admin.all.each {|admin| puts admin.email }
+```
+
 #### Companies
 ```ruby
 # Add a user to one or more companies
