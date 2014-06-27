@@ -39,7 +39,7 @@ module Intercom
     end
 
     def self.default_headers
-      {'Accept-Encoding' => 'gzip, deflate', 'Accept' => 'application/vnd.intercom.3+json'}
+      {'Accept-Encoding' => 'gzip, deflate', 'Accept' => 'application/vnd.intercom.3+json', 'User-Agent' => "Intercom-Ruby/#{Intercom::VERSION}"}
     end
 
     def client(uri)
