@@ -1,3 +1,7 @@
+2.2.2
+- Clean up some spec warnings
+- Fix incrementing of custom data
+
 2.1.1
 - Added User Agent header
 
