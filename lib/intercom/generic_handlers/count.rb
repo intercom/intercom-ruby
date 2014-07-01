@@ -22,7 +22,7 @@ module Intercom
 
             def do_count
               entity.fetch_for_app.send(appwide_entity_to_count)['count']
-            rescue Intercom::AttributeNotSetError => ex
+            rescue Intercom::AttributeNotSetError
               # Indicates this this kind of counting is not supported
               raise_no_method_missing_handler
             end

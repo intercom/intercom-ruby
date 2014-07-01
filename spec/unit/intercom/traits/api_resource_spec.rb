@@ -18,7 +18,6 @@ describe Intercom::Traits::ApiResource do
   before(:each) { api_resource.from_response(object_json) }
 
   it "does not set type on parsing json" do
-    assert_nil api_resource.instance_variable_get(:@type)
     api_resource.wont_respond_to :type
   end
 

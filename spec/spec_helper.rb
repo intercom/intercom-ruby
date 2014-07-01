@@ -108,7 +108,6 @@ def test_message
 end
 
 def page_of_users(include_next_link: false)
-  all_user =
   {
      "type"=>"user.list",
      "pages"=>
