@@ -3,20 +3,9 @@ module Intercom
     module IncrementableAttributes
 
       def increment(key, value=1)
-        mark_field_as_changed!(:increments)
-        increments[key] ||= 0
-        increments[key] += value
-      end
-
-      private
-
-      def increments
-        @increments ||= {}
-      end
-
-      def increments=(hash)
-        mark_field_as_changed!(:increments)
-        @increments = hash
+        existing_value = self.custom_attributes[key]
+        existing_value ||= 0
+        self.custom_attributes[key] = existing_value + value
       end
     end
   end

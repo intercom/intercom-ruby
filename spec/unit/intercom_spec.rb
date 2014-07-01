@@ -40,6 +40,7 @@ describe Intercom do
       after do
         Intercom.protocol = @protocol
         Intercom.hostname = @hostname
+        Intercom.endpoints = ["https://api.intercom.io"]
       end
 
       it "allows overriding of the endpoint and protocol" do

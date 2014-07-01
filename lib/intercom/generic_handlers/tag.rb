@@ -41,7 +41,7 @@ module Intercom
             end
             
             def tag_object_list(args)
-              to_tag_object_list = args[1].map { |id| { :id => id } }
+              args[1].map { |id| { :id => id } }
             end
             
             def untag_object_list(args)

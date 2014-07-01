@@ -115,40 +115,28 @@ describe "Intercom::User" do
 
     it "increments up by 1 with no args" do
       @user.increment("mad")
-      @user.to_hash["increments"].must_equal "mad" => 1
+      @user.to_hash["custom_attributes"]["mad"].must_equal 124
     end
 
     it "increments up by given value" do
       @user.increment("mad", 4)
-      @user.to_hash["increments"].must_equal "mad" => 4
+      @user.to_hash["custom_attributes"]["mad"].must_equal 127
     end
 
     it "increments down by given value" do
       @user.increment("mad", -1)
-      @user.to_hash["increments"].must_equal "mad" => -1
-    end
-
-    it "doesn't allow direct access to increments hash" do
-      proc { @user.increments["mad"] = 1 }.must_raise Intercom::AttributeNotSetError
-      proc { @user.increments }.must_raise Intercom::AttributeNotSetError
-    end
-
-    it "can update the increments hash without losing previous changes" do
-      @user.increment("mad")
-      @user.to_hash["increments"].must_equal "mad" => 1
-      @user.increment("another", -2)
-      @user.to_hash["increments"].must_equal "mad" => 1, "another" => -2
+      @user.to_hash["custom_attributes"]["mad"].must_equal 122
     end
 
     it "can increment new custom data fields" do
       @user.increment("new_field", 3)
-      @user.to_hash["increments"].must_equal "new_field" => 3
+      @user.to_hash["custom_attributes"]["new_field"].must_equal 3
     end
 
     it "can call increment on the same key twice and increment by 2" do
       @user.increment("mad")
       @user.increment("mad")
-      @user.to_hash["increments"].must_equal "mad" => 2
+      @user.to_hash["custom_attributes"]["mad"].must_equal 125
     end
   end
 
