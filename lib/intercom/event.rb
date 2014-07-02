@@ -84,7 +84,7 @@ module Intercom
     end
     
     def self.user_hash(user)
-      user.user_id ? { :user_id => user.user_id } : { :email => user.email }
+      ((defined? user.user_id) and user.user_id) ? { :user_id => user.user_id } : { :email => user.email }
     end
 
     def self.post_to_intercom(hash)
