@@ -68,7 +68,7 @@ module Intercom
         parsed_body
       end
     rescue Timeout::Error
-      raise Intercom::ServiceUnavailableError
+      raise Intercom::ServiceUnavailableError.new('Service Unavailable')
     end
 
     def decode(content_encoding, body)
@@ -78,15 +78,15 @@ module Intercom
 
     def raise_errors_on_failure(res)
       if res.code.to_i.eql?(404)
-        raise Intercom::ResourceNotFound
+        raise Intercom::ResourceNotFound.new('Resource Not Found')
       elsif res.code.to_i.eql?(401)
-        raise Intercom::AuthenticationError
+        raise Intercom::AuthenticationError.new('Unauthorized')
       elsif res.code.to_i.eql?(500)
-        raise Intercom::ServerError
+        raise Intercom::ServerError.new('Server Error')
       elsif res.code.to_i.eql?(502)
-        raise Intercom::BadGatewayError
+        raise Intercom::BadGatewayError.new('Bad Gateway Error')
       elsif res.code.to_i.eql?(503)
-        raise Intercom::ServiceUnavailableError
+        raise Intercom::ServiceUnavailableError.new('Service Unavailable')
       end
     end
 
