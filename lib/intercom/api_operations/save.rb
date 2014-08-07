@@ -37,7 +37,7 @@ module Intercom
       end
 
       def identity_hash
-        respond_to?(:identity_vars) ? to_hash.slice(*(identity_vars.map(&:to_s))) : {}
+        respond_to?(:identity_vars) ? SliceableHash.new(to_hash).slice(*(identity_vars.map(&:to_s))) : {}
       end
     end
   end

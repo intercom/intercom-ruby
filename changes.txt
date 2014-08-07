@@ -1,3 +1,6 @@
+2.1.4
+  - Rework hash helper extensions
+
 2.1.2
 - Clean up some spec warnings
 - Fix incrementing of custom data
