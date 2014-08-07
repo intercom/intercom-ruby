@@ -71,8 +71,13 @@ describe Intercom::Traits::ApiResource do
   it "an initialized ApiResource is equal to on generated from a response" do
     class ConcreteApiResource; include Intercom::Traits::ApiResource; end
     initialized_api_resource = ConcreteApiResource.new(object_json)
-    object_json.except('type').keys.each do |attribute|
+    except(object_json, 'type').keys.each do |attribute|
       assert_equal initialized_api_resource.send(attribute), api_resource.send(attribute)
     end
+  end
+  
+  def except(h, *keys)
+    keys.each { |key| h.delete(key) }
+    h
   end
 end
