@@ -107,7 +107,7 @@ def test_message
   }
 end
 
-def page_of_users(include_next_link: false)
+def page_of_users(include_next_link= false)
   {
      "type"=>"user.list",
      "pages"=>
