@@ -99,12 +99,13 @@ describe "Intercom::User" do
 
   it "rejects nested data structures in custom_attributes" do
     user = Intercom::User.new()
-    proc { user.custom_attributes["thing"] = [1] }.must_raise ArgumentError
-    proc { user.custom_attributes["thing"] = {1 => 2} }.must_raise ArgumentError
-    proc { user.custom_attributes = {1 => {2 => 3}} }.must_raise ArgumentError
+    
+    proc { user.custom_attributes["thing"] = [1] }.must_raise(ArgumentError)
+    proc { user.custom_attributes["thing"] = {1 => 2} }.must_raise(ArgumentError)
+    proc { user.custom_attributes["thing"] = {1 => {2 => 3}} }.must_raise(ArgumentError)
 
     user = Intercom::User.from_api(test_user)
-    proc { user.custom_attributes["thing"] = [1] }.must_raise ArgumentError
+    proc { user.custom_attributes["thing"] = [1] }.must_raise(ArgumentError)
   end
 
   describe "incrementing custom_attributes fields" do
@@ -193,7 +194,8 @@ describe "Intercom::User" do
   it "sets/gets rw keys" do
     params = {"email" => "me@example.com", :user_id => "abc123", "name" => "Bob Smith", "last_seen_ip" => "1.2.3.4", "last_seen_user_agent" => "ie6", "created_at" => Time.now}
     user = Intercom::User.new(params)
-    user.to_hash.keys.sort.must_equal (params.keys + ['custom_attributes']).map(&:to_s).sort
+    custom_attributes = (params.keys + ['custom_attributes']).map(&:to_s).sort
+    user.to_hash.keys.sort.must_equal custom_attributes
     params.keys.each do |key|
       user.send(key).to_s.must_equal params[key].to_s
     end
