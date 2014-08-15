@@ -13,7 +13,7 @@ describe Intercom::Traits::ApiResource do
      "user_count"=>1,
      "custom_attributes"=>{}}
   end
-  let(:api_resource) { Object.new.extend(Intercom::Traits::ApiResource)}
+  let(:api_resource) { DummyClass.new.extend(Intercom::Traits::ApiResource)}
 
   before(:each) { api_resource.from_response(object_json) }
 
@@ -80,4 +80,6 @@ describe Intercom::Traits::ApiResource do
     keys.each { |key| h.delete(key) }
     h
   end
+  
+  class DummyClass; end
 end
