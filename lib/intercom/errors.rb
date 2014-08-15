@@ -3,10 +3,9 @@ module Intercom
   # Base class exception from which all public Intercom exceptions will be derived
   class IntercomError < StandardError
     attr_reader :http_code, :application_error_code
-    def initialize(message, http_code = nil, app_error_code = nil)
-      app_error_code = app_error_code || application_error_code
+    def initialize(message, http_code = nil, application_error_code = application_error_code)
       @http_code = http_code
-      @application_error_code = app_error_code
+      @application_error_code = application_error_code
       super(message)
     end
   end
