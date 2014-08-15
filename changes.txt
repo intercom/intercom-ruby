@@ -1,3 +1,9 @@
+2.1.5
+  - Fix typos in error messages (thanks to @infertux)
+  - Gemfile cleanup (thanks to @Manfred)
+  - Handle 403 Forbidden errors
+  - Fix intermittant spec failure
+
 2.1.4
   - Rework hash helper extensions
 
