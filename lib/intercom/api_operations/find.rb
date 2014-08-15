@@ -3,7 +3,7 @@ module Intercom
     module Find
       module ClassMethods
         def find(params)
-          raise BadRequestError, "#{self}#find takes a hash as it's parameter but you supplied #{params.inspect}" unless params.is_a? Hash
+          raise BadRequestError, "#{self}#find takes a hash as its parameter but you supplied #{params.inspect}" unless params.is_a? Hash
           collection_name = Utils.resource_class_to_collection_name(self)
           if params[:id]
             response = Intercom.get("/#{collection_name}/#{params[:id]}", {})
