@@ -81,6 +81,8 @@ module Intercom
         raise Intercom::ResourceNotFound.new('Resource Not Found')
       elsif res.code.to_i.eql?(401)
         raise Intercom::AuthenticationError.new('Unauthorized')
+      elsif res.code.to_i.eql?(403)
+        raise Intercom::AuthenticationError.new('Forbidden')
       elsif res.code.to_i.eql?(500)
         raise Intercom::ServerError.new('Server Error')
       elsif res.code.to_i.eql?(502)
@@ -100,7 +102,7 @@ module Intercom
         :application_error_code => error_code
       }
       case error_code
-      when 'unauthorized'
+      when 'unauthorized', 'forbidden'
         raise Intercom::AuthenticationError.new(error_details['message'], error_context)
       when "bad_request", "missing_parameter", 'parameter_invalid'
         raise Intercom::BadRequestError.new(error_details['message'], error_context)
