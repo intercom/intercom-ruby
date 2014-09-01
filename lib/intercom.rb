@@ -30,24 +30,20 @@ module Intercom
   @hostname = "api.intercom.io"
   @protocol = "https"
 
-  @endpoints = nil
-  @current_endpoint = nil
-  @app_id = nil
-  @app_api_key = nil
-
   def self.app_id=(app_id)
-    @app_id = app_id
+    Thread.current[:intercom_app_id] = app_id
   end
 
   def self.app_id
-    @app_id
+    Thread.current[:intercom_app_id]
   end
 
   def self.app_api_key=(app_api_key)
-    @app_api_key = app_api_key
+    Thread.current[:intercom_app_api_key] = app_api_key
   end
+
   def self.app_api_key
-    @app_api_key
+    Thread.current[:intercom_app_api_key]
   end
 
   # This method is obsolete and used to warn of backwards incompatible changes on upgrading
@@ -58,8 +54,8 @@ module Intercom
   private
 
   def self.target_base_url
-    raise ArgumentError, "#{configuration_required_text} #{related_docs_text}" if [@app_id, @app_api_key].any?(&:nil?)
-    basic_auth_part = "#{@app_id}:#{@app_api_key}@"
+    raise ArgumentError, "#{configuration_required_text} #{related_docs_text}" if [app_id, app_api_key].any?(&:nil?)
+    basic_auth_part = "#{app_id}:#{app_api_key}@"
     current_endpoint.gsub(/(https?:\/\/)(.*)/, "\\1#{basic_auth_part}\\2")
   end
 
@@ -90,14 +86,23 @@ module Intercom
   end
 
   def self.retry_on_alternative_endpoint(request)
-    @current_endpoint = alternative_random_endpoint
+    Thread.current[:intercom_current_endpoint] = alternative_random_endpoint
     request.execute(target_base_url)
   end
 
   def self.current_endpoint
-    return @current_endpoint if @current_endpoint && @endpoint_randomized_at > (Time.now - (60 * 5))
-    @endpoint_randomized_at = Time.now
-    @current_endpoint = random_endpoint
+    current_endpoint = Thread.current[:intercom_current_endpoint]
+    return current_endpoint if current_endpoint && endpoint_randomized_at > (Time.now - (60 * 5))
+    self.endpoint_randomized_at = Time.now
+    Thread.current[:intercom_current_endpoint] = random_endpoint
+  end
+
+  def self.endpoint_randomized_at
+    Thread.current[:intercom_endpoint_randomized_at]
+  end
+
+  def self.endpoint_randomized_at=(time)
+    Thread.current[:intercom_endpoint_randomized_at] = time
   end
 
   def self.random_endpoint
@@ -105,7 +110,7 @@ module Intercom
   end
 
   def self.alternative_random_endpoint
-    (endpoints.shuffle - [@current_endpoint]).first
+    (endpoints.shuffle - [Thread.current[:intercom_current_endpoint]]).first
   end
 
   def self.post(path, payload_hash)
@@ -131,33 +136,32 @@ module Intercom
   end
 
   def self.protocol #nodoc
-    @protocol
+    Thread.current[:intercom_protocol] ||= @protocol
   end
 
   def self.protocol=(override) #nodoc
-    @protocol = override
+    Thread.current[:intercom_protocol] = override
   end
 
   def self.hostname #nodoc
-    @hostname
+    Thread.current[:intercom_hostname] ||= @hostname
   end
 
   def self.hostname=(override) #nodoc
-    @hostname = override
+    Thread.current[:intercom_hostname] = override
   end
 
   def self.endpoint=(endpoint) #nodoc
     self.endpoints = [endpoint]
-    @current_endpoint = nil
+    Thread.current[:intercom_current_endpoint] = nil
   end
 
   def self.endpoints=(endpoints) #nodoc
-    @endpoints = endpoints
-    @current_endpoint = nil
+    Thread.current[:intercom_endpoints] = endpoints
+    Thread.current[:intercom_current_endpoint] = nil
   end
 
   def self.endpoints
-    @endpoints || ["#{@protocol}://#{hostname}"]
+    Thread.current[:intercom_endpoints] ||= ["#{protocol}://#{hostname}"]
   end
-
 end
