@@ -110,6 +110,8 @@ module Intercom
         raise Intercom::ResourceNotFound.new(error_details['message'], error_context)
       when "rate_limit_exceeded"
         raise Intercom::RateLimitExceeded.new(error_details['message'], error_context)
+      when 'service_unavailable'
+        raise Intercom::ServiceUnavailableError.new(error_details['message'], error_context)
       when nil, ''
         raise Intercom::UnexpectedError.new(message_for_unexpected_error_without_type(error_details, parsed_http_code), error_context)
       else
