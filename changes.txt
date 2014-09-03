@@ -1,55 +1,58 @@
+2.1.6
+ - Add handling for service unavailable exceptions
+
 2.1.5
-  - Fix typos in error messages (thanks to @infertux)
-  - Gemfile cleanup (thanks to @Manfred)
-  - Handle 403 Forbidden errors
-  - Fix intermittant spec failure
+ - Fix typos in error messages (thanks to @infertux)
+ - Gemfile cleanup (thanks to @Manfred)
+ - Handle 403 Forbidden errors
+ - Fix intermittant spec failure
 
 2.1.4
-  - Rework hash helper extensions
+ - Rework hash helper extensions
 
 2.1.2
-- Clean up some spec warnings
-- Fix incrementing of custom data
+ - Clean up some spec warnings
+ - Fix incrementing of custom data
 
 2.1.1
-- Added User Agent header
+ - Added User Agent header
 
 2.1.0
-- Added Admin listing (thanks to @javiercr)
-- Fix ancestor lookup of constants (thanks to @javiercr)
+ - Added Admin listing (thanks to @javiercr)
+ - Fix ancestor lookup of constants (thanks to @javiercr)
 
 2.0.3
-- Fix for bug caused by "type" in custom attributes
+ - Fix for bug caused by "type" in custom attributes
 
 2.0.2
-- Mark conversations as read
+ - Mark conversations as read
 
 2.0.1
-- Move ruby version to gemspec
+ - Move ruby version to gemspec
 
 2.0.0
-- Bumped to 2.0.0.
+ - Bumped to 2.0.0.
 
 1.0.0
-- Bumped to a 1.0.0 version. No functional changes.
+ - Bumped to a 1.0.0 version. No functional changes.
 
 0.3.0
-- Renamed UserEvents to Events
+ - Renamed UserEvents to Events
 
 0.2.0
-- Add UserEvents.
+ - Add UserEvents.
 
 0.1.19
-- Update DELETE request to fix issue.
+ - Update DELETE request to fix issue.
 
 0.1.18
-- Increase connection and read timeouts
+ - Increase connection and read timeouts
 
 0.1.16
-- Add BadGatewayError to properly report that sort of error.
+ - Add BadGatewayError to properly report that sort of error.
 
 0.1.15
-- Fix location_data and social_profiles for ruby 2.0 change to #respond_to? method.
+ - Fix location_data and social_profiles for ruby 2.0 change to #respond_to? method.
 
 0.1.14
  - Update tagging interface for API changes

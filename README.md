@@ -19,7 +19,7 @@ Additionally, the new version uses Ruby 2.
 
 Using bundler:
 
-    gem 'intercom', "~> 2.1.3"
+    gem 'intercom', "~> 2.1.6"
 
 ## Basic Usage
 
