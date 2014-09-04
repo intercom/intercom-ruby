@@ -1,3 +1,6 @@
+2.2.0
+ - Handle blanks on identity attributes (e.g. email) better.
+
 2.1.6
  - Add handling for service unavailable exceptions
 
