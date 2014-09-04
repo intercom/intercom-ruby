@@ -165,6 +165,12 @@ describe "Intercom::User" do
     Intercom.expects(:post).with("/users", {'custom_attributes' => {}, "email" => "jo@example.com", "user_id" => "i-1224242", "companies" => [{"company_id" => 6, "name" => "Intercom"}]}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
     user.save
   end
+  
+  it 'can save a user with a nil email' do
+    user = Intercom::User.new("email" => nil, :user_id => "i-1224242", :companies => [{'company_id' => 6, 'name' => "Intercom"}])
+    Intercom.expects(:post).with("/users", {'custom_attributes' => {}, "email" => nil, "user_id" => "i-1224242", "companies" => [{"company_id" => 6, "name" => "Intercom"}]}).returns({"email" => nil, "user_id" => "i-1224242"})
+    user.save
+  end
 
   it "deletes a user" do
     user = Intercom::User.new("id" => "1")
