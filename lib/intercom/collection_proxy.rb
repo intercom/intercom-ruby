@@ -47,7 +47,11 @@ module Intercom
 
     def deserialize_response_hash(response_hash, block)
       top_level_type = response_hash.delete('type')
-      top_level_entity_key = Utils.entity_key_from_type(top_level_type)
+      if resource_name == 'subscriptions'
+        top_level_entity_key = 'items'
+      else
+        top_level_entity_key = Utils.entity_key_from_type(top_level_type)
+      end
       response_hash[top_level_entity_key].each do |object_json|
         block.call Lib::TypedJsonDeserializer.new(object_json).deserialize
       end
