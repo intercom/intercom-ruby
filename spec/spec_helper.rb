@@ -262,6 +262,33 @@ def test_conversation_notification
   }
 end
 
+def test_subscription
+  {"request"=>
+       {"type"=>"notification_subscription",
+        "id"=>"nsub_123456789",
+        "created_at"=>1410368642,
+        "updated_at"=>1410368642,
+        "service_type"=>"web",
+        "app_id"=>"3qmk5gyg",
+        "url"=>
+            "http://example.com",
+        "self"=>
+            "https://api.intercom.io/subscriptions/nsub_123456789",
+        "topics"=>["user.created", "conversation.user.replied", "conversation.admin.replied"],
+        "active"=>true,
+        "metadata"=>{},
+        "hub_secret"=>nil,
+        "mode"=>"point",
+        "links"=>
+            {"sent"=>
+                 "https://api.intercom.io/subscriptions/nsub_123456789/sent",
+             "retry"=>
+                 "https://api.intercom.io/subscriptions/nsub_123456789/retry",
+             "errors"=>
+                 "https://api.intercom.io/subscriptions/nsub_123456789/errors"},
+        "notes"=>[]}}
+end
+
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
 end
