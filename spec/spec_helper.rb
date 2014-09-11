@@ -132,7 +132,7 @@ def test_tag
   }
 end
 
-def test_webhook_user
+def test_user_notification
   {
     "type" => "notification_event",
     "id" => "notif_123456-56465-546546",
@@ -199,7 +199,7 @@ def test_webhook_user
   }
 end
 
-def test_webhook_conversation
+def test_conversation_notification
   {
      "type"=>"notification_event",
      "id"=>"notif_123456-56465-546546",
