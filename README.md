@@ -19,7 +19,7 @@ Additionally, the new version uses Ruby 2.
 
 Using bundler:
 
-    gem 'intercom', "~> 2.2.0"
+    gem 'intercom', "~> 2.2.1"
 
 ## Basic Usage
 
@@ -43,6 +43,9 @@ Resources this API supports:
     https://api.intercom.io/conversations
     https://api.intercom.io/messages
     https://api.intercom.io/counts
+    https://api.intercom.io/subscriptions
+    
+Additionally, the library can handle incoming webhooks from Intercom and convert to `Intercom::` models.
 
 ### Examples
 
@@ -289,6 +292,39 @@ The metadata key values in the example are treated as follows-
 - stripe_invoice: The identifier of the Stripe invoice (has a 'stripe_invoice' key)
 - order_number: a Rich Link (value contains 'url' and 'value' keys)
 - price: An Amount in US Dollars (value contains 'amount' and 'currency' keys)
+
+### Subscriptions
+
+Subscribe to events in Intercom to receive webhooks.
+
+```ruby
+# create a subscription
+Intercom::Subscription.create(:url => "http://example.com", :topics => ["user.created"])
+
+# fetch a subscription
+Intercom::Subscription.find(:id => "nsub_123456789")
+
+# list subscriptions
+Intercom::Subscription.all
+```
+
+### Webhooks
+
+```ruby
+# create a payload from the notification hash (from json).
+payload = Intercom::Notification.new(notification_hash)
+
+payload.type
+# => 'user.created'
+
+payload.model_type
+# => Intercom::User
+
+user = payload.model
+# => Instance of Intercom::User
+```
+
+Note that models generated from webhook notifications might differ slightly from models directly acquired via the API. If this presents a problem, calling `payload.load` will load the model from the API using the `id` field.
 
 ### Errors
 You do not need to deal with the HTTP response from an API call directly. If there is an unsuccessful response then an error that is a subclass of Intercom:Error will be raised. If desired, you can get at the http_code of an Intercom::Error via it's `http_code` method.
