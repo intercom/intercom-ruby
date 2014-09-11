@@ -132,6 +132,136 @@ def test_tag
   }
 end
 
+def test_user_notification
+  {
+    "type" => "notification_event",
+    "id" => "notif_123456-56465-546546",
+    "topic" => "user.created",
+    "app_id" => "aaaaaa",
+    "data" =>
+    {
+      "type" => "notification_event_data",
+      "item" =>
+      {
+        "type" => "user",
+        "id" => "aaaaaaaaaaaaaaaaaaaaaaaa",
+        "user_id" => nil,
+        "email" => "joe@example.com",
+        "name" => "Joe Schmoe",
+        "avatar" =>
+        {
+          "type" => "avatar",
+          "image_url" => nil
+        },
+        "app_id" => "aaaaa",
+        "companies" =>
+        {
+          "type" => "company.list",
+          "companies" => [ ]
+        },
+        "location_data" =>
+        {
+        },
+        "last_request_at" => nil,
+        "created_at" => "1401970114",
+        "remote_created_at" => nil,
+        "updated_at" => "1401970114",
+        "session_count" => 0,
+        "social_profiles" =>
+        {
+          "type" => "social_profile.list",
+          "social_profiles" => [ ]
+        },
+        "unsubscribed_from_emails" => false,
+        "user_agent_data" => nil,
+        "tags" =>
+        {
+          "type" => "tag.list",
+          "tags" => [ ]
+        },
+        "segments" =>
+        {
+          "type" => "segment.list",
+          "segments" => [ ]
+        },
+        "custom_attributes" =>
+        {
+        }
+      }
+    },
+    "delivery_status" => nil,
+    "delivery_attempts" => 1,
+    "delivered_at" => 0,
+    "first_sent_at" => 1410188629,
+    "created_at" => 1410188628,
+    "links" => { },
+    "self" => nil
+  }
+end
+
+def test_conversation_notification
+  {
+     "type"=>"notification_event",
+     "id"=>"notif_123456-56465-546546",
+     "topic"=>"conversation.user.created",
+     "app_id"=>"aaaaa",
+     "data"=>
+     {
+          "type"=>"notification_event_data",
+          "item"=>
+          {
+               "type"=>"conversation",
+               "id"=>"123456789",
+               "created_at"=>"1410335293",
+               "updated_at"=>"1410335293",
+               "user"=>
+               {
+                    "type"=>"user",
+                    "id"=>"540f1de7112d3d1d51001637",
+                    "name"=>"Kill Bill",
+                    "email"=>"bill@bill.bill"},
+               "assignee"=>
+               {
+                   "type"=>"nobody_admin",
+                   "id"=>nil
+               },
+               "conversation_message"=>
+               {
+                    "type"=>"conversation_message",
+                    "id"=>"321546",
+                    "subject"=>"",
+                    "body"=>"<p>An important message</p>",
+                    "author"=>
+                    {
+                         "type"=>"user",
+                         "id"=>"aaaaaaaaaaaaaaaaaaaaaa",
+                         "name"=>"Kill Bill",
+                         "email"=>"bill@bill.bill"},
+                    "attachments"=>[]
+               },
+               "conversation_parts"=>
+               {
+                   "type"=>"conversation_part.list",
+                   "conversation_parts"=>[]
+               },
+               "open"=>nil,
+               "read"=>true,
+               "links"=>
+               {
+                   "conversation_web"=>
+                    "https://app.intercom.io/a/apps/aaaaaa/inbox/all/conversations/123456789"}
+          }
+     },
+     "delivery_status"=>nil,
+     "delivery_attempts"=>1,
+     "delivered_at"=>0,
+     "first_sent_at"=>1410335293,
+     "created_at"=>1410335293,
+     "links"=>{},
+     "self"=>nil
+  }
+end
+
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
 end
