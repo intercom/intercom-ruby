@@ -12,7 +12,7 @@ describe "Intercom::Notification" do
     payload.model_type.must_equal Intercom::User
   end
 
-  it "returns correct notification topic" do
+  it "returns correct User notification topic" do
     payload = Intercom::Notification.new(test_user_notification)
     payload.topic.must_equal "user.created"
   end
@@ -27,12 +27,12 @@ describe "Intercom::Notification" do
     payload.model.must_be_instance_of Intercom::Conversation
   end
 
-  it "returns correct model type for User" do
+  it "returns correct model type for Conversation" do
     payload = Intercom::Notification.new(test_conversation_notification)
     payload.model_type.must_equal Intercom::Conversation
   end
 
-  it "returns correct notification topic" do
+  it "returns correct Conversation notification topic" do
     payload = Intercom::Notification.new(test_conversation_notification)
     payload.topic.must_equal "conversation.user.created"
   end
