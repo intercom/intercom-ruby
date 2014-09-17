@@ -44,7 +44,7 @@ Resources this API supports:
     https://api.intercom.io/messages
     https://api.intercom.io/counts
     https://api.intercom.io/subscriptions
-    
+
 Additionally, the library can handle incoming webhooks from Intercom and convert to `Intercom::` models.
 
 ### Examples
@@ -113,7 +113,7 @@ Intercom::Tag.find_all_for_user(:user_id => '3')
 # Tag companies
 tag = Intercom::Tag.tag_companies('red', ["42ea2f1b93891f6a99000427"])
 # Untag companies
-Intercom::Tag.untag_users('blue', ["42ea2f1b93891f6a99000427"])
+Intercom::Tag.untag_companies('blue', ["42ea2f1b93891f6a99000427"])
 # Iterate over all tags for company
 Intercom::Tag.find_all_for_company(:id => '43357e2c3c77661e25000026')
 Intercom::Tag.find_all_for_company(:company_id => '6')
@@ -223,7 +223,7 @@ Intercom::Message.create({
     :id   => "1234"
   },
   :to => {
-    :type => :user,
+    :type => "user",
     :id   => "5678"
   }
 })
@@ -271,16 +271,16 @@ Metadata Objects support a few simple types that Intercom can present on your be
 
 ```ruby
 Intercom::Event.create(:event_name => "placed-order", :email => current_user.email,
-  :created_at => 1403001013
+  :created_at => 1403001013,
   :metadata => {
-    :order_date => Time.now.to_i,  
+    :order_date => Time.now.to_i,
     :stripe_invoice => 'inv_3434343434',
     :order_number => {
       :value => '3434-3434',
       :url => 'https://example.org/orders/3434-3434'
     },
     price: {
-      :currency => 'usd',  
+      :currency => 'usd',
       :amount => 2999
     }
   }
