@@ -41,7 +41,12 @@ module Intercom
             end
             
             def tag_object_list(args)
+              return args[1] if hashy_list(args[1])
               args[1].map { |id| { :id => id } }
+            end
+
+            def hashy_list(list)
+              list.size > 0 && list[0].is_a?(Hash) 
             end
             
             def untag_object_list(args)
