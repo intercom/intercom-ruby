@@ -23,6 +23,8 @@ module Intercom
   # Raised when we reach socket connect timeout
   class ServiceUnavailableError < IntercomError; end
 
+  class ServiceConnectionError < IntercomError; end
+
   # Raised when requesting resources on behalf of a user that doesn't exist in your application on Intercom.
   class ResourceNotFound < IntercomError; end
 
