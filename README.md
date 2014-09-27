@@ -205,7 +205,7 @@ Intercom::Segment.count
 Intercom::Tag.count
 ```
 
-#### Full loading of and embedded entity
+#### Full loading of an embedded entity
 ```ruby
 # Given a conversation with a partial user, load the full user. This can be
 # done for any entity
