@@ -336,6 +336,7 @@ else rescue the more specific error subclass.
 Intercom::AuthenticationError
 Intercom::ServerError
 Intercom::ServiceUnavailableError
+Intercom::ServiceConnectionError
 Intercom::ResourceNotFound
 Intercom::BadRequestError
 Intercom::RateLimitExceeded
