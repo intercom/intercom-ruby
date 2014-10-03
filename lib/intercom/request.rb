@@ -69,11 +69,11 @@ module Intercom
             raise_errors_on_failure(response)
             parsed_body
           rescue Timeout::Error
-            raise Intercom::ServiceUnavailableError.new('Service Unavailable')
+            raise Intercom::ServiceUnavailableError.new('Service Unavailable [request timed out]')
           end
         end
       rescue Timeout::Error
-        raise Intercom::ServiceConnectionError.new('Failed to connect to service')
+        raise Intercom::ServiceConnectionError.new('Failed to connect to service [connection attempt timed out]')
       end
     end
 
