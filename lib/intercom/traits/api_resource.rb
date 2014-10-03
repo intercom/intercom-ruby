@@ -67,7 +67,7 @@ module Intercom
       end
 
       def set_property(attribute, value)
-        if typed_value?(value) && !custom_attribute_field?(attribute)
+        if typed_value?(value) && !custom_attribute_field?(attribute) && !message_from_field?(attribute, value) && !message_to_field?(attribute, value)
           value_to_set = Intercom::Lib::TypedJsonDeserializer.new(value).deserialize
         elsif flat_store_attribute?(attribute)
           value_to_set = Intercom::Lib::FlatStore.new(value)
@@ -79,6 +79,14 @@ module Intercom
 
       def custom_attribute_field?(attribute)
         attribute == 'custom_attributes'
+      end
+      
+      def message_from_field?(attribute, value)
+        attribute.to_s == 'from' && value.is_a?(Hash) && value['type']
+      end
+      
+      def message_to_field?(attribute, value)
+        attribute.to_s == 'to' && value.is_a?(Hash) && value['type']
       end
 
       def typed_value?(value)
