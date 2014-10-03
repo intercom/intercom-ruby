@@ -1,3 +1,9 @@
+2.2.2
+ - Improve spec strings (thanks to @jkeyes)
+ - Improve README readability (thanks to @jkeyes)
+ - Raise Intercom::ServiceConnectionError on connection failure
+ - Fix creation of Intercom::Message with stringy keys in to/from fields
+
 2.2.1
  - Webhook Notification support
  - Webhook Subscription support
