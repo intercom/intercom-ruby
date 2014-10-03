@@ -58,17 +58,21 @@ module Intercom
       base_uri = URI.parse(target_base_url)
       set_common_headers(net_http_method, base_uri)
       client(base_uri).start do |http|
-        response = http.request(net_http_method)
-        decoded = decode(response['content-encoding'], response.body)
-        unless decoded.strip.empty?
-          parsed_body = JSON.parse(decoded)
-          raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
+        begin
+          response = http.request(net_http_method)
+          decoded = decode(response['content-encoding'], response.body)
+          unless decoded.strip.empty?
+            parsed_body = JSON.parse(decoded)
+            raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
+          end
+          raise_errors_on_failure(response)
+          parsed_body
+        rescue Timeout::Error
+          raise Intercom::ServiceUnavailableError.new('Service Unavailable - read timeout')
         end
-        raise_errors_on_failure(response)
-        parsed_body
       end
     rescue Timeout::Error
-      raise Intercom::ServiceUnavailableError.new('Service Unavailable')
+      raise Intercom::ServiceUnavailableError.new('Service Unavailable - connect timeout')
     end
 
     def decode(content_encoding, body)
