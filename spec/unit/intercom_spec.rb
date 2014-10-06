@@ -1,8 +1,45 @@
 require "spec_helper"
+require 'thread'
 
 describe Intercom do
   it "has a version number" do
     Intercom::VERSION.must_match(/\d+\.\d+\.\d+/)
+  end
+
+  describe "Thread Safety" do
+    it "should be thread safe" do
+      app_id = SecureRandom.uuid
+      api_key = SecureRandom.uuid
+      protocol = SecureRandom.uuid
+      hostname = SecureRandom.uuid
+      endpoints = SecureRandom.uuid
+      endpoint_randomized_at = SecureRandom.uuid
+
+      Thread.new do
+        Intercom.app_id = app_id
+        Intercom.app_api_key = api_key
+        Intercom.protocol = protocol
+        Intercom.hostname = hostname
+        Intercom.endpoints = endpoints
+        Intercom.endpoint_randomized_at = endpoint_randomized_at
+
+        Thread.new do
+          Intercom.app_id = SecureRandom.uuid
+          Intercom.app_api_key = SecureRandom.uuid
+          Intercom.protocol = SecureRandom.uuid
+          Intercom.hostname = SecureRandom.uuid
+          Intercom.endpoints = SecureRandom.uuid
+          Intercom.endpoint_randomized_at = SecureRandom.uuid
+        end.join
+
+        assert_equal Intercom.app_id, app_id
+        assert_equal Intercom.app_api_key, api_key
+        assert_equal Intercom.hostname, hostname
+        assert_equal Intercom.protocol, protocol
+        assert_equal Intercom.endpoints, endpoints
+        assert_equal Intercom.endpoint_randomized_at, endpoint_randomized_at
+      end.join
+    end
   end
 
   describe "API" do
@@ -63,13 +100,13 @@ describe Intercom do
       end
 
       it "should randomize endpoints if last checked endpoint is > 5 minutes ago" do
-        Intercom.instance_variable_set(:@current_endpoint, "http://start")
-        Intercom.instance_variable_set(:@endpoints, ["http://alternative"])
-        Intercom.instance_variable_set(:@endpoint_randomized_at, Time.now - 120)
+        Thread.current[:intercom_current_endpoint] = "http://start"
+        Thread.current[:intercom_endpoints] = ["http://alternative"]
+        Thread.current[:intercom_endpoint_randomized_at] = Time.now - 120
         Intercom.current_endpoint.must_equal "http://start"
-        Intercom.instance_variable_set(:@endpoint_randomized_at, Time.now - 360)
+        Thread.current[:intercom_endpoint_randomized_at] = Time.now - 360
         Intercom.current_endpoint.must_equal "http://alternative"
-        Intercom.instance_variable_get(:@endpoint_randomized_at).to_i.must_be_close_to Time.now.to_i
+        Thread.current[:intercom_endpoint_randomized_at].to_i.must_be_close_to Time.now.to_i
       end
     end
   end
