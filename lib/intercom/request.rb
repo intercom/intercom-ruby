@@ -61,6 +61,7 @@ module Intercom
         client(base_uri).start do |http|
           begin
             response = http.request(net_http_method)
+            set_rate_limit_details(response)
             decoded = decode(response['content-encoding'], response.body)
             unless decoded.strip.empty?
               parsed_body = JSON.parse(decoded)
@@ -75,6 +76,14 @@ module Intercom
       rescue Timeout::Error
         raise Intercom::ServiceConnectionError.new('Failed to connect to service [connection attempt timed out]')
       end
+    end
+
+    def set_rate_limit_details(response)
+      rate_limit_details = {}
+      rate_limit_details[:limit] = response['X-RateLimit-Limit'].to_i if response['X-RateLimit-Limit']
+      rate_limit_details[:remaining] = response['X-RateLimit-Remaining'].to_i if response['X-RateLimit-Remaining']
+      rate_limit_details[:reset_at] = Time.at(response['X-RateLimit-Reset'].to_i) if response['X-RateLimit-Reset']
+      Intercom.rate_limit_details = rate_limit_details
     end
 
     def decode(content_encoding, body)

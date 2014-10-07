@@ -36,6 +36,7 @@ module Intercom
   @current_endpoint = nil
   @app_id = nil
   @app_api_key = nil
+  @rate_limit_details = {}
 
   def self.app_id=(app_id)
     @app_id = app_id
@@ -48,8 +49,17 @@ module Intercom
   def self.app_api_key=(app_api_key)
     @app_api_key = app_api_key
   end
+
   def self.app_api_key
     @app_api_key
+  end
+
+  def self.rate_limit_details=(rate_limit_details)
+    @rate_limit_details = rate_limit_details
+  end
+
+  def self.rate_limit_details
+    @rate_limit_details
   end
 
   # This method is obsolete and used to warn of backwards incompatible changes on upgrading
