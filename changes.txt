@@ -1,3 +1,6 @@
+2.2.3
+ - Add rate limiting details to Intercom.rate_limiting_details
+
 2.2.2
  - Improve spec strings (thanks to @jkeyes)
  - Improve README readability (thanks to @jkeyes)

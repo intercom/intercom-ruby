@@ -19,7 +19,7 @@ Additionally, the new version uses Ruby 2.
 
 Using bundler:
 
-    gem 'intercom', "~> 2.2.2"
+    gem 'intercom', "~> 2.2.3"
 
 ## Basic Usage
 
@@ -343,3 +343,13 @@ Intercom::BadRequestError
 Intercom::RateLimitExceeded
 Intercom::AttributeNotSetError # Raised when you try to call a getter that does not exist on an object
 ```
+
+### Rate Limiting
+
+Calling `Intercom.rate_limit_details` returns a Hash that contains details about your app's current rate limit.
+
+```ruby
+Intercom.rate_limit_details
+#=> {:limit=>180, :remaining=>179, :reset_at=>2014-10-07 14:58:00 +0100}
+```
+
