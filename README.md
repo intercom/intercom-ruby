@@ -19,7 +19,7 @@ Additionally, the new version uses Ruby 2.
 
 Using bundler:
 
-    gem 'intercom', "~> 2.2.3"
+    gem 'intercom', "~> 2.2.4"
 
 ## Basic Usage
 
@@ -342,6 +342,7 @@ Intercom::ResourceNotFound
 Intercom::BadRequestError
 Intercom::RateLimitExceeded
 Intercom::AttributeNotSetError # Raised when you try to call a getter that does not exist on an object
+Intercom::MultipleMatchingUsersError
 ```
 
 ### Rate Limiting
