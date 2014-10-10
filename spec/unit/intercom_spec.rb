@@ -16,6 +16,11 @@ describe Intercom do
       Intercom.app_api_key = nil
       proc { Intercom.target_base_url }.must_raise ArgumentError, "You must set both Intercom.app_id and Intercom.app_api_key to use this client. See https://github.com/intercom/intercom-ruby for usage examples."
     end
+    
+    it 'raises an Intercom::MultipleMatchingUsers error when receiving a conflict' do
+      multiple_matching_error = { 'type' => 'error.list', 'errors' => [{ 'code' => 'conflict', 'message' => 'Multiple existing users match this email address - must be more specific using user_id' }]}
+      proc {Intercom::Request.new('/users', :get).raise_application_errors_on_failure(multiple_matching_error, 400)}.must_raise(Intercom::MultipleMatchingUsersError)
+    end
 
     it "returns the app_id and app_api_key previously set" do
       Intercom.app_id.must_equal "abc123"
