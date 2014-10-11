@@ -328,7 +328,7 @@ user = payload.model
 Note that models generated from webhook notifications might differ slightly from models directly acquired via the API. If this presents a problem, calling `payload.load` will load the model from the API using the `id` field.
 
 ### Errors
-You do not need to deal with the HTTP response from an API call directly. If there is an unsuccessful response then an error that is a subclass of Intercom:Error will be raised. If desired, you can get at the http_code of an Intercom::Error via it's `http_code` method.
+You do not need to deal with the HTTP response from an API call directly. If there is an unsuccessful response then an error that is a subclass of Intercom:Error will be raised. If desired, you can get at the http_code of an Intercom::Error via its `http_code` method.
 
 The list of different error subclasses are listed below. As they all inherit off Intercom::Error you can choose to rescue Intercom::Error or
 else rescue the more specific error subclass.
