@@ -10,6 +10,7 @@ module Intercom
           else
             response = Intercom.get("/#{collection_name}", params)
           end
+          raise Intercom::HttpError.new('Http Error - No response returned') unless response
           from_api(response)
         end
       end
