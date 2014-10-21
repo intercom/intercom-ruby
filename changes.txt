@@ -1,3 +1,8 @@
+2.3.0
+ - Add Intercom::HttpError to be raised when empty response entity received unexpectedly
+ - Raise Intercom errors more gracefully when HTML returned
+ - Fixed README typo (thanks to @marckohlbrugge)
+
 2.2.4
  - Add Intercom::MultipleMatchingUsersError
 
