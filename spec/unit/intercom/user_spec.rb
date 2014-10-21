@@ -219,32 +219,5 @@ describe "Intercom::User" do
   it "returns the total number of users" do
     Intercom::Count.expects(:user_count).returns('count_info')
     Intercom::User.count
-  end
-
- ##TODO: Investigate
-  #it "converts company created_at values to unix timestamps" do
-  #  time = Time.now
-
-  #  user = Intercom::User.new("companies" => [
-  #    { "created_at" => time },
-  #    { "created_at" => time.to_i }
-  #  ])
-
-  #  as_hash = user.to_hash
-  #  require 'ruby-debug' ; debugger
-  #  first_company_as_hash = as_hash["companies"][0]
-  #  second_company_as_hash = as_hash["companies"][1]
-
-  #  first_company_as_hash["created_at"].must_equal time.to_i
-  #  second_company_as_hash["created_at"].must_equal time.to_i
-  #end
-  
-#  it "tracks events" do
-#    user = Intercom::User.new("email" => "jim@example.com", :user_id => "12345", :created_at => Time.now, :name => "Jim Bob")
-#    Intercom::Event.expects(:create).with(:event_name => 'registration', :user => user)
-#    event = user.track_event('registration')
-    
-#    Intercom::Event.expects(:create).with(:event_name => 'another', :user => user, :created_at => 1391691571)
-#    event = user.track_event("another", {:created_at => 1391691571})
-#  end
+  end  
 end
