@@ -8,7 +8,7 @@ module Intercom
         else
           raise "Cannot load #{self.class} as it does not have a valid id."
         end
-        raise Intercom::HttpError.new('Http Error - No response returned') unless response
+        raise Intercom::HttpError.new('Http Error - No response entity returned') unless response
         from_response(response)
       end
     end
