@@ -21,6 +21,7 @@ module Intercom
         else
           response_hash = Intercom.get(@finder_url, @finder_params)
         end
+        raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
         deserialize_response_hash(response_hash, block)
         next_page = extract_next_link(response_hash)
         break if next_page.nil?

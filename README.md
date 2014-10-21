@@ -343,6 +343,7 @@ Intercom::BadRequestError
 Intercom::RateLimitExceeded
 Intercom::AttributeNotSetError # Raised when you try to call a getter that does not exist on an object
 Intercom::MultipleMatchingUsersError
+Intercom::HttpError # Raised when response object is unexpectedly nil
 ```
 
 ### Rate Limiting

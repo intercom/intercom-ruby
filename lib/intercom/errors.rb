@@ -43,6 +43,9 @@ module Intercom
 
   # Raised when you try to call a non-setter method that does not exist on an object
   class Intercom::AttributeNotSetError < IntercomError ; end
+  
+  # Raised when unexpected nil returned from server
+  class Intercom::HttpError < IntercomError ; end
 
   #
   # Non-public errors (internal to the gem)
