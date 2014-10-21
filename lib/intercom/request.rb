@@ -62,11 +62,8 @@ module Intercom
           begin
             response = http.request(net_http_method)
             set_rate_limit_details(response)
-            decoded = decode(response['content-encoding'], response.body)
-            unless decoded.strip.empty?
-              parsed_body = JSON.parse(decoded)
-              raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
-            end
+            decoded_body = decode_body(response)
+            parsed_body = parse_body(decoded_body, response)
             raise_errors_on_failure(response)
             parsed_body
           rescue Timeout::Error
@@ -76,6 +73,23 @@ module Intercom
       rescue Timeout::Error
         raise Intercom::ServiceConnectionError.new('Failed to connect to service [connection attempt timed out]')
       end
+    end
+    
+    def decode_body(response)
+      decode(response['content-encoding'], response.body)
+    end
+
+    def parse_body(decoded_body, response)
+      parsed_body = nil
+      unless decoded_body.strip.empty?
+        begin
+          parsed_body = JSON.parse(decoded_body)
+        rescue JSON::ParserError => e
+          raise_errors_on_failure(response)
+        end
+        raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
+      end
+      parsed_body
     end
 
     def set_rate_limit_details(response)
