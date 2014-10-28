@@ -1,3 +1,6 @@
+2.4.1
+ - Add 'update_last_requst_at=true' as an attribute to set on a User.
+
 2.4.0
  - Support for Ruby 1.9.3 (thanks @Chocksy)
 
