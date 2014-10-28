@@ -1,3 +1,6 @@
+2.4.0
+ - Support for Ruby 1.9.3 (thanks @Chocksy)
+
 2.3.0
  - Add Intercom::HttpError to be raised when empty response entity received unexpectedly
  - Raise Intercom errors more gracefully when HTML returned
