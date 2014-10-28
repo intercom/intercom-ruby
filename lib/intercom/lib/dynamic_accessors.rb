@@ -6,7 +6,7 @@ module Intercom
 
         def define_accessors(attribute, value, object)
           klass = object.class
-          if attribute.to_s.end_with? '_at'
+          if attribute.to_s.end_with?('_at') && attribute.to_s != 'update_last_request_at'
             define_date_based_accessors(attribute, value, klass)
           elsif object.flat_store_attribute?(attribute)
             define_flat_store_based_accessors(attribute, value, klass)
