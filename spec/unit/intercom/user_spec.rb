@@ -77,6 +77,11 @@ describe "Intercom::User" do
     user.unsubscribed_from_emails.must_equal true
     user.user_agent_data.must_equal "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11"
   end
+  
+  it 'allows update_last_request_at' do
+    Intercom.expects(:post).with("/users", {"user_id" => "1224242", 'update_last_request_at' => true, "custom_attributes" => {}}).returns({"user_id" => "i-1224242", "last_request_at" => 1414509439})
+    Intercom::User.create(user_id:'1224242', update_last_request_at:true)
+  end
 
   it "allows easy setting of custom data" do
     now = Time.now
