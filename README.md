@@ -330,7 +330,7 @@ Note that models generated from webhook notifications might differ slightly from
 ### Errors
 You do not need to deal with the HTTP response from an API call directly. If there is an unsuccessful response then an error that is a subclass of Intercom:Error will be raised. If desired, you can get at the http_code of an Intercom::Error via its `http_code` method.
 
-The list of different error subclasses are listed below. As they all inherit off Intercom::Error you can choose to rescue Intercom::Error or
+The list of different error subclasses are listed below. As they all inherit off Intercom::IntercomError you can choose to rescue Intercom::IntercomError or
 else rescue the more specific error subclass.
 
 ```ruby
