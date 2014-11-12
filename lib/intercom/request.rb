@@ -81,14 +81,13 @@ module Intercom
 
     def parse_body(decoded_body, response)
       parsed_body = nil
-      unless decoded_body.strip.empty?
-        begin
-          parsed_body = JSON.parse(decoded_body)
-        rescue JSON::ParserError => e
-          raise_errors_on_failure(response)
-        end
-        raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
+      return parsed_body if decoded_body.nil? || decoded_body.strip.empty?
+      begin
+        parsed_body = JSON.parse(decoded_body)
+      rescue JSON::ParserError => e
+        raise_errors_on_failure(response)
       end
+      raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
       parsed_body
     end
 
