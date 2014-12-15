@@ -30,6 +30,8 @@ Intercom.app_id = "my_app_id"
 Intercom.app_api_key = "my-super-crazy-api-key"
 ```
 
+You can get your `app_id` from the URL when you're logged into Intercom (it's the alphanumeric just after `/apps/`) and your API key from the API keys settings page (under your app settings in Intercom). 
+
 ### Resources
 
 Resources this API supports:
