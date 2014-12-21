@@ -51,6 +51,8 @@ Additionally, the library can handle incoming webhooks from Intercom and convert
 
 ### Examples
 
+APIs shold be used as normal Rails calls, meaning .find methods will throw exception if not found
+
 #### Users
 
 ```ruby
