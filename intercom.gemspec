@@ -19,11 +19,11 @@ Gem::Specification.new do |spec|
   spec.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency 'minitest'
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'mocha'
+  spec.add_development_dependency 'minitest', '~> 5.4'
+  spec.add_development_dependency 'rake', '~> 10.3'
+  spec.add_development_dependency 'mocha', '~> 1.0'
   spec.add_development_dependency "fakeweb", ["~> 1.3"]
 
-  spec.add_dependency 'json'
+  spec.add_dependency 'json', '~> 1.8'
   spec.required_ruby_version = '>= 1.9.3'
 end
