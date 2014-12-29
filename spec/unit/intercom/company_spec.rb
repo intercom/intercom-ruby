@@ -5,7 +5,7 @@ describe Intercom::Company do
   describe 'when no response raises error' do
     it 'on find' do
       Intercom.expects(:get).with("/companies", {:company_id => '4'}).returns(nil)
-      proc {company = Intercom::Company.find(:company_id => '4')}.must_raise Intercom::HttpError
+      proc {Intercom::Company.find(:company_id => '4')}.must_raise Intercom::HttpError
     end
     
     it 'on find_all' do

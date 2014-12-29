@@ -11,7 +11,6 @@ def test_user(email="bob@example.com")
     "name" => "Joe Schmoe",
     "avatar" => {"type"=>"avatar", "image_url"=>"https://graph.facebook.com/1/picture?width=24&height=24"},
     "app_id" => "the-app-id",
-    "created_at" => 1323422442,
     "custom_attributes" => {"a" => "b", "b" => 2},
     "companies" =>
      {"type"=>"company.list",
