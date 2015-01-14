@@ -61,7 +61,7 @@ user = Intercom::User.find(:user_id => "1")
 # Find user by id
 user = Intercom::User.find(:id => "1")
 # Create a user
-user = Intercom::User.create(:email => "bob@example.com", :name => "Bob Smith")
+user = Intercom::User.create(:email => "bob@example.com", :name => "Bob Smith", :signed_up_at => Time.now.to_i)
 # Update custom_attributes for a user
 user.custom_attributes["average_monthly_spend"] = 1234.56; user.save
 # Perform incrementing
@@ -356,4 +356,3 @@ Calling `Intercom.rate_limit_details` returns a Hash that contains details about
 Intercom.rate_limit_details
 #=> {:limit=>180, :remaining=>179, :reset_at=>2014-10-07 14:58:00 +0100}
 ```
-
