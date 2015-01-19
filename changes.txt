@@ -1,3 +1,6 @@
+2.4.4
+ - Fix parsing nil lists from notifications
+
 2.4.3
  - Updates to remove warning when running in Ruby 2.2.0 (thanks @pat @jwaldrip)
 
