@@ -31,6 +31,7 @@ module Intercom
         end
 
         def deserialize_collection(collection_json)
+          return [] if collection_json == nil
           collection_json.map { |item_json| TypedJsonDeserializer.new(item_json).deserialize }
         end
 

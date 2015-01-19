@@ -41,5 +41,28 @@ describe "Intercom::Notification" do
     payload = Intercom::Notification.new(test_conversation_notification)
     payload.model.user.must_be_instance_of Intercom::User
   end
+  
+  it "returns inner User object with nil tags" do
+    user_notification = {
+      "type" => "notification_event",
+      "app_id" => "aa11aa",
+      "data" => {
+        "type" => "notification_event_data",
+        "item" => {
+          "type" => "user",
+          "id" => "abc123def",
+          "user_id" => "666",
+          "email" => "joe@example.com",
+          "name" => "Joe",
+          "tags" => {
+            "type" => "tag.list",
+            "tags" => nil
+          }
+        }
+      },  
+    }
+    payload = Intercom::Notification.new(user_notification)
+    payload.model.tags.must_equal([])
+  end
 
 end
