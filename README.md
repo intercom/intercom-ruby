@@ -145,21 +145,21 @@ intercom.notes.find_all(:user_id => '123').each {|note| puts note.body}
 ```ruby
 # FINDING CONVERSATIONS FOR AN ADMIN
 # Iterate over all conversations (open and closed) assigned to an admin
-intercom.conversations.find_all(:type => 'admin', :id => '7').each do {|convo| ... }
+intercom.conversations.find_all(:type => 'admin', :id => '7').each {|convo| ... }
 # Iterate over all open conversations assigned to an admin
-intercom.conversations.find_all(:type => 'admin', :id => 7, :open => true).each do {|convo| ... }
+intercom.conversations.find_all(:type => 'admin', :id => 7, :open => true).each {|convo| ... }
 # Iterate over closed conversations assigned to an admin
-intercom.conversations.find_all(:type => 'admin', :id => 7, :open => false).each do {|convo| ... }
+intercom.conversations.find_all(:type => 'admin', :id => 7, :open => false).each {|convo| ... }
 # Iterate over closed conversations for assigned an admin, before a certain moment in time
-intercom.conversations.find_all(:type => 'admin', :id => 7, :open => false, :before => 1374844930).each do {|convo| ... }
+intercom.conversations.find_all(:type => 'admin', :id => 7, :open => false, :before => 1374844930).each {|convo| ... }
 
 # FINDING CONVERSATIONS FOR A USER
 # Iterate over all conversations (read + unread, correct) with a user based on the users email
-intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user').each do {|convo| ... }
+intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user').each {|convo| ... }
 # Iterate over through all conversations (read + unread) with a user based on the users email
-intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user', :unread => false).each do {|convo| ... }
+intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user', :unread => false).each {|convo| ... }
 # Iterate over all unread conversations with a user based on the users email
-intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user', :unread => true).each do {|convo| ... }
+intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user', :unread => true).each {|convo| ... }
 
 # FINDING A SINGLE CONVERSATION
 conversation = intercom.conversations.find(:id => '1')
