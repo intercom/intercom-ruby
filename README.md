@@ -332,6 +332,9 @@ user = payload.model
 Note that models generated from webhook notifications might differ slightly from models directly acquired via the API. If this presents a problem, calling `payload.load` will load the model from the API using the `id` field.
 
 ### Errors
+
+There are different styles for error handlng - some people prefer exceptions; some prefer nil and check; some prefer error objects/codes. Balancing these preferences alongside our wish to provide an idiomatic gem has brought us to use the current mechanism of throwing specific exceptions. Our approach in the client is to propagate errors and signal our failure loudly so that erroneous data does not get propagated through our customers' systems - in other words, if you see a `Intercom::ServiceUnavailableError` you know where the problem is. 
+
 You do not need to deal with the HTTP response from an API call directly. If there is an unsuccessful response then an error that is a subclass of Intercom:Error will be raised. If desired, you can get at the http_code of an Intercom::Error via its `http_code` method.
 
 The list of different error subclasses are listed below. As they all inherit off Intercom::IntercomError you can choose to rescue Intercom::IntercomError or
