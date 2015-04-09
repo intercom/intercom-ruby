@@ -62,6 +62,8 @@ user = Intercom::User.find(:user_id => "1")
 user = Intercom::User.find(:id => "1")
 # Create a user
 user = Intercom::User.create(:email => "bob@example.com", :name => "Bob Smith", :signed_up_at => Time.now.to_i)
+# Delete a user
+deleted_user = Intercom::User.find(:id => "1").delete
 # Update custom_attributes for a user
 user.custom_attributes["average_monthly_spend"] = 1234.56; user.save
 # Perform incrementing
