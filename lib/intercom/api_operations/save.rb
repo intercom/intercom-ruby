@@ -5,7 +5,14 @@ module Intercom
     module Save
 
       module ClassMethods
-        def create(params)
+        PARAMS_NOT_PROVIDED = Object.new
+        def create(params = PARAMS_NOT_PROVIDED)
+          if self.ancestors.include?(Intercom::Contact) && params == PARAMS_NOT_PROVIDED
+            params = Hash.new
+          elsif params == PARAMS_NOT_PROVIDED
+            raise ArgumentError, '.create requires 1 parameter'
+          end
+
           instance = self.new(params)
           instance.mark_fields_as_changed!(params.keys)
           instance.save
@@ -26,6 +33,10 @@ module Intercom
         from_response(response) if response # may be nil we received back a 202
       end
 
+      def identity_hash
+        respond_to?(:identity_vars) ? SliceableHash.new(to_hash).slice(*(identity_vars.map(&:to_s))) : {}
+      end
+
       private
 
       def id_present?
@@ -34,10 +45,6 @@ module Intercom
 
       def posted_updates?
         respond_to?(:update_verb) && update_verb == 'post'
-      end
-
-      def identity_hash
-        respond_to?(:identity_vars) ? SliceableHash.new(to_hash).slice(*(identity_vars.map(&:to_s))) : {}
       end
     end
   end
