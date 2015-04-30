@@ -298,6 +298,8 @@ The metadata key values in the example are treated as follows-
 - order_number: a Rich Link (value contains 'url' and 'value' keys)
 - price: An Amount in US Dollars (value contains 'amount' and 'currency' keys)
 
+*NB:* This version of the gem reserves the field name `type` in Event data.
+
 ### Subscriptions
 
 Subscribe to events in Intercom to receive webhooks.
