@@ -10,6 +10,17 @@ module Intercom
       @request_id = context[:request_id]
       super(message)
     end
+    def inspect
+      attributes = instance_variables.map do |var|
+        value = instance_variable_get(var).inspect
+        "#{var}=#{value}"
+      end
+      "##{self.class.name}:#{message} #{attributes.join(' ')}"
+    end
+    def to_hash
+      {message: message}
+        .merge(Hash[instance_variables.map{ |var| [var[1..-1], instance_variable_get(var)] }])
+    end
   end
 
   # Raised when the credentials you provide don't match a valid account on Intercom.
