@@ -74,7 +74,7 @@ module Intercom
         raise Intercom::ServiceConnectionError.new('Failed to connect to service [connection attempt timed out]')
       end
     end
-    
+
     def decode_body(response)
       decode(response['content-encoding'], response.body)
     end
@@ -124,10 +124,13 @@ module Intercom
       # Currently, we don't support multiple errors
       error_details = error_list_details['errors'].first
       error_code = error_details['type'] || error_details['code']
+      error_field = error_details['field']
       parsed_http_code = (http_code > 0 ? http_code : nil)
       error_context = {
         :http_code => parsed_http_code,
-        :application_error_code => error_code
+        :application_error_code => error_code,
+        :field => error_field,
+        :request_id => error_list_details['request_id']
       }
       case error_code
       when 'unauthorized', 'forbidden'
