@@ -1,3 +1,3 @@
 module Intercom #:nodoc:
-  VERSION = "2.4.4"
+  VERSION = "2.5.4"
 end
