@@ -300,6 +300,22 @@ The metadata key values in the example are treated as follows-
 
 *NB:* This version of the gem reserves the field name `type` in Event data.
 
+### Contacts
+
+`Contacts` represent logged out users of your application.
+
+```ruby
+# Create a contact
+contact = Intercom::Contact.create(email: "some_contact@example.com")
+
+# Update a contact
+contact.custom_attributes['foo'] = 'bar'
+contact.save
+
+# Find contacts by email
+contacts = Intercom::Contact.find_all(email: "some_contact@example.com")
+```
+
 ### Subscriptions
 
 Subscribe to events in Intercom to receive webhooks.

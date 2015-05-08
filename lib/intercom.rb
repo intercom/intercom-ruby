@@ -1,4 +1,5 @@
 require "intercom/version"
+require "intercom/contact"
 require "intercom/user"
 require "intercom/company"
 require "intercom/note"
