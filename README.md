@@ -257,6 +257,29 @@ Intercom::Message.create({
   },
   :body => "halp"
 })
+
+# Message from admin to contact
+
+Intercom::Message.create({
+  :body     => "How can I help :)",
+  :from => {
+    :type => "admin",
+    :id   => "1234"
+  },
+  :to => {
+    :type => "contact",
+    :id => "536e5643as316c83104c400671"
+  }
+})
+
+# Message from a contact
+Intercom::Message.create({
+  :from => {
+    :type => "contact",
+    :id => "536e5643as316c83104c400671"
+  },
+  :body => "halp"
+})
 ```
 
 #### Events
@@ -314,6 +337,9 @@ contact.save
 
 # Find contacts by email
 contacts = Intercom::Contact.find_all(email: "some_contact@example.com")
+
+# Convert a contact into a user
+contact.convert(user)
 ```
 
 ### Subscriptions
