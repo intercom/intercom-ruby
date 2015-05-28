@@ -2,24 +2,25 @@ require "intercom/utils"
 require "ext/sliceable_hash"
 
 module Intercom
-  class CollectionProxy
+  class ClientCollectionProxy
 
     attr_reader :resource_name
 
-    def initialize(resource_name, finder_details = {})
+    def initialize(resource_name, finder_details: {}, client: client)
       @resource_name = resource_name
       @resource_class = Utils.constantize_resource_name(resource_name)
       @finder_url = (finder_details[:url] || "/#{@resource_name}")
       @finder_params = (finder_details[:params] || {})
+      @client = client
     end
 
     def each(&block)
       next_page = nil
       loop do
         if next_page
-          response_hash = Intercom.get(next_page, {})
+          response_hash = @client.get(next_page, {})
         else
-          response_hash = Intercom.get(@finder_url, @finder_params)
+          response_hash = @client.get(@finder_url, @finder_params)
         end
         raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
         deserialize_response_hash(response_hash, block)
@@ -37,10 +38,6 @@ module Intercom
     end
 
     include Enumerable
-
-    def count
-      raise NoMethodError, "undefined method `count' for #{self.class}. Consider using the dedicated Intercom::Count interface if suitable"
-    end
 
     private
 

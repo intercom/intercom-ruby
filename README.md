@@ -9,9 +9,12 @@ Ruby bindings for the Intercom API (https://api.intercom.io).
 For generating Intercom javascript script tags for Rails, please see https://github.com/intercom/intercom-rails
 
 ## Upgrading information
-Version 2 of intercom-ruby is not backwards compatible with previous versions. Be sure to test this new version before deploying to production. One other change you will need to make as part of the upgrade is to set `Intercom.app_api_key` and not set `Intercom.api_key` (you can continue to use your existing API key).
 
-This version of the gem is compatible with `Ruby 2.1`, `Ruby 2.0` & `Ruby 1.9.3`
+Version 3 of intercom-ruby is not backwards compatible with previous versions.
+
+Version 3 moves away from a global setup approach to the use of an Intercom Client.
+
+This version of the gem is compatible with `Ruby 2.1` and above.
 
 ## Installation
 
@@ -19,24 +22,24 @@ This version of the gem is compatible with `Ruby 2.1`, `Ruby 2.0` & `Ruby 1.9.3`
 
 Using bundler:
 
-    gem 'intercom', "~> 2.5.4"
+    gem 'intercom', "~> 3.0.0b1"
 
 ## Basic Usage
 
-### Configure your access credentials
+### Configure your client
 
 ```ruby
-Intercom.app_id = "my_app_id"
-Intercom.app_api_key = "my-super-crazy-api-key"
+intercom = Intercom::Client.new(app_id: 'my_app_id', api_key: 'my_api_key')
 ```
 
-You can get your `app_id` from the URL when you're logged into Intercom (it's the alphanumeric just after `/apps/`) and your API key from the API keys settings page (under your app settings in Intercom). 
+You can get your `app_id` from the URL when you're logged into Intercom (it's the alphanumeric just after `/apps/`) and your API key from the API keys integration settings page (under your app settings - integrations in Intercom). 
 
 ### Resources
 
 Resources this API supports:
 
     https://api.intercom.io/users
+    https://api.intercom.io/contacts
     https://api.intercom.io/companies
     https://api.intercom.io/tags
     https://api.intercom.io/notes
@@ -44,10 +47,7 @@ Resources this API supports:
     https://api.intercom.io/events
     https://api.intercom.io/conversations
     https://api.intercom.io/messages
-    https://api.intercom.io/counts
     https://api.intercom.io/subscriptions
-
-Additionally, the library can handle incoming webhooks from Intercom and convert to `Intercom::` models.
 
 ### Examples
 
@@ -55,118 +55,112 @@ Additionally, the library can handle incoming webhooks from Intercom and convert
 
 ```ruby
 # Find user by email
-user = Intercom::User.find(:email => "bob@example.com")
+user = intercom.users.find(:email => "bob@example.com")
 # Find user by user_id
-user = Intercom::User.find(:user_id => "1")
+user = intercom.users.find(:user_id => "1")
 # Find user by id
-user = Intercom::User.find(:id => "1")
+user = intercom.users.find(:id => "1")
 # Create a user
-user = Intercom::User.create(:email => "bob@example.com", :name => "Bob Smith", :signed_up_at => Time.now.to_i)
+user = intercom.users.create(:email => "bob@example.com", :name => "Bob Smith", :signed_up_at => Time.now.to_i)
 # Delete a user
-deleted_user = Intercom::User.find(:id => "1").delete
+deleted_user = intercom.users.find(:id => "1").delete
 # Update custom_attributes for a user
-user.custom_attributes["average_monthly_spend"] = 1234.56; user.save
+user.custom_attributes["average_monthly_spend"] = 1234.56
+intercom.users.save(user)
 # Perform incrementing
-user.increment('karma'); user.save
+user.increment('karma')
+intercom.users.save(user)
 # Iterate over all users
-Intercom::User.all.each {|user| puts %Q(#{user.email} - #{user.custom_attributes["average_monthly_spend"]}) }
-Intercom::User.all.map {|user| user.email }
+intercom.users.all.each {|user| puts %Q(#{user.email} - #{user.custom_attributes["average_monthly_spend"]}) }
+intercom.users.all.map {|user| user.email }
 ```
 
 #### Admins
 ```ruby
 # Iterate over all admins
-Intercom::Admin.all.each {|admin| puts admin.email }
+intercom.admins.all.each {|admin| puts admin.email }
 ```
 
 #### Companies
 ```ruby
 # Add a user to one or more companies
-user = Intercom::User.find(:email => "bob@example.com")
-user.companies = [{:company_id => 6, :name => "Intercom"}, {:company_id => 9, :name => "Test Company"}]; user.save
+user = intercom.users.find(:email => "bob@example.com")
+user.companies = [{:company_id => 6, :name => "Intercom"}, {:company_id => 9, :name => "Test Company"}]
+intercom.users.save(user)
 # You can also pass custom attributes within a company as you do this
-user.companies = [{:id => 6, :name => "Intercom", :custom_attributes => {:referral_source => "Google"} } ]; user.save
+user.companies = [{:id => 6, :name => "Intercom", :custom_attributes => {:referral_source => "Google"} } ]
+intercom.users.save(user)
 # Find a company by company_id
-company = Intercom::Company.find(:company_id => "44")
+company = intercom.companies.find(:company_id => "44")
 # Find a company by name
-company = Intercom::Company.find(:name => "Some company")
+company = intercom.companies.find(:name => "Some company")
 # Find a company by id
-company = Intercom::Company.find(:id => "41e66f0313708347cb0000d0")
+company = intercom.companies.find(:id => "41e66f0313708347cb0000d0")
 # Update a company
-company.name = 'Updated company name'; company.save
+company.name = 'Updated company name'
+intercom.companies.save(company)
 # Iterate over all companies
-Intercom::Company.all.each {|company| puts %Q(#{company.name} - #{company.custom_attributes["referral_source"]}) }
-Intercom::Company.all.map {|company| company.name }
+intercom.companies.all.each {|company| puts %Q(#{company.name} - #{company.custom_attributes["referral_source"]}) }
+intercom.companies.all.map {|company| company.name }
 # Get a list of users in a company
-company.users
+intercom.companies.users(company.id)
 ```
 
 #### Tags
 ```ruby
 # Tag users
-tag = Intercom::Tag.tag_users('blue', ["42ea2f1b93891f6a99000427"])
+tag = intercom.tags.tag(name: 'blue', users: [{email: "test1@example.com"}])
 # Untag users
-Intercom::Tag.untag_users('blue', ["42ea2f1b93891f6a99000427"])
+intercom.tags.untag_users('blue',  users: [{user_id: "42ea2f1b93891f6a99000427"}])
 # Iterate over all tags
-Intercom::Tag.all.each {|tag| "#{tag.id} - #{tag.name}" }
-Intercom::Tag.all.map {|tag| tag.name }
-# Iterate over all tags for user
-Intercom::Tag.find_all_for_user(:id => '53357ddc3c776629e0000029')
-Intercom::Tag.find_all_for_user(:email => 'declan+declan@intercom.io')
-Intercom::Tag.find_all_for_user(:user_id => '3')
+intercom.tags.all.each {|tag| "#{tag.id} - #{tag.name}" }
+intercom.tags.all.map {|tag| tag.name }
 # Tag companies
-tag = Intercom::Tag.tag_companies('red', ["42ea2f1b93891f6a99000427"])
-# Untag companies
-Intercom::Tag.untag_companies('blue', ["42ea2f1b93891f6a99000427"])
-# Iterate over all tags for company
-Intercom::Tag.find_all_for_company(:id => '43357e2c3c77661e25000026')
-Intercom::Tag.find_all_for_company(:company_id => '6')
+tag = intercom.tags.tag(name: 'blue', companies: [{id: "42ea2f1b93891f6a99000427"}])
 ```
 
 #### Segments
 ```ruby
 # Find a segment
-segment = Intercom::Segment.find(:id => segment_id)
-# Update a segment
-segment.name = 'Updated name'; segment.save
+segment = intercom.segments.find(:id => segment_id)
 # Iterate over all segments
-Intercom::Segment.all.each {|segment| puts "id: #{segment.id} name: #{segment.name}"}
+intercom.segments.all.each {|segment| puts "id: #{segment.id} name: #{segment.name}"}
 ```
 
 #### Notes
 ```ruby
 # Find a note by id
-note = Intercom::Note.find(:id => note)
+note = intercom.notes.find(:id => note)
 # Create a note for a user
-note = Intercom::Note.create(:body => "<p>Text for the note</p>", :email => 'joe@example.com')
+note = intercom.notes.create(:body => "<p>Text for the note</p>", :email => 'joe@example.com')
 # Iterate over all notes for a user via their email address
-Intercom::Note.find_all(:email => 'joe@example.com').each {|note| puts note.body}
+intercom.notes.find_all(:email => 'joe@example.com').each {|note| puts note.body}
 # Iterate over all notes for a user via their user_id
-Intercom::Note.find_all(:user_id => '123').each {|note| puts note.body}
+intercom.notes.find_all(:user_id => '123').each {|note| puts note.body}
 ```
 
 #### Conversations
 ```ruby
 # FINDING CONVERSATIONS FOR AN ADMIN
 # Iterate over all conversations (open and closed) assigned to an admin
-Intercom::Conversation.find_all(:type => 'admin', :id => '7').each do {|convo| ... }
+intercom.conversations.find_all(:type => 'admin', :id => '7').each do {|convo| ... }
 # Iterate over all open conversations assigned to an admin
-Intercom::Conversation.find_all(:type => 'admin', :id => 7, :open => true).each do {|convo| ... }
+intercom.conversations.find_all(:type => 'admin', :id => 7, :open => true).each do {|convo| ... }
 # Iterate over closed conversations assigned to an admin
-Intercom::Conversation.find_all(:type => 'admin', :id => 7, :open => false).each do {|convo| ... }
+intercom.conversations.find_all(:type => 'admin', :id => 7, :open => false).each do {|convo| ... }
 # Iterate over closed conversations for assigned an admin, before a certain moment in time
-Intercom::Conversation.find_all(:type => 'admin', :id => 7, :open => false, :before => 1374844930).each do {|convo| ... }
+intercom.conversations.find_all(:type => 'admin', :id => 7, :open => false, :before => 1374844930).each do {|convo| ... }
 
 # FINDING CONVERSATIONS FOR A USER
 # Iterate over all conversations (read + unread, correct) with a user based on the users email
-Intercom::Conversation.find_all(:email => 'joe@example.com', :type => 'user').each do {|convo| ... }
+intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user').each do {|convo| ... }
 # Iterate over through all conversations (read + unread) with a user based on the users email
-Intercom::Conversation.find_all(:email => 'joe@example.com', :type => 'user', :unread => false).each do {|convo| ... }
+intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user', :unread => false).each do {|convo| ... }
 # Iterate over all unread conversations with a user based on the users email
-Intercom::Conversation.find_all(:email => 'joe@example.com', :type => 'user', :unread => true).each do {|convo| ... }
+intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user', :unread => true).each do {|convo| ... }
 
 # FINDING A SINGLE CONVERSATION
-conversation = Intercom::Conversation.find(:id => '1')
+conversation = intercom.conversations.find(:id => '1')
 
 # INTERACTING WITH THE PARTS OF A CONVERSATION
 # Getting the subject of a part (only applies to email-based conversations)
@@ -178,49 +172,26 @@ conversation.conversation_parts[1].body
 
 # REPLYING TO CONVERSATIONS
 # User (identified by email) replies with a comment
-conversation.reply(:type => 'user', :email => 'joe@example.com', :message_type => 'comment', :body => 'foo')
+intercom.conversations.reply(:id => conversation.id, :type => 'user', :email => 'joe@example.com', :message_type => 'comment', :body => 'foo')
 # Admin (identified by email) replies with a comment
-conversation.reply(:type => 'admin', :email => 'bob@example.com', :message_type => 'comment', :body => 'bar')
+intercom.conversations.reply(:id => conversation.id, :type => 'admin', :email => 'bob@example.com', :message_type => 'comment', :body => 'bar')
 
 # MARKING A CONVERSATION AS READ
-conversation.read = true
-conversation.save
-```
-
-#### Counts
-```ruby
-# Get Conversation per Admin
-conversation_counts_for_each_admin = Intercom::Count.conversation_counts_for_each_admin
-conversation_counts_for_each_admin.each{|count| puts "Admin: #{count.name} (id: #{count.id}) Open: #{count.open} Closed: #{count.closed}" }
-# Get User Tag Count Object
-Intercom::Count.user_counts_for_each_tag
-# Get User Segment Count Object
-Intercom::Count.user_counts_for_each_segment
-# Get Company Segment Count Object
-Intercom::Count.company_counts_for_each_segment
-# Get Company Tag Count Object
-Intercom::Count.company_counts_for_each_tag
-# Get Company User Count Object
-Intercom::Count.company_counts_for_each_user
-# Get total count of companies, users, segments or tags across app
-Intercom::Company.count
-Intercom::User.count
-Intercom::Segment.count
-Intercom::Tag.count
+intercom.conversations.mark_read(conversation.id)
 ```
 
 #### Full loading of an embedded entity
 ```ruby
 # Given a conversation with a partial user, load the full user. This can be
 # done for any entity
-conversation.user.load
+intercom.users.load(conversation.user)
 ```
 
 #### Sending messages
 ```ruby
 
 # InApp message from admin to user
-Intercom::Message.create({
+intercom.messages.create({
   :message_type => 'inapp',
   :body => "What's up :)",
   :from => {
@@ -234,7 +205,7 @@ Intercom::Message.create({
 })
 
 # Email message from admin to user
-Intercom::Message.create({
+intercom.messages.create({
   :message_type => 'email',
   :subject  => 'Hey there',
   :body     => "What's up :)",
@@ -250,7 +221,7 @@ Intercom::Message.create({
 })
 
 # Message from a user
-Intercom::Message.create({
+intercom.messages.create({
   :from => {
     :type => "user",
     :id => "536e564f316c83104c000020"
@@ -260,7 +231,7 @@ Intercom::Message.create({
 
 # Message from admin to contact
 
-Intercom::Message.create({
+intercom.messages.create({
   :body     => "How can I help :)",
   :from => {
     :type => "admin",
@@ -273,7 +244,7 @@ Intercom::Message.create({
 })
 
 # Message from a contact
-Intercom::Message.create({
+intercom.messages.create({
   :from => {
     :type => "contact",
     :id => "536e5643as316c83104c400671"
@@ -284,7 +255,7 @@ Intercom::Message.create({
 
 #### Events
 ```ruby
-Intercom::Event.create(
+intercom.events.create(
   :event_name => "invited-friend", :created_at => Time.now.to_i,
   :email => user.email,
   :metadata => {
@@ -298,7 +269,7 @@ Intercom::Event.create(
 Metadata Objects support a few simple types that Intercom can present on your behalf
 
 ```ruby
-Intercom::Event.create(:event_name => "placed-order", :email => current_user.email,
+intercom.events.create(:event_name => "placed-order", :email => current_user.email,
   :created_at => 1403001013,
   :metadata => {
     :order_date => Time.now.to_i,
@@ -329,17 +300,17 @@ The metadata key values in the example are treated as follows-
 
 ```ruby
 # Create a contact
-contact = Intercom::Contact.create(email: "some_contact@example.com")
+contact = intercom.contacts.create(email: "some_contact@example.com")
 
 # Update a contact
 contact.custom_attributes['foo'] = 'bar'
-contact.save
+intercom.contacts.save(contact)
 
 # Find contacts by email
-contacts = Intercom::Contact.find_all(email: "some_contact@example.com")
+contacts = intercom.contacts.find_all(email: "some_contact@example.com")
 
 # Convert a contact into a user
-contact.convert(user)
+intercom.contacts.convert(contact, user)
 ```
 
 ### Subscriptions
@@ -348,32 +319,14 @@ Subscribe to events in Intercom to receive webhooks.
 
 ```ruby
 # create a subscription
-Intercom::Subscription.create(:url => "http://example.com", :topics => ["user.created"])
+intercom.subscriptions.create(:url => "http://example.com", :topics => ["user.created"])
 
 # fetch a subscription
-Intercom::Subscription.find(:id => "nsub_123456789")
+intercom.subscriptions.find(:id => "nsub_123456789")
 
 # list subscriptions
-Intercom::Subscription.all
+intercom.subscriptions.all
 ```
-
-### Webhooks
-
-```ruby
-# create a payload from the notification hash (from json).
-payload = Intercom::Notification.new(notification_hash)
-
-payload.type
-# => 'user.created'
-
-payload.model_type
-# => Intercom::User
-
-user = payload.model
-# => Instance of Intercom::User
-```
-
-Note that models generated from webhook notifications might differ slightly from models directly acquired via the API. If this presents a problem, calling `payload.load` will load the model from the API using the `id` field.
 
 ### Errors
 You do not need to deal with the HTTP response from an API call directly. If there is an unsuccessful response then an error that is a subclass of Intercom:Error will be raised. If desired, you can get at the http_code of an Intercom::Error via its `http_code` method.
@@ -396,9 +349,9 @@ Intercom::HttpError # Raised when response object is unexpectedly nil
 
 ### Rate Limiting
 
-Calling `Intercom.rate_limit_details` returns a Hash that contains details about your app's current rate limit.
+Calling your client's `rate_limit_details` returns a Hash that contains details about your app's current rate limit.
 
 ```ruby
-Intercom.rate_limit_details
+intercom.rate_limit_details
 #=> {:limit=>180, :remaining=>179, :reset_at=>2014-10-07 14:58:00 +0100}
 ```

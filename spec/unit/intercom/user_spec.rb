@@ -1,6 +1,8 @@
 require "spec_helper"
 
 describe "Intercom::User" do
+  let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
+
   it "to_hash'es itself" do
     created_at = Time.now
     user = Intercom::User.new(:email => "jim@example.com", :user_id => "12345", :created_at => created_at, :name => "Jim Bob")
@@ -77,10 +79,10 @@ describe "Intercom::User" do
     user.unsubscribed_from_emails.must_equal true
     user.user_agent_data.must_equal "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11"
   end
-  
+
   it 'allows update_last_request_at' do
-    Intercom.expects(:post).with("/users", {"user_id" => "1224242", 'update_last_request_at' => true, "custom_attributes" => {}}).returns({"user_id" => "i-1224242", "last_request_at" => 1414509439})
-    Intercom::User.create(user_id:'1224242', update_last_request_at:true)
+    client.expects(:post).with("/users", {"user_id" => "1224242", 'update_last_request_at' => true, "custom_attributes" => {}}).returns({"user_id" => "i-1224242", "last_request_at" => 1414509439})
+    client.users.create(user_id: '1224242', update_last_request_at: true)
   end
 
   it "allows easy setting of custom data" do
@@ -104,7 +106,7 @@ describe "Intercom::User" do
 
   it "rejects nested data structures in custom_attributes" do
     user = Intercom::User.new()
-    
+
     proc { user.custom_attributes["thing"] = [1] }.must_raise(ArgumentError)
     proc { user.custom_attributes["thing"] = {1 => 2} }.must_raise(ArgumentError)
     proc { user.custom_attributes["thing"] = {1 => {2 => 3}} }.must_raise(ArgumentError)
@@ -147,58 +149,68 @@ describe "Intercom::User" do
   end
 
   it "fetches a user" do
-    Intercom.expects(:get).with("/users", {"email" => "bo@example.com"}).returns(test_user)
-    user = Intercom::User.find("email" => "bo@example.com")
+    client.expects(:get).with("/users", {"email" => "bo@example.com"}).returns(test_user)
+    user = client.users.find("email" => "bo@example.com")
     user.email.must_equal "bob@example.com"
     user.name.must_equal "Joe Schmoe"
     user.session_count.must_equal 123
   end
 
+  it 'gets users by tag' do
+    client.expects(:get).with("/users?tag_id=124", {}).returns(page_of_users(false))
+    client.users.by_tag(124).each { |t| }
+  end
+
+  it 'gets users by segment' do
+    client.expects(:get).with("/users?segment_id=124", {}).returns(page_of_users(false))
+    client.users.by_segment(124).each { |t| }
+  end
+
   it "saves a user (always sends custom_attributes)" do
     user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242")
-    Intercom.expects(:post).with("/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "custom_attributes" => {}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
-    user.save
+    client.expects(:post).with("/users", {"email" => "jo@example.com", "user_id" => "i-1224242", "custom_attributes" => {}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    client.users.save(user)
   end
 
   it "saves a user with a company" do
     user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242", :company => {'company_id' => 6, 'name' => "Intercom"})
-    Intercom.expects(:post).with("/users", {'custom_attributes' => {}, "user_id" => "i-1224242", "email" => "jo@example.com", "company" => {"company_id" => 6, "name" => "Intercom"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
-    user.save
+    client.expects(:post).with("/users", {'custom_attributes' => {}, "user_id" => "i-1224242", "email" => "jo@example.com", "company" => {"company_id" => 6, "name" => "Intercom"}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    client.users.save(user)
   end
 
   it "saves a user with a companies" do
     user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242", :companies => [{'company_id' => 6, 'name' => "Intercom"}])
-    Intercom.expects(:post).with("/users", {'custom_attributes' => {}, "email" => "jo@example.com", "user_id" => "i-1224242", "companies" => [{"company_id" => 6, "name" => "Intercom"}]}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
-    user.save
+    client.expects(:post).with("/users", {'custom_attributes' => {}, "email" => "jo@example.com", "user_id" => "i-1224242", "companies" => [{"company_id" => 6, "name" => "Intercom"}]}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    client.users.save(user)
   end
-  
+
   it 'can save a user with a nil email' do
     user = Intercom::User.new("email" => nil, :user_id => "i-1224242", :companies => [{'company_id' => 6, 'name' => "Intercom"}])
-    Intercom.expects(:post).with("/users", {'custom_attributes' => {}, "email" => nil, "user_id" => "i-1224242", "companies" => [{"company_id" => 6, "name" => "Intercom"}]}).returns({"email" => nil, "user_id" => "i-1224242"})
-    user.save
+    client.expects(:post).with("/users", {'custom_attributes' => {}, "email" => nil, "user_id" => "i-1224242", "companies" => [{"company_id" => 6, "name" => "Intercom"}]}).returns({"email" => nil, "user_id" => "i-1224242"})
+    client.users.save(user)
   end
 
   it "deletes a user" do
     user = Intercom::User.new("id" => "1")
-    Intercom.expects(:delete).with("/users/1", {}).returns(user)
-    user.delete
+    client.expects(:delete).with("/users/1", {}).returns(user)
+    client.users.delete(user)
   end
 
-  it "can use User.create for convenience" do
-    Intercom.expects(:post).with("/users", {'custom_attributes' => {}, "email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
-    user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
+  it "can use client.users.create for convenience" do
+    client.expects(:post).with("/users", {'custom_attributes' => {}, "email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
+    user = client.users.create("email" => "jo@example.com", :user_id => "i-1224242")
     user.email.must_equal "jo@example.com"
   end
 
-  it "updates the @user with attributes as set by the server" do
-    Intercom.expects(:post).with("/users", {"email" => "jo@example.com", "user_id" => "i-1224242", 'custom_attributes' => {}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "session_count" => 4})
-    user = Intercom::User.create("email" => "jo@example.com", :user_id => "i-1224242")
+  it "updates the user with attributes as set by the server" do
+    client.expects(:post).with("/users", {"email" => "jo@example.com", "user_id" => "i-1224242", 'custom_attributes' => {}}).returns({"email" => "jo@example.com", "user_id" => "i-1224242", "session_count" => 4})
+    user = client.users.create("email" => "jo@example.com", :user_id => "i-1224242")
     user.session_count.must_equal 4
   end
 
   it "allows setting dates to nil without converting them to 0" do
-    Intercom.expects(:post).with("/users", {"email" => "jo@example.com", 'custom_attributes' => {}, "remote_created_at" => nil}).returns({"email" => "jo@example.com"})
-    user = Intercom::User.create("email" => "jo@example.com", "remote_created_at" => nil)
+    client.expects(:post).with("/users", {"email" => "jo@example.com", 'custom_attributes' => {}, "remote_created_at" => nil}).returns({"email" => "jo@example.com"})
+    user = client.users.create("email" => "jo@example.com", "remote_created_at" => nil)
     user.remote_created_at.must_equal nil
   end
 
@@ -217,14 +229,10 @@ describe "Intercom::User" do
     user.new_param.must_equal "some value"
   end
 
-  it "returns a CollectionProxy for all without making any requests" do
-    Intercom.expects(:execute_request).never
-    all = Intercom::User.all
-    all.must_be_instance_of(Intercom::CollectionProxy)
+  it "returns a ClientCollectionProxy for all without making any requests" do
+    client.expects(:execute_request).never
+    all = client.users.all
+    all.must_be_instance_of(Intercom::ClientCollectionProxy)
   end
 
-  it "returns the total number of users" do
-    Intercom::Count.expects(:user_count).returns('count_info')
-    Intercom::User.count
-  end  
 end

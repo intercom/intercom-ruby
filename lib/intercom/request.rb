@@ -3,7 +3,7 @@ require 'net/https'
 
 module Intercom
   class Request
-    attr_accessor :path, :net_http_method
+    attr_accessor :path, :net_http_method, :rate_limit_details
 
     def initialize(path, net_http_method)
       self.path = path
@@ -11,8 +11,11 @@ module Intercom
     end
 
     def set_common_headers(method, base_uri)
-      method.basic_auth(CGI.unescape(base_uri.user), CGI.unescape(base_uri.password))
       method.add_field('AcceptEncoding', 'gzip, deflate')
+    end
+
+    def set_basic_auth(method, username, secret)
+      method.basic_auth(CGI.unescape(username), CGI.unescape(secret))
     end
 
     def self.get(path, params)
@@ -54,9 +57,10 @@ module Intercom
       net
     end
 
-    def execute(target_base_url=nil)
+    def execute(target_base_url=nil, username:, secret: nil)
       base_uri = URI.parse(target_base_url)
       set_common_headers(net_http_method, base_uri)
+      set_basic_auth(net_http_method, username, secret)
       begin
         client(base_uri).start do |http|
           begin
@@ -74,7 +78,7 @@ module Intercom
         raise Intercom::ServiceConnectionError.new('Failed to connect to service [connection attempt timed out]')
       end
     end
-    
+
     def decode_body(response)
       decode(response['content-encoding'], response.body)
     end
@@ -96,7 +100,7 @@ module Intercom
       rate_limit_details[:limit] = response['X-RateLimit-Limit'].to_i if response['X-RateLimit-Limit']
       rate_limit_details[:remaining] = response['X-RateLimit-Remaining'].to_i if response['X-RateLimit-Remaining']
       rate_limit_details[:reset_at] = Time.at(response['X-RateLimit-Reset'].to_i) if response['X-RateLimit-Reset']
-      Intercom.rate_limit_details = rate_limit_details
+      @rate_limit_details = rate_limit_details
     end
 
     def decode(content_encoding, body)

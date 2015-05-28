@@ -1,9 +1,11 @@
 require "spec_helper"
 
 describe "Intercom::Contact" do
+  let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
+
   it 'should not throw ArgumentErrors when there are no parameters' do
-    Intercom.expects(:post)
-    Intercom::Contact.create
+    client.expects(:post)
+    client.contacts.create
   end
 
   describe 'converting' do
@@ -11,15 +13,15 @@ describe "Intercom::Contact" do
     let(:user) { Intercom::User.from_api(id: 'user_id') }
 
     it do
-      Intercom.expects(:post).with(
+      client.expects(:post).with(
         "/contacts/convert",
         {
           contact: { user_id: contact.user_id },
-          user: user.identity_hash
+          user: { 'id' => user.id }
         }
       ).returns(test_user)
 
-      contact.convert(user)
+      client.contacts.convert(contact, user)
     end
   end
 end

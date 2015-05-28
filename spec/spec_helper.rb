@@ -57,6 +57,45 @@ def test_user(email="bob@example.com")
   }
 end
 
+def test_admin_list
+  {
+    "type" => "admin.list",
+    "admins" => [
+      {
+        "type" => "admin",
+        "id" => "1234",
+        "name" => "Hoban Washburne",
+        "email" => "wash@serenity.io"
+      }
+    ]
+  }
+end
+
+def test_company
+  {
+    "type" => "company",
+    "id" => "531ee472cce572a6ec000006",
+    "name" => "Blue Sun",
+    "plan" => {
+      "type" =>"plan",
+      "id" =>"1",
+      "name" =>"Paid"
+    },
+    "company_id" => "6",
+    "remote_created_at" => 1394531169,
+    "created_at" => 1394533506,
+    "updated_at" => 1396874658,
+    "last_request_at" => 1396874658,
+    "monthly_spend" => 49,
+    "session_count" => 26,
+    "user_count" => 10,
+    "custom_attributes" => {
+      "paid_subscriber"  => true,
+      "team_mates" => 0
+    }
+  }
+end
+
 def test_messages
   [test_message, test_message]
 end
@@ -119,6 +158,84 @@ def page_of_users(include_next_link= false)
       },
       "users"=> [test_user("user1@example.com"), test_user("user2@example.com"), test_user("user3@example.com")],
       "total_count"=>314
+  }
+end
+
+def test_conversation
+  {
+    "type" => "conversation",
+    "id" => "147",
+    "created_at" => 1400850973,
+    "updated_at" => 1400857494,
+    "conversation_message" => {
+      "type" => "conversation_message",
+      "subject" => "",
+      "body" => "<p>Hi Alice,</p>\n\n<p>We noticed you using our Product, do you have any questions?</p> \n<p>- Jane</p>",
+      "author" => {
+        "type" => "admin",
+        "id" => "25"
+      },
+      "attachments" => [
+        {
+          "name" => "signature",
+          "url" => "http =>//someurl.com/signature.jpg"
+        }
+      ]
+    },
+    "user" => {
+      "type" => "user",
+      "id" => "536e564f316c83104c000020"
+    },
+    "assignee" => {
+      "type" => "admin",
+      "id" => "25"
+    },
+    "open" => true,
+    "read" => true,
+    "conversation_parts" => {
+      "type" => "conversation_part.list",
+      "conversation_parts" => [
+      ]
+    }
+  }
+end
+
+def segment
+  {
+    "type" => "segment",
+    "id" => "5310d8e7598c9a0b24000002",
+    "name" => "Active",
+    "created_at" => 1393613031,
+    "updated_at" => 1393613031
+  }
+end
+
+def segment_list
+  {
+    "type" => "segment.list",
+    "segments" => [
+      {
+        "created_at" => 1393613031,
+        "id" => "5310d8e7598c9a0b24000002",
+        "name" => "Active",
+        "type" => "segment",
+        "updated_at" => 1393613031
+      },
+      {
+        "created_at" => 1393613030,
+        "id" => "5310d8e6598c9a0b24000001",
+        "name" => "New",
+        "type" => "segment",
+        "updated_at" => 1393613030
+      },
+      {
+        "created_at" => 1393613031,
+        "id" => "5310d8e7598c9a0b24000003",
+        "name" => "Slipping Away",
+        "type" => "segment",
+        "updated_at" => 1393613031
+      }
+    ]
   }
 end
 

@@ -25,5 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "fakeweb", ["~> 1.3"]
 
   spec.add_dependency 'json', '~> 1.8'
-  spec.required_ruby_version = '>= 1.9.3'
+  spec.required_ruby_version = '>= 2.1.0'
 end

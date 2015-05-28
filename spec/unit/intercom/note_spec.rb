@@ -1,10 +1,17 @@
 require "spec_helper"
 
 describe "notes" do
+  let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
+
   it "creates a note" do
-    Intercom.expects(:post).with("/notes", {"body" => "Note to leave on user"}).returns({"body" => "<p>Note to leave on user</p>", "created_at" => 1234567890})
-    note = Intercom::Note.create("body" => "Note to leave on user")
+    client.expects(:post).with("/notes", {"body" => "Note to leave on user"}).returns({"body" => "<p>Note to leave on user</p>", "created_at" => 1234567890})
+    note = client.notes.create("body" => "Note to leave on user")
     note.body.must_equal "<p>Note to leave on user</p>"
+  end
+
+  it 'gets a note' do
+    client.expects(:get).with("/notes/123", {}).returns({"id" => "123", "body" => "<p>Note to leave on user</p>", "created_at" => 1234567890})
+    client.notes.find(id: '123')
   end
 
   it "sets/gets allowed keys" do
