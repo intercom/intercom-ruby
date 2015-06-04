@@ -45,7 +45,6 @@ module Intercom
       end
 
       def define_lightweight_class(class_name)
-        #File.open('./intercom_ruby_dynamically_defined_classes.log', 'a') {|f| f.puts("Dynamically defining the class Intercom::#{class_name}") } #HACK
         new_class_definition = Class.new(Object) do
           include Traits::ApiResource
         end

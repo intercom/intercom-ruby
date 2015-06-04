@@ -1,16 +1,10 @@
-require 'intercom/collection_proxy'
+require 'intercom/client_collection_proxy'
 
 module Intercom
   module ApiOperations
-    module List # TODO: Should we rename to All
-      module ClassMethods
-        def all
-          CollectionProxy.new(Utils.resource_class_to_collection_name(self))
-        end
-      end
-
-      def self.included(base)
-        base.extend(ClassMethods)
+    module List
+      def all
+        ClientCollectionProxy.new(Utils.resource_class_to_collection_name(collection_class), client: @client)
       end
     end
   end

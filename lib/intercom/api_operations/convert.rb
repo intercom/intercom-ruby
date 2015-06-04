@@ -3,13 +3,13 @@ require 'intercom/traits/api_resource'
 module Intercom
   module ApiOperations
     module Convert
-      def convert(user)
-        from_response(
-          Intercom.post(
+      def convert(contact, user)
+        Intercom::User.new.from_response(
+          @client.post(
             "/contacts/convert",
             {
-              contact: { user_id: user_id },
-              user: user.identity_hash
+              contact: { user_id: contact.user_id },
+              user: identity_hash(user)
             }
           )
         )
