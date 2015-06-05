@@ -32,7 +32,7 @@ Using bundler:
 intercom = Intercom::Client.new(app_id: 'my_app_id', api_key: 'my_api_key')
 ```
 
-You can get your `app_id` from the URL when you're logged into Intercom (it's the alphanumeric just after `/apps/`) and your API key from the API keys integration settings page (under your app settings - integrations in Intercom). 
+You can get your `app_id` from the URL when you're logged into Intercom (it's the alphanumeric just after `/apps/`) and your API key from the API keys integration settings page (under your app settings - integrations in Intercom).
 
 ### Resources
 
@@ -41,6 +41,7 @@ Resources this API supports:
     https://api.intercom.io/users
     https://api.intercom.io/contacts
     https://api.intercom.io/companies
+    https://api.intercom.io/counts
     https://api.intercom.io/tags
     https://api.intercom.io/notes
     https://api.intercom.io/segments
@@ -311,6 +312,16 @@ contacts = intercom.contacts.find_all(email: "some_contact@example.com")
 
 # Convert a contact into a user
 intercom.contacts.convert(contact, user)
+```
+
+### Counts
+
+```ruby
+# App-wide counts
+intercom.counts.for_app
+
+# Users in segment counts
+intercom.counts.for_type(type: 'user', count: 'segment')
 ```
 
 ### Subscriptions
