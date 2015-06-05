@@ -111,7 +111,7 @@ intercom.companies.users(company.id)
 # Tag users
 tag = intercom.tags.tag(name: 'blue', users: [{email: "test1@example.com"}])
 # Untag users
-intercom.tags.untag_users('blue',  users: [{user_id: "42ea2f1b93891f6a99000427"}])
+intercom.tags.untag(name: 'blue',  users: [{user_id: "42ea2f1b93891f6a99000427"}])
 # Iterate over all tags
 intercom.tags.all.each {|tag| "#{tag.id} - #{tag.name}" }
 intercom.tags.all.map {|tag| tag.name }
