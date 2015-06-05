@@ -405,6 +405,49 @@ def test_subscription
         "notes"=>[]}}
 end
 
+def test_app_count
+  {
+    "type" => "count.hash",
+    "company" => {
+      "count" => 8
+    },
+    "segment" => {
+      "count" => 47
+    },
+    "tag" => {
+      "count" => 341
+    },
+    "user" => {
+      "count" => 12239
+    }
+  }
+end
+
+def test_segment_count
+  {
+    "type" => "count",
+    "user" => {
+      "segment" => [
+        {
+          "Active" => 1
+        },
+        {
+          "New" => 0
+        },
+        {
+          "VIP" => 0
+        },
+        {
+          "Slipping Away" => 0
+        },
+        {
+          "segment 1" => 1
+        }
+      ]
+    }
+  }
+end
+
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
 end

@@ -36,6 +36,10 @@ module Intercom
       Intercom::Service::Conversation.new(self)
     end
 
+    def counts
+      Intercom::Service::Counts.new(self)
+    end
+
     def events
       Intercom::Service::Event.new(self)
     end

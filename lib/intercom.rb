@@ -3,6 +3,7 @@ require 'intercom/service/admin'
 require 'intercom/service/company'
 require 'intercom/service/contact'
 require 'intercom/service/conversation'
+require 'intercom/service/count'
 require 'intercom/service/event'
 require 'intercom/service/message'
 require 'intercom/service/note'
@@ -13,6 +14,7 @@ require 'intercom/service/user'
 require 'intercom/options'
 require 'intercom/client'
 require "intercom/contact"
+require "intercom/count"
 require "intercom/user"
 require "intercom/company"
 require "intercom/note"
