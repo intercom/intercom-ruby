@@ -6,7 +6,7 @@ module Intercom
 
     attr_reader :resource_name
 
-    def initialize(resource_name, finder_details: {}, client: client)
+    def initialize(resource_name, finder_details: {}, client:)
       @resource_name = resource_name
       @resource_class = Utils.constantize_resource_name(resource_name)
       @finder_url = (finder_details[:url] || "/#{@resource_name}")
