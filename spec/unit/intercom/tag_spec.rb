@@ -23,7 +23,7 @@ describe "Intercom::Tag" do
   end
 
   it 'untags users' do
-    client.expects(:post).with("/tags", {'name' => "Test Tag", 'users' => [ { user_id: 'abc123' }, { user_id: 'def456' } ], 'tag_or_untag' => 'untag'}).returns(test_tag)
+    client.expects(:post).with("/tags", {'name' => "Test Tag", 'users' => [ { user_id: 'abc123', untag: true }, { user_id: 'def456', untag: true } ], 'tag_or_untag' => 'untag'}).returns(test_tag)
     client.tags.untag(:name => "Test Tag", :users => [ { user_id: "abc123" }, { user_id: "def456" } ])
   end
 end
