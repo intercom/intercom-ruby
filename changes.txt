@@ -1,3 +1,6 @@
+3.0.3
+ - Fix untagging
+
 3.0.2
  - Fix bad .gem push :(
 
