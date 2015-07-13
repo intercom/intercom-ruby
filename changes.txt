@@ -1,3 +1,6 @@
+3.0.4
+ - Support the `all` resource on Contacts
+
 3.0.3
  - Fix untagging
 
