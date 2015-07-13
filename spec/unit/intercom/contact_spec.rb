@@ -3,6 +3,13 @@ require "spec_helper"
 describe "Intercom::Contact" do
   let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
 
+  it 'should be listable' do
+    proxy = client.contacts.all
+    proxy.resource_name.must_equal 'contacts'
+    proxy.finder_url.must_equal '/contacts'
+    proxy.resource_class.must_equal Intercom::Contact
+  end
+
   it 'should not throw ArgumentErrors when there are no parameters' do
     client.expects(:post)
     client.contacts.create

@@ -4,7 +4,7 @@ require "ext/sliceable_hash"
 module Intercom
   class ClientCollectionProxy
 
-    attr_reader :resource_name
+    attr_reader :resource_name, :finder_url, :resource_class
 
     def initialize(resource_name, finder_details: {}, client:)
       @resource_name = resource_name
@@ -40,8 +40,6 @@ module Intercom
     include Enumerable
 
     private
-
-    def resource_class; @resource_class; end
 
     def deserialize_response_hash(response_hash, block)
       top_level_type = response_hash.delete('type')

@@ -8,6 +8,7 @@ require 'intercom/api_operations/convert'
 module Intercom
   module Service
     class Contact < BaseService
+      include ApiOperations::List
       include ApiOperations::Load
       include ApiOperations::Find
       include ApiOperations::FindAll
