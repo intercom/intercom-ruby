@@ -1,3 +1,6 @@
+3.0.5
+ - Fix id-based updates on Contacts (thanks @gevans)
+
 3.0.4
  - Support the `all` resource on Contacts
 
