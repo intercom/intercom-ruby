@@ -15,6 +15,12 @@ describe "Intercom::Contact" do
     client.contacts.create
   end
 
+  it 'can update a contact with an id' do
+    contact = Intercom::Contact.new(:id => "de45ae78gae1289cb")
+    client.expects(:put).with("/contacts/de45ae78gae1289cb", {'custom_attributes' => {}})
+    client.contacts.save(contact)
+  end
+
   describe 'converting' do
     let(:contact) { Intercom::Contact.from_api(user_id: 'contact_id') }
     let(:user) { Intercom::User.from_api(id: 'user_id') }
