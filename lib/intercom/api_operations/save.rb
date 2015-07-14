@@ -21,7 +21,7 @@ module Intercom
       def save(object)
         collection_name = Utils.resource_class_to_collection_name(collection_class)
         if id_present?(object) && !posted_updates?(object)
-          response = @client.put("/#{collection_name}/#{id}", object.to_submittable_hash)
+          response = @client.put("/#{collection_name}/#{object.id}", object.to_submittable_hash)
         else
           response = @client.post("/#{collection_name}", object.to_submittable_hash.merge(identity_hash(object)))
         end
