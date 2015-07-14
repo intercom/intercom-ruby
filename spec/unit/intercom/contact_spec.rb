@@ -37,4 +37,17 @@ describe "Intercom::Contact" do
       client.contacts.convert(contact, user)
     end
   end
+
+  it "returns a ClientCollectionProxy for all without making any requests" do
+    client.expects(:execute_request).never
+    all = client.contacts.all
+    all.must_be_instance_of(Intercom::ClientCollectionProxy)
+  end
+
+  it "deletes a contact" do
+    contact = Intercom::Contact.new("id" => "1")
+    client.expects(:delete).with("/contacts/1", {}).returns(contact)
+    client.contacts.delete(contact)
+  end
+
 end

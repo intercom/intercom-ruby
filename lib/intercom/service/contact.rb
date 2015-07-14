@@ -4,6 +4,7 @@ require 'intercom/api_operations/find'
 require 'intercom/api_operations/find_all'
 require 'intercom/api_operations/save'
 require 'intercom/api_operations/convert'
+require 'intercom/api_operations/delete'
 
 module Intercom
   module Service
@@ -14,6 +15,7 @@ module Intercom
       include ApiOperations::FindAll
       include ApiOperations::Save
       include ApiOperations::Convert
+      include ApiOperations::Delete
 
       def collection_class
         Intercom::Contact
