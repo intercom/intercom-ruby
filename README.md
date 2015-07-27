@@ -178,6 +178,9 @@ intercom.conversations.reply(:id => conversation.id, :type => 'user', :email => 
 # Admin (identified by email) replies with a comment
 intercom.conversations.reply(:id => conversation.id, :type => 'admin', :email => 'bob@example.com', :message_type => 'comment', :body => 'bar')
 
+# ASSIGNING CONVERSATIONS TO ADMINS
+intercom.conversations.reply(:id => conversation.id, :type => 'admin', :assignee_id => assignee_admin.id, :admin_id => admin.id, :message_type => 'assignment')
+
 # MARKING A CONVERSATION AS READ
 intercom.conversations.mark_read(conversation.id)
 ```
