@@ -178,6 +178,18 @@ intercom.conversations.reply(:id => conversation.id, :type => 'user', :email => 
 # Admin (identified by email) replies with a comment
 intercom.conversations.reply(:id => conversation.id, :type => 'admin', :email => 'bob@example.com', :message_type => 'comment', :body => 'bar')
 
+# Reply and Open
+intercom.conversations.reply_and_open(:id => conversation.id, :type => 'admin', :email => 'bob@example.com', :message_type => 'note', :body => 'foo')
+
+# Reply and Close
+intercom.conversations.reply_and_close(:id => conversation.id, :type => 'admin', :email => 'bob@example.com', :message_type => 'note', :body => 'foo')
+
+# Reply and Assign
+intercom.conversations.reply_and_assign({:id => conversation.id, :type => 'admin', :email => 'bob@example.com', :message_type => 'note', :body => 'foo'}, assignee_id: admin.id)
+
+# Assign without reply
+intercom.conversations.assign({:id => conversation.id }, assignee_id: admin.id)
+
 # MARKING A CONVERSATION AS READ
 intercom.conversations.mark_read(conversation.id)
 ```
