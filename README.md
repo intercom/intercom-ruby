@@ -175,8 +175,23 @@ conversation.conversation_parts[1].body
 # REPLYING TO CONVERSATIONS
 # User (identified by email) replies with a comment
 intercom.conversations.reply(:id => conversation.id, :type => 'user', :email => 'joe@example.com', :message_type => 'comment', :body => 'foo')
-# Admin (identified by email) replies with a comment
-intercom.conversations.reply(:id => conversation.id, :type => 'admin', :email => 'bob@example.com', :message_type => 'comment', :body => 'bar')
+# Admin (identified by id) replies with a comment
+intercom.conversations.reply(:id => conversation.id, :type => 'admin', :admin_id => '123', :message_type => 'comment', :body => 'bar')
+
+# Open
+intercom.conversations.open(id: conversation.id, admin_id: '123')
+
+# Close
+intercom.conversations.close(id: conversation.id, admin_id: '123')
+
+# Assign
+intercom.conversations.assign(id: conversation.id, admin_id: '123', assignee_id: '124')
+
+# Reply and Open
+intercom.conversations.reply(:id => conversation.id, :type => 'admin', :admin_id => '123', :message_type => 'open', :body => 'bar')
+
+# Reply and Close
+intercom.conversations.reply(:id => conversation.id, :type => 'admin', :admin_id => '123', :message_type => 'close', :body => 'bar')
 
 # ASSIGNING CONVERSATIONS TO ADMINS
 intercom.conversations.reply(:id => conversation.id, :type => 'admin', :assignee_id => assignee_admin.id, :admin_id => admin.id, :message_type => 'assignment')

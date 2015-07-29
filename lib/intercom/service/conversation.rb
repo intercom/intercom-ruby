@@ -26,6 +26,19 @@ module Intercom
         response = @client.post("/#{collection_name}/#{id}/reply", reply_data.merge(:conversation_id => id))
         collection_class.new.from_response(response)
       end
+
+      def open(reply_data)
+        reply reply_data.merge(message_type: 'open', type: 'admin')
+      end
+
+      def close(reply_data)
+        reply reply_data.merge(message_type: 'close', type: 'admin')
+      end
+
+      def assign(reply_data)
+        assignee_id = reply_data.fetch(:assignee_id) { fail 'assignee_id is required' }
+        reply reply_data.merge(message_type: 'assignment', assignee_id: assignee_id, type: 'admin')
+      end
     end
   end
 end
