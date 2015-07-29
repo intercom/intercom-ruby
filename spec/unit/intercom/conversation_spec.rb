@@ -18,6 +18,21 @@ describe "Intercom::Conversation" do
     client.conversations.reply(id: '147', type: 'user', body: 'Thanks again', message_type: 'comment', user_id: 'ac4')
   end
 
+  it 'opens a conversation' do
+    client.expects(:post).with('/conversations/147/reply', { type: 'admin', message_type: 'open', conversation_id: '147', admin_id: '123'}).returns(test_conversation)
+    client.conversations.open(id: '147', admin_id: '123')
+  end
+
+  it 'closes a conversation' do
+    client.expects(:post).with('/conversations/147/reply', { type: 'admin', message_type: 'close', conversation_id: '147', admin_id: '123'}).returns(test_conversation)
+    client.conversations.close(id: '147', admin_id: '123')
+  end
+
+  it 'assigns a conversation' do
+    client.expects(:post).with('/conversations/147/reply', { type: 'admin', message_type: 'assignment', conversation_id: '147', admin_id: '123', assignee_id: '124'}).returns(test_conversation)
+    client.conversations.assign(id: '147', admin_id: '123', assignee_id: '124')
+  end
+
   # it "creates a subscription" do
   #   client.expects(:post).with("/subscriptions", {'url' => "http://example.com", 'topics' => ["user.created"]}).returns(test_subscription)
   #   subscription = client.subscriptions.create(:url => "http://example.com", :topics => ["user.created"])

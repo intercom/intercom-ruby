@@ -27,20 +27,18 @@ module Intercom
         collection_class.new.from_response(response)
       end
 
-      def reply_and_open(reply_data)
-        reply reply_data.merge(change_state: 'open')
+      def open(reply_data)
+        reply reply_data.merge(message_type: 'open', type: 'admin')
       end
 
-      def reply_and_close(reply_data)
-        reply reply_data.merge(change_state: 'close')
+      def close(reply_data)
+        reply reply_data.merge(message_type: 'close', type: 'admin')
       end
 
-      def reply_and_assign(reply_data, assignee_id:)
-        reply reply_data.merge(assignee_id: assignee_id)
+      def assign(reply_data)
+        assignee_id = reply_data.fetch(:assignee_id) { fail 'assignee_id is required' }
+        reply reply_data.merge(message_type: 'assignment', assignee_id: assignee_id, type: 'admin')
       end
-
-      def assign(reply_data, assignee_id:)
-        reply reply_data.merge(message_type: 'assignment', assignee_id: assignee_id)
-      end
+    end
   end
 end
