@@ -1,3 +1,6 @@
+3.1.0
+ - Support opening, closing, and assigning conversations
+
 3.0.6
  - Support the `delete` resource on Contacts
 
