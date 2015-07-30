@@ -196,6 +196,11 @@ describe "Intercom::User" do
     client.users.delete(user)
   end
 
+  it 'can create multiple users' do
+    client.expects(:post).with('/users/bulk', { 'users' => [{ 'user_id' => 25, 'email' => 'wash@serenity.io', 'custom_attributes' => {} }, { 'user_id' => 26, 'email' => 'zoe@serenity.io', 'custom_attributes' => {} }] })
+    users = client.users.bulk_create([{ user_id: 25, email: 'wash@serenity.io' }, { user_id: 26, email: 'zoe@serenity.io' }])
+  end
+
   it "can use client.users.create for convenience" do
     client.expects(:post).with("/users", {'custom_attributes' => {}, "email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
     user = client.users.create("email" => "jo@example.com", :user_id => "i-1224242")
