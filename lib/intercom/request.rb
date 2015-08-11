@@ -136,7 +136,7 @@ module Intercom
       case error_code
       when 'unauthorized', 'forbidden'
         raise Intercom::AuthenticationError.new(error_details['message'], error_context)
-      when "bad_request", "missing_parameter", 'parameter_invalid'
+      when "bad_request", "missing_parameter", 'parameter_invalid', 'parameter_not_found'
         raise Intercom::BadRequestError.new(error_details['message'], error_context)
       when "not_found"
         raise Intercom::ResourceNotFound.new(error_details['message'], error_context)
@@ -144,7 +144,7 @@ module Intercom
         raise Intercom::RateLimitExceeded.new(error_details['message'], error_context)
       when 'service_unavailable'
         raise Intercom::ServiceUnavailableError.new(error_details['message'], error_context)
-      when 'conflict'
+      when 'conflict', 'unique_user_constraint'
         raise Intercom::MultipleMatchingUsersError.new(error_details['message'], error_context)
       when nil, ''
         raise Intercom::UnexpectedError.new(message_for_unexpected_error_without_type(error_details, parsed_http_code), error_context)
