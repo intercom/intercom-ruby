@@ -335,7 +335,7 @@ contacts = intercom.contacts.find_all(email: "some_contact@example.com")
 intercom.contacts.convert(contact, user)
 
 # Delete a contact
-intercom.contacts.find(id: "some_id").delete
+intercom.contacts.delete(contact)
 ```
 
 ### Counts
