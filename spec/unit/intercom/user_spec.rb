@@ -235,4 +235,11 @@ describe "Intercom::User" do
     all.must_be_instance_of(Intercom::ClientCollectionProxy)
   end
 
+  it 'can print users without crashing' do
+    client.expects(:get).with("/users", {"email" => "bo@example.com"}).returns(test_user)
+    user = client.users.find("email" => "bo@example.com")
+    puts user
+    p user
+  end
+
 end

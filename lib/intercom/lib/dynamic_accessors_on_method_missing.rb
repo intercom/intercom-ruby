@@ -18,7 +18,7 @@ module Intercom
           Lib::DynamicAccessors.define_accessors(attribute_name, *arguments, object)
           object.send(method_sym, *arguments)
         else # getter
-          if trying_to_access_private_variable?
+          if trying_to_access_private_variable? || trying_to_access_print_method?
             yield
           else
             raise Intercom::AttributeNotSetError, attribute_not_set_error_message
@@ -43,6 +43,10 @@ module Intercom
       def trying_to_access_private_variable?
         object.instance_variable_defined?("@#{method_string}")
       end
+
+      def trying_to_access_print_method?
+         [:to_ary, :to_s].include? method_sym
+       end
 
       def attribute_not_set_error_message
         "'#{method_string}' called on #{klass} but it has not been set an " +
