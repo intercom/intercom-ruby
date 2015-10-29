@@ -242,4 +242,85 @@ describe "Intercom::User" do
     p user
   end
 
+  describe 'bulk operations' do
+    let (:job) {
+      {
+        "app_id"=>"app_id",
+        "id"=>"super_awesome_job",
+        "created_at"=>1446033421,
+        "completed_at"=>1446048736,
+        "closing_at"=>1446034321,
+        "updated_at"=>1446048736,
+        "name"=>"api_bulk_job",
+        "state"=>"completed",
+        "links"=>
+          {
+            "error"=>"https://api.intercom.io/jobs/super_awesome_job/error",
+            "self"=>"https://api.intercom.io/jobs/super_awesome_job"
+          },
+        "tasks"=>
+          [
+            {
+              "id"=>"super_awesome_task",
+              "item_count"=>2,
+              "created_at"=>1446033421,
+              "started_at"=>1446033709,
+              "completed_at"=>1446033709,
+              "state"=>"completed"
+            }
+          ]
+        }
+    }
+    let(:bulk_request) {
+       {
+        items: [
+          {
+            method: "post",
+            data_type: "user",
+            data:{
+              user_id: 25,
+              email: "alice@example.com"
+            }
+          },
+          {
+            method: "delete",
+            data_type: "user",
+            data:{
+              user_id: 26,
+              email: "bob@example.com"
+            }
+          }
+        ]
+      }
+    }
+    let(:users_to_create) {
+      [
+        {
+          user_id: 25,
+          email: "alice@example.com"
+        }
+      ]
+    }
+    let(:users_to_delete) {
+      [
+        {
+          user_id: 26,
+          email: "bob@example.com"
+        }
+      ]
+    }
+
+    it "submits a bulk job" do
+      client.expects(:post).with("/bulk/users", bulk_request).returns(job)
+      client.users.submit_bulk_job(create_items: users_to_create, delete_items: users_to_delete)
+    end
+
+    it "adds users to an existing bulk job" do
+      bulk_request[:job] = {id: 'super_awesome_job'}
+      client.expects(:post).with("/bulk/users", bulk_request).returns(job)
+      client.users.submit_bulk_job(create_items: users_to_create, delete_items: users_to_delete, job_id: 'super_awesome_job')
+    end
+
+  end
+
 end
