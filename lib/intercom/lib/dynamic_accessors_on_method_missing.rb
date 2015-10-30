@@ -45,8 +45,8 @@ module Intercom
       end
 
       def trying_to_access_print_method?
-         [:to_ary, :to_s].include? method_sym
-       end
+        [:to_ary, :to_s].include? method_sym
+      end
 
       def attribute_not_set_error_message
         "'#{method_string}' called on #{klass} but it has not been set an " +

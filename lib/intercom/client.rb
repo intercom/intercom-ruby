@@ -68,6 +68,10 @@ module Intercom
       Intercom::Service::User.new(self)
     end
 
+    def jobs
+      Intercom::Service::Job.new(self)
+    end
+
     def get(path, params)
       execute_request Intercom::Request.get(path, params)
     end
