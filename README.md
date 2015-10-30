@@ -49,6 +49,8 @@ Resources this API supports:
     https://api.intercom.io/conversations
     https://api.intercom.io/messages
     https://api.intercom.io/subscriptions
+    https://api.intercom.io/jobs
+    https://api.intercom.io/bulk
 
 ### Examples
 
@@ -75,6 +77,14 @@ intercom.users.save(user)
 # Iterate over all users
 intercom.users.all.each {|user| puts %Q(#{user.email} - #{user.custom_attributes["average_monthly_spend"]}) }
 intercom.users.all.map {|user| user.email }
+
+#Bulk operations. (BETA)
+# Submit bulk job, to create users
+intercom.users.submit_bulk_job(create_items: [{user_id: 25, email: "alice@example.com"}, {user_id: 25, email: "bob@example.com"}])
+# Submit bulk job, to delete users
+intercom.users.submit_bulk_job(delete_items: [{user_id: 25, email: "alice@example.com"}, {user_id: 25, email: "bob@example.com"}])
+# Submit bulk job, to add items to existing job
+intercom.users.submit_bulk_job(create_items: [{user_id: 25, email: "alice@example.com"}], delete_items: [{user_id: 25, email: "bob@example.com"}], job_id:'job_abcd1234')
 ```
 
 #### Admins
@@ -286,6 +296,8 @@ intercom.events.create(
     "found_date" => 12909364407
   }
 )
+
+
 ```
 
 Metadata Objects support a few simple types that Intercom can present on your behalf
@@ -315,6 +327,54 @@ The metadata key values in the example are treated as follows-
 - price: An Amount in US Dollars (value contains 'amount' and 'currency' keys)
 
 *NB:* This version of the gem reserves the field name `type` in Event data.
+
+Bulk operations. (BETA)
+```ruby
+# Submit bulk job, to create events
+intercom.events.submit_bulk_job(create_items: [
+  {
+    event_name: "ordered-item",
+    created_at: 1438944980,
+    user_id: "314159",
+    metadata: {
+      order_date: 1438944980,
+      stripe_invoice: "inv_3434343434"
+    }
+  },
+  {
+    event_name: "invited-friend",
+    created_at: 1438944979,
+    user_id: "314159",
+    metadata: {
+      invitee_email: "pi@example.org",
+      invite_code: "ADDAFRIEND"
+    }
+  }
+])
+
+
+# Submit bulk job, to add items to existing job
+intercom.events.submit_bulk_job(create_items: [
+  {
+    event_name: "ordered-item",
+    created_at: 1438944980,
+    user_id: "314159",
+    metadata: {
+      order_date: 1438944980,
+      stripe_invoice: "inv_3434343434"
+    }
+  },
+  {
+    event_name: "invited-friend",
+    created_at: 1438944979,
+    user_id: "314159",
+    metadata: {
+      invitee_email: "pi@example.org",
+      invite_code: "ADDAFRIEND"
+    }
+  }
+], job_id:'job_abcd1234')
+```
 
 ### Contacts
 
@@ -362,10 +422,19 @@ intercom.subscriptions.find(:id => "nsub_123456789")
 # list subscriptions
 intercom.subscriptions.all
 ```
+### Bulk jobs (Beta)
+
+```ruby
+# fetch a job
+intercom.jobs.find(id: 'job_abcd1234')
+
+# fetch a job's error feed
+intercom.jobs.errors(id: 'job_abcd1234')
+```
 
 ### Errors
 
-There are different styles for error handlng - some people prefer exceptions; some prefer nil and check; some prefer error objects/codes. Balancing these preferences alongside our wish to provide an idiomatic gem has brought us to use the current mechanism of throwing specific exceptions. Our approach in the client is to propagate errors and signal our failure loudly so that erroneous data does not get propagated through our customers' systems - in other words, if you see a `Intercom::ServiceUnavailableError` you know where the problem is. 
+There are different styles for error handling - some people prefer exceptions; some prefer nil and check; some prefer error objects/codes. Balancing these preferences alongside our wish to provide an idiomatic gem has brought us to use the current mechanism of throwing specific exceptions. Our approach in the client is to propagate errors and signal our failure loudly so that erroneous data does not get propagated through our customers' systems - in other words, if you see a `Intercom::ServiceUnavailableError` you know where the problem is.
 
 You do not need to deal with the HTTP response from an API call directly. If there is an unsuccessful response then an error that is a subclass of Intercom:Error will be raised. If desired, you can get at the http_code of an Intercom::Error via its `http_code` method.
 
