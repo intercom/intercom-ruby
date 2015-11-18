@@ -78,7 +78,7 @@ intercom.users.save(user)
 intercom.users.all.each {|user| puts %Q(#{user.email} - #{user.custom_attributes["average_monthly_spend"]}) }
 intercom.users.all.map {|user| user.email }
 
-#Bulk operations. (BETA)
+#Bulk operations.
 # Submit bulk job, to create users
 intercom.users.submit_bulk_job(create_items: [{user_id: 25, email: "alice@example.com"}, {user_id: 25, email: "bob@example.com"}])
 # Submit bulk job, to delete users
@@ -328,7 +328,7 @@ The metadata key values in the example are treated as follows-
 
 *NB:* This version of the gem reserves the field name `type` in Event data.
 
-Bulk operations. (BETA)
+Bulk operations. 
 ```ruby
 # Submit bulk job, to create events
 intercom.events.submit_bulk_job(create_items: [
@@ -422,7 +422,7 @@ intercom.subscriptions.find(:id => "nsub_123456789")
 # list subscriptions
 intercom.subscriptions.all
 ```
-### Bulk jobs (Beta)
+### Bulk jobs
 
 ```ruby
 # fetch a job
