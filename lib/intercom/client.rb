@@ -1,4 +1,5 @@
 module Intercom
+  class MisconfiguredClientError < StandardError; end
   class Client
     include Options
     attr_reader :base_url, :rate_limit_details
@@ -16,6 +17,8 @@ module Intercom
     def initialize(app_id: 'my_app_id', api_key: 'my_api_key')
       @app_id = app_id
       @api_key = api_key
+      validate_credentials!
+
       @base_url = 'https://api.intercom.io'
       @rate_limit_details = {}
     end
@@ -89,6 +92,12 @@ module Intercom
     end
 
     private
+
+    def validate_credentials!
+      error = MisconfiguredClientError.new("app_id and api_key must not be nil")
+      fail error if @app_id.nil?
+      fail error if @api_key.nil?
+    end
 
     def execute_request(request)
       result = request.execute(@base_url, username: @app_id, secret: @api_key)
