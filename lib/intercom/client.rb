@@ -96,7 +96,6 @@ module Intercom
     def validate_credentials!
       error = MisconfiguredClientError.new("app_id and api_key must not be nil")
       fail error if @app_id.nil?
-      fail error if @api_key.nil?
     end
 
     def execute_request(request)
