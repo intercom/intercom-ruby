@@ -17,5 +17,8 @@ module Intercom
       client.base_url.must_equal('https://api.intercom.io')
     end
 
+    it 'should raise on nil credentials' do
+      proc { Client.new(app_id: nil, api_key: nil) }.must_raise MisconfiguredClientError
+    end
   end
 end
