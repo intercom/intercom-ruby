@@ -11,6 +11,7 @@ module Intercom
       include ApiOperations::List
       include ApiOperations::Find
       include ApiOperations::FindAll
+      include ApiOperations::Delete
 
       def collection_class
         Intercom::Tag
