@@ -20,5 +20,13 @@ module Intercom
     it 'should raise on nil credentials' do
       proc { Client.new(app_id: nil, api_key: nil) }.must_raise MisconfiguredClientError
     end
+
+    describe 'OAuth clients' do
+      it 'supports "token"' do
+        client = Client.new(token: 'foo')
+        client.username_part.must_equal('foo')
+        client.password_part.must_equal('')
+      end
+    end
   end
 end
