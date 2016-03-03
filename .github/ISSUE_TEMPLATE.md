@@ -12,8 +12,8 @@ For feature requests please contact us at team@intercom.io
 ## Actual behavior
 
 ## Steps to reproduce
- 1.
- 2.
- 3.
+ 1. 
+ 2. 
+ 3. 
 
 ## Logs
