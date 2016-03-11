@@ -1,7 +1,6 @@
 require 'intercom/service/base_service'
 require 'intercom/api_operations/save'
 require 'intercom/api_operations/list'
-require 'intercom/api_operations/find'
 require 'intercom/api_operations/find_all'
 
 module Intercom
@@ -9,7 +8,6 @@ module Intercom
     class Tag < BaseService
       include ApiOperations::Save
       include ApiOperations::List
-      include ApiOperations::Find
       include ApiOperations::FindAll
       include ApiOperations::Delete
 
