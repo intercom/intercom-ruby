@@ -15,7 +15,9 @@ module Intercom
       end
 
       def for_type(type:, count: nil)
-        find(type: type, count: count)
+        params = {type: type}
+        params[:count] = count if count
+        find(params)
       end
     end
   end
