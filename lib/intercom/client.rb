@@ -76,6 +76,10 @@ module Intercom
       Intercom::Service::User.new(self)
     end
 
+    def visitors
+      Intercom::Service::Visitor.new(self)
+    end
+
     def jobs
       Intercom::Service::Job.new(self)
     end
