@@ -92,6 +92,8 @@ intercom.users.submit_bulk_job(create_items: [{user_id: 25, email: "alice@exampl
 
 #### Admins
 ```ruby
+# Find an admin by id
+intercom.admins.find(:id => admin_id)
 # Iterate over all admins
 intercom.admins.all.each {|admin| puts admin.email }
 ```
