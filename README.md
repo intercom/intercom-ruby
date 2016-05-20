@@ -1,5 +1,7 @@
 # intercom-ruby
 
+[![Join the chat at https://gitter.im/intercom/intercom-ruby](https://badges.gitter.im/intercom/intercom-ruby.svg)](https://gitter.im/intercom/intercom-ruby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Ruby bindings for the Intercom API (https://api.intercom.io).
 
 [API Documentation](https://api.intercom.io/docs)
