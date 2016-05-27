@@ -30,12 +30,17 @@ Using bundler:
 
 ```ruby
 intercom = Intercom::Client.new(app_id: 'my_app_id', api_key: 'my_api_key')
+```
 
+You can get your `app_id` from the URL when you're logged into Intercom (it's the alphanumeric just after `/apps/`) and your API key from the API keys integration settings page (under your app settings - integrations in Intercom).
+
+```ruby 
 # With an OAuth token:
 intercom = Intercom::Client.new(token: 'my_token')
 ```
 
-You can get your `app_id` from the URL when you're logged into Intercom (it's the alphanumeric just after `/apps/`) and your API key from the API keys integration settings page (under your app settings - integrations in Intercom).
+If you are building a third party application you can get your access_tokens by [setting-up-oauth](https://developers.intercom.io/page/setting-up-oauth) for Intercom.
+You can also use the [omniauth-intercom lib](https://github.com/intercom/omniauth-intercom) which is a middleware helping you to handle the authentication process with Intercom.
 
 ### Resources
 
