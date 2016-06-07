@@ -3,6 +3,7 @@ require 'intercom/api_operations/load'
 require 'intercom/api_operations/list'
 require 'intercom/api_operations/find'
 require 'intercom/api_operations/find_all'
+require 'intercom/api_operations/scroll'
 require 'intercom/api_operations/save'
 require 'intercom/api_operations/delete'
 require 'intercom/api_operations/bulk/submit'
@@ -16,6 +17,7 @@ module Intercom
       include ApiOperations::List
       include ApiOperations::Find
       include ApiOperations::FindAll
+      include ApiOperations::Scroll
       include ApiOperations::Save
       include ApiOperations::Delete
       include ApiOperations::Bulk::Submit

@@ -39,7 +39,7 @@ module Intercom
 
     include Enumerable
 
-    private
+    protected
 
     def deserialize_response_hash(response_hash, block)
       top_level_type = response_hash.delete('type')
