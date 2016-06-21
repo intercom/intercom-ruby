@@ -105,7 +105,7 @@ module Intercom
 
     def decode(content_encoding, body)
       return body if (!body) || body.empty? || content_encoding != 'gzip'
-      Zlib::GzipReader.new(StringIO.new(body)).read
+      Zlib::GzipReader.new(StringIO.new(body)).read.force_encoding("utf-8")
     end
 
     def raise_errors_on_failure(res)

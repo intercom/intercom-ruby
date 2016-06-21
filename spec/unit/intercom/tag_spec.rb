@@ -3,12 +3,6 @@ require 'spec_helper'
 describe "Intercom::Tag" do
   let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
 
-  it "gets a tag" do
-    client.expects(:get).with("/tags", {:name => "Test Tag"}).returns(test_tag)
-    tag = client.tags.find(:name => "Test Tag")
-    tag.name.must_equal "Test Tag"
-  end
-
   it "creates a tag" do
     client.expects(:post).with("/tags", {'name' => "Test Tag"}).returns(test_tag)
     tag = client.tags.create(:name => "Test Tag")

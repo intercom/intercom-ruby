@@ -1,3 +1,10 @@
+3.5.1
+ - Support for 'visitors'
+ - Fix utf8 body parsing
+
+3.4.0
+ - Add a "token" keyword for OAuth clients
+
 3.3.0
  - Add Bulk API support
 
