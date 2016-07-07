@@ -70,6 +70,9 @@ module Intercom
             parsed_body = parse_body(decoded_body, response)
             raise_errors_on_failure(response)
             parsed_body
+          rescue Intercom::RateLimitExceeded
+            sleep (response.rate_limit_details[:reset_at] - Time.now.utc).ceiling
+            retry
           rescue Timeout::Error
             raise Intercom::ServiceUnavailableError.new('Service Unavailable [request timed out]')
           end
