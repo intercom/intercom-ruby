@@ -16,6 +16,7 @@ module Intercom
 
     def each(&block)
       next_page = nil
+      current_page = nil
       loop do
         if next_page
           response_hash = @client.get(next_page, {})
@@ -23,9 +24,10 @@ module Intercom
           response_hash = @client.get(@finder_url, @finder_params)
         end
         raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
+        current_page = extract_current_page(response_hash)
         deserialize_response_hash(response_hash, block)
         next_page = extract_next_link(response_hash)
-        break if next_page.nil?
+        break if next_page.nil? or (@finder_params[:page] and (current_page  >=  @finder_params[:page]))
       end
       self
     end
@@ -61,6 +63,11 @@ module Intercom
       return nil unless paging_info_present?(response_hash)
       paging_info = response_hash.delete('pages')
       paging_info["next"]
+    end
+
+    def extract_current_page(response_hash)
+      return nil unless paging_info_present?(response_hash)
+      response_hash['pages']['page']
     end
   end
 end

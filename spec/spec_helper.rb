@@ -57,6 +57,61 @@ def test_user(email="bob@example.com")
   }
 end
 
+def test_user_dates(email="bob@example.com", created_at=1401970114, last_request_at=1401970113)
+  {
+      "type" =>"user",
+      "id" =>"aaaaaaaaaaaaaaaaaaaaaaaa",
+      "user_id" => 'id-from-customers-app',
+      "email" => email,
+      "name" => "Joe Schmoe",
+      "avatar" => {"type"=>"avatar", "image_url"=>"https://graph.facebook.com/1/picture?width=24&height=24"},
+      "app_id" => "the-app-id",
+      "custom_attributes" => {"a" => "b", "b" => 2},
+      "companies" =>
+          {"type"=>"company.list",
+           "companies"=>
+               [{"type"=>"company",
+                 "company_id"=>"123",
+                 "id"=>"bbbbbbbbbbbbbbbbbbbbbbbb",
+                 "app_id"=>"the-app-id",
+                 "name"=>"Company 1",
+                 "remote_created_at"=>1390936440,
+                 "created_at"=>1401970114,
+                 "updated_at"=>1401970114,
+                 "last_request_at"=>1401970113,
+                 "monthly_spend"=>0,
+                 "session_count"=>0,
+                 "user_count"=>1,
+                 "tag_ids"=>[],
+                 "custom_attributes"=>{"category"=>"Tech"}}]},
+      "session_count" => 123,
+      "unsubscribed_from_emails" => true,
+      "last_request_at" =>last_request_at,
+      "created_at" =>created_at,
+      "remote_created_at" =>1393613864,
+      "updated_at" =>1401970114,
+      "user_agent_data" => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11",
+      "social_profiles" =>{"type"=>"social_profile.list",
+                           "social_profiles" => [
+                               {"type" => "social_profile", "name" => "twitter", "url" => "http://twitter.com/abc", "username" => "abc", "id" => nil},
+                               {"type" => "social_profile", "name" => "twitter", "username" => "abc2", "url" => "http://twitter.com/abc2", "id" => nil},
+                               {"type" => "social_profile", "name" => "facebook", "url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"},
+                               {"type" => "social_profile", "name" => "quora", "url" => "http://facebook.com/abc", "username" => "abc", "id" => "1234242"}
+                           ]},
+      "location_data"=>
+          {"type"=>"location_data",
+           "city_name"=> 'Dublin',
+           "continent_code"=> 'EU',
+           "country_name"=> 'Ireland',
+           "latitude"=> '90',
+           "longitude"=> '10',
+           "postal_code"=> 'IE',
+           "region_name"=> 'Europe',
+           "timezone"=> '+1000',
+           "country_code" => "IRL"}
+  }
+end
+
 def test_admin_list
   {
     "type" => "admin.list",
@@ -158,6 +213,23 @@ def page_of_users(include_next_link= false)
       },
       "users"=> [test_user("user1@example.com"), test_user("user2@example.com"), test_user("user3@example.com")],
       "total_count"=>314
+  }
+end
+
+def users_pagination(include_next_link=false, per_page=0, page=0, total_pages=0, total_count=0, user_list=[])
+  {
+      "type"=>"user.list",
+      "pages"=>
+          {
+              "type"=>"pages",
+              "next"=> (include_next_link ? "https://api.intercom.io/users?per_page=" \
+                                            + per_page.to_s + "&page=" +  (page+1).to_s : nil),
+              "page"=>page,
+              "per_page"=>per_page,
+              "total_pages"=>total_pages
+          },
+      "users"=> user_list,
+      "total_count"=>total_count
   }
 end
 
