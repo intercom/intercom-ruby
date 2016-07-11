@@ -2,7 +2,7 @@ module Intercom
   class MisconfiguredClientError < StandardError; end
   class Client
     include Options
-    attr_reader :base_url, :rate_limit_details, :username_part, :password_part
+    attr_reader :base_url, :rate_limit_details, :username_part, :password_part, :handle_rate_limit
 
     class << self
       def set_base_url(base_url)
@@ -14,7 +14,7 @@ module Intercom
       end
     end
 
-    def initialize(app_id: 'my_app_id', api_key: 'my_api_key', token: nil)
+    def initialize(app_id: 'my_app_id', api_key: 'my_api_key', token: nil, handle_rate_limit: false)
       if token
         @username_part = token
         @password_part = ""
@@ -26,6 +26,7 @@ module Intercom
 
       @base_url = 'https://api.intercom.io'
       @rate_limit_details = {}
+      @handle_rate_limit = handle_rate_limit
     end
 
     def admins
@@ -108,6 +109,7 @@ module Intercom
     end
 
     def execute_request(request)
+      request.handle_rate_limit = handle_rate_limit
       result = request.execute(@base_url, username: @username_part, secret: @password_part)
       @rate_limit_details = request.rate_limit_details
       result
