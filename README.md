@@ -82,6 +82,9 @@ intercom.users.save(user)
 # Perform incrementing
 user.increment('karma')
 intercom.users.save(user)
+# Perform decrementing
+user.decrement('karma', 5)
+intercom.users.save(user)
 # Iterate over all users
 intercom.users.all.each {|user| puts %Q(#{user.email} - #{user.custom_attributes["average_monthly_spend"]}) }
 intercom.users.all.map {|user| user.email }
