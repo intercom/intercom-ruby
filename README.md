@@ -240,7 +240,7 @@ intercom.messages.create({
   },
   :to => {
     :type => "user",
-    :id   => "5678"
+    :user_id   => "5678"
   }
 })
 
