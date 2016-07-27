@@ -238,8 +238,17 @@ describe "Intercom::User" do
   it 'can print users without crashing' do
     client.expects(:get).with("/users", {"email" => "bo@example.com"}).returns(test_user)
     user = client.users.find("email" => "bo@example.com")
-    puts user
-    p user
+
+    begin
+      orignal_stdout = $stdout
+      $stdout = StringIO.new
+
+      puts user
+      p user
+
+    ensure
+      $stdout = orignal_stdout
+    end
   end
 
   describe 'bulk operations' do
