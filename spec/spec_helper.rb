@@ -556,9 +556,10 @@ def test_event
       "created_at" => 1389913941,
       "user_id"  => "314159",
       "metadata" => {
-       "invitee_email" => "pi@example.org",
-       "invite_code" => "ADDAFRIEND"
-       }
+        "type" => "user",
+        "invitee_email" => "pi@example.org",
+        "invite_code" => "ADDAFRIEND"
+      }
     }
 end
 

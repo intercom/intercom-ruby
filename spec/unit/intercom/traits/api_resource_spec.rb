@@ -11,7 +11,11 @@ describe Intercom::Traits::ApiResource do
      "remote_created_at"=>103201,
      "created_at"=>1374056196,
      "user_count"=>1,
-     "custom_attributes"=>{}}
+     "custom_attributes"=>{},
+     "metadata"=>{
+       "type"=>"user",
+       "color"=>"cyan"
+     }}
   end
   let(:api_resource) { DummyClass.new.extend(Intercom::Traits::ApiResource)}
 
@@ -27,6 +31,10 @@ describe Intercom::Traits::ApiResource do
 
   it "exposes string" do
     assert_equal Time.at(1374056196), api_resource.created_at
+  end
+
+  it "treats 'metadata' as a plain hash, not a typed object" do
+    assert_equal Hash, api_resource.metadata.class
   end
 
   it "dynamically defines accessors when a non-existent property is called that looks like a setter" do
