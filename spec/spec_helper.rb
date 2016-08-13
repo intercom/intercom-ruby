@@ -448,6 +448,18 @@ def test_segment_count
   }
 end
 
+def test_conversation_count
+  {
+    "type" => "count",
+    "conversation" => {
+      "assigned" => 1,
+      "closed" => 15,
+      "open" => 1,
+      "unassigned" => 0
+    }
+  }
+end
+
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
 end
