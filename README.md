@@ -1,8 +1,8 @@
 # intercom-ruby
 
-Ruby bindings for the Intercom API (https://api.intercom.io).
+Ruby bindings for the Intercom API (https://developers.intercom.io/reference).
 
-[API Documentation](https://api.intercom.io/docs)
+[API Documentation](https://developers.intercom.io/docs)
 
 [Gem Documentation](http://rubydoc.info/github/intercom/intercom-ruby/master/frames)
 
