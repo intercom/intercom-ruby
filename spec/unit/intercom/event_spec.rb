@@ -6,6 +6,11 @@ describe "Intercom::Event" do
   let(:created_time) {Time.now - 300}
   let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
 
+  it 'gets events for a user' do
+    client.expects(:get).with('/events', type: 'user', email: 'joe@example.com').returns(test_event_list)
+    client.events.find_all(type: 'user', email: 'joe@example.com').first
+  end
+
   it "creates an event with metadata" do
     client.expects(:post).with('/events', {'event_name' => 'Eventful 1', 'created_at' => created_time.to_i, 'email' => 'joe@example.com', 'metadata' => {'invitee_email' => 'pi@example.org', :invite_code => 'ADDAFRIEND', 'found_date' => 12909364407}}).returns(:status => 202)
 
