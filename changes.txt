@@ -1,3 +1,6 @@
+3.5.3
+- Add support for global conversation counts
+
 3.5.2
 - Add Support for pagination
 
