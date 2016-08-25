@@ -14,4 +14,15 @@ describe "Intercom::Count" do
     counts = client.counts.for_type(type: 'user', count: 'segment')
     counts.user['segment'][4]["segment 1"].must_equal(1)
   end
+
+  it 'should not include count param when nil' do
+    client.expects(:get).with("/counts", {type: 'conversation'}).returns(test_conversation_count)
+    counts = client.counts.for_type(type: 'conversation')
+    counts.conversation.must_equal({
+      "assigned" => 1,
+      "closed" => 15,
+      "open" => 1,
+      "unassigned" => 0
+    })
+  end
 end
