@@ -9,21 +9,39 @@ module Intercom
     def initialize(resource_name, finder_details: {}, client:)
       @resource_name = resource_name
       @resource_class = Utils.constantize_resource_name(resource_name)
-      @scroll_url = (finder_details[:url] || "/#{@resource_name}")
+      @scroll_url = (finder_details[:url] || "/#{@resource_name}") + '/scroll'
       @client = client
+    end
+
+    def next(scroll_param=nil)
+      if not scroll_param
+        #First time so do initial get without scroll_param
+        puts "no scroll"
+        response_hash = @client.get(@scroll_url, '')
+      else
+        #Not first call so use get next page
+        puts "scroll #{scroll_param}"
+        response_hash = @client.get(@scroll_url, scroll_param: scroll_param)
+      end
+      raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
+      @scroll_param = extract_scroll_param(response_hash)
+      deserialize_response_hash(response_hash).each do |object_json|
+        Lib::TypedJsonDeserializer.new(object_json).deserialize
+      end
     end
 
     def each(&block)
       scroll_param = nil
-      scroll_url = @scroll_url + '/scroll'
       loop do
         if not scroll_param
-          response_hash = @client.get(scroll_url, '')
+          response_hash = @client.get(@scroll_url, '')
         else
-          response_hash = @client.get(scroll_url, scroll_param: scroll_param)
+          response_hash = @client.get(@scroll_url, scroll_param: scroll_param)
         end
         raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
-        deserialize_response_hash(response_hash, block)
+        deserialize_response_hash(response_hash).each do |object_json|
+          block.call Lib::TypedJsonDeserializer.new(object_json).deserialize
+        end
         scroll_param = extract_scroll_param(response_hash)
         break if not users_present?(response_hash)
       end
@@ -41,7 +59,7 @@ module Intercom
 
     private
 
-    def deserialize_response_hash(response_hash, block)
+    def deserialize_response_hash(response_hash)
       top_level_type = response_hash.delete('type')
       if resource_name == 'subscriptions'
         top_level_entity_key = 'items'
@@ -49,7 +67,7 @@ module Intercom
         top_level_entity_key = Utils.entity_key_from_type(top_level_type)
       end
       response_hash[top_level_entity_key].each do |object_json|
-        block.call Lib::TypedJsonDeserializer.new(object_json).deserialize
+        Lib::TypedJsonDeserializer.new(object_json).deserialize
       end
     end
 
