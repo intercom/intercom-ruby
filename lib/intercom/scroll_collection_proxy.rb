@@ -25,9 +25,7 @@ module Intercom
       end
       raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
       @scroll_param = extract_scroll_param(response_hash)
-      deserialize_response_hash(response_hash).each do |object_json|
-        Lib::TypedJsonDeserializer.new(object_json).deserialize
-      end
+      deserialize_next_hash(response_hash)
     end
 
     def each(&block)
@@ -39,9 +37,8 @@ module Intercom
           response_hash = @client.get(@scroll_url, scroll_param: scroll_param)
         end
         raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
-        deserialize_response_hash(response_hash).each do |object_json|
-          block.call Lib::TypedJsonDeserializer.new(object_json).deserialize
-        end
+        deserialize_response_hash(response_hash, block)
+
         scroll_param = extract_scroll_param(response_hash)
         break if not users_present?(response_hash)
       end
@@ -59,7 +56,7 @@ module Intercom
 
     private
 
-    def deserialize_response_hash(response_hash)
+    def deserialize_response_hash(response_hash, block)
       top_level_type = response_hash.delete('type')
       if resource_name == 'subscriptions'
         top_level_entity_key = 'items'
@@ -67,8 +64,21 @@ module Intercom
         top_level_entity_key = Utils.entity_key_from_type(top_level_type)
       end
       response_hash[top_level_entity_key].each do |object_json|
+        block.call Lib::TypedJsonDeserializer.new(object_json).deserialize
+      end
+    end
+
+    def deserialize_next_hash(response_hash)
+      top_level_type = response_hash.delete('type')
+      if resource_name == 'subscriptions'
+        top_level_entity_key = 'items'
+      else
+        top_level_entity_key = Utils.entity_key_from_type(top_level_type)
+      end
+      response_hash[top_level_entity_key] = response_hash[top_level_entity_key].map do |object_json|
         Lib::TypedJsonDeserializer.new(object_json).deserialize
       end
+      response_hash
     end
 
     def users_present?(response_hash)
