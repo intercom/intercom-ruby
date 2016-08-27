@@ -4,7 +4,7 @@ require "ext/sliceable_hash"
 module Intercom
   class ScrollCollectionProxy
 
-    attr_reader :resource_name, :scroll_url, :resource_class, :scroll_param, :scroll_users
+    attr_reader :resource_name, :scroll_url, :resource_class, :scroll_param, :users
 
     def initialize(resource_name, finder_details: {}, client:)
       @resource_name = resource_name
@@ -14,18 +14,22 @@ module Intercom
 
     end
 
-    def next(scroll_param=nil)
-      scroll_users = []
-      if not scroll_param
+    def next(scroll_paramater=nil)
+      @users = []
+      if not scroll_paramater
         #First time so do initial get without scroll_param
         response_hash = @client.get(@scroll_url, '')
       else
         #Not first call so use get next page
-        response_hash = @client.get(@scroll_url, scroll_param: scroll_param)
+        response_hash = @client.get(@scroll_url, scroll_param: scroll_paramater)
       end
       raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
       @scroll_param = extract_scroll_param(response_hash)
-      @scroll_users = deserialize_next_hash(response_hash)['users']
+      top_level_entity_key = deserialize_response_hash(response_hash)
+      response_hash[top_level_entity_key] = response_hash[top_level_entity_key].map do |object_json|
+        Lib::TypedJsonDeserializer.new(object_json).deserialize
+      end
+      @users = response_hash['users']
       self
     end
 
@@ -38,8 +42,9 @@ module Intercom
           response_hash = @client.get(@scroll_url, scroll_param: scroll_param)
         end
         raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
-        deserialize_response_hash(response_hash, block)
-
+        response_hash[deserialize_response_hash(response_hash)].each do |object_json|
+          block.call Lib::TypedJsonDeserializer.new(object_json).deserialize
+        end
         scroll_param = extract_scroll_param(response_hash)
         break if not users_present?(response_hash)
       end
@@ -57,29 +62,13 @@ module Intercom
 
     private
 
-    def deserialize_response_hash(response_hash, block)
+    def deserialize_response_hash(response_hash)
       top_level_type = response_hash.delete('type')
       if resource_name == 'subscriptions'
         top_level_entity_key = 'items'
       else
         top_level_entity_key = Utils.entity_key_from_type(top_level_type)
       end
-      response_hash[top_level_entity_key].each do |object_json|
-        block.call Lib::TypedJsonDeserializer.new(object_json).deserialize
-      end
-    end
-
-    def deserialize_next_hash(response_hash)
-      top_level_type = response_hash.delete('type')
-      if resource_name == 'subscriptions'
-        top_level_entity_key = 'items'
-      else
-        top_level_entity_key = Utils.entity_key_from_type(top_level_type)
-      end
-      response_hash[top_level_entity_key] = response_hash[top_level_entity_key].map do |object_json|
-        Lib::TypedJsonDeserializer.new(object_json).deserialize
-      end
-      response_hash
     end
 
     def users_present?(response_hash)

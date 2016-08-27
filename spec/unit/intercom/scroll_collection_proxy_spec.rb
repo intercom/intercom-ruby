@@ -33,7 +33,7 @@ describe Intercom::ScrollCollectionProxy do
     client.expects(:get).with("/users/scroll", '').returns(users_scroll(true))
     users = client.users.scroll.next
     emails = []
-    users['users'].each {|usr| emails << usr.email}
+    users.users.each {|usr| emails << usr.email}
     emails.must_equal %W(user1@example.com user2@example.com user3@example.com)
   end
 
@@ -43,14 +43,14 @@ describe Intercom::ScrollCollectionProxy do
     users = client.users.scroll.next
     users = client.users.scroll.next('da6bbbac-25f6-4f07-866b-b911082d7')
     emails =[]
-    users['users'].each {|usr| puts usr.email}
+    users.users.each {|usr| puts usr.email}
   end
 
   it "works with an empty list" do
     client.expects(:get).with("/users/scroll", '').returns(users_scroll(false))
-    users = client.users.scroll.next
+    scroll = client.users.scroll.next
     emails = []
-    users['users'].each {|usr| emails << usr.email}
+    scroll.users.each {|usr| emails << usr.email}
     emails.must_equal %W()
   end
 end
