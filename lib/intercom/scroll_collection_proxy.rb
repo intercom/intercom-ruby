@@ -4,28 +4,29 @@ require "ext/sliceable_hash"
 module Intercom
   class ScrollCollectionProxy
 
-    attr_reader :resource_name, :scroll_url, :resource_class
+    attr_reader :resource_name, :scroll_url, :resource_class, :scroll_param, :scroll_users
 
     def initialize(resource_name, finder_details: {}, client:)
       @resource_name = resource_name
       @resource_class = Utils.constantize_resource_name(resource_name)
       @scroll_url = (finder_details[:url] || "/#{@resource_name}") + '/scroll'
       @client = client
+
     end
 
     def next(scroll_param=nil)
+      scroll_users = []
       if not scroll_param
         #First time so do initial get without scroll_param
-        puts "no scroll"
         response_hash = @client.get(@scroll_url, '')
       else
         #Not first call so use get next page
-        puts "scroll #{scroll_param}"
         response_hash = @client.get(@scroll_url, scroll_param: scroll_param)
       end
       raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
       @scroll_param = extract_scroll_param(response_hash)
-      deserialize_next_hash(response_hash)
+      @scroll_users = deserialize_next_hash(response_hash)['users']
+      self
     end
 
     def each(&block)
