@@ -1,3 +1,6 @@
+3.5.4
+- Add support for scoll API feature
+
 3.5.3
 - Add support for global conversation counts
 
