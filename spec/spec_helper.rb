@@ -216,6 +216,14 @@ def page_of_users(include_next_link= false)
   }
 end
 
+def users_scroll(include_users= false)
+  {
+      "type"=>"user.list",
+      "scroll_param"=> ("da6bbbac-25f6-4f07-866b-b911082d7"),
+      "users"=> (include_users ? [test_user("user1@example.com"), test_user("user2@example.com"), test_user("user3@example.com")] : []),
+  }
+end
+
 def users_pagination(include_next_link=false, per_page=0, page=0, total_pages=0, total_count=0, user_list=[])
   {
       "type"=>"user.list",
