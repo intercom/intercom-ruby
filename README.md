@@ -85,6 +85,22 @@ intercom.users.save(user)
 # Iterate over all users
 intercom.users.all.each {|user| puts %Q(#{user.email} - #{user.custom_attributes["average_monthly_spend"]}) }
 intercom.users.all.map {|user| user.email }
+# List your users create in the last two days
+intercom.users.find_all(type: 'users', page: 1, per_page: 10, created_since: 2, order: :asc).to_a.each_with_index {|usr, i| puts "#{i+1}: #{usr.name}"};
+# Paginate through your list of users choosing how many to return per page (default and max is 50 per page)
+intercom.users.find_all(type: 'users', page: 1, per_page: 10, order: :asc).to_a.each_with_index {|usr, i| puts "#{i+1}: #{usr.name}"}
+# If you have over 10,000 users then you will need to use the scroll function to list your users
+# otherwise you will encounter a page limit with list all your users
+# You can use the scroll method to list all your users
+intercom.users.scroll.each { |user| puts user.name}
+# Alternatively you can use the scroll.next method to get 100 users with each request
+result = intercom.users.scroll.next
+# The result object then contains a records attributes that is an array of your user objects and it also contains a scroll_param which
+# you can then use to request the next 100 users. Note that the scroll parameter will time out after one minute and you will need to
+# make a new request
+result.scroll_param
+=> "0730e341-63ef-44da-ab9c-9113f886326d"
+result =  = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
 
 #Bulk operations.
 # Submit bulk job, to create users, if any of the items in create_items match an existing user that user will be updated
