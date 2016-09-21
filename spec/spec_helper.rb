@@ -540,6 +540,44 @@ def test_conversation_count
   }
 end
 
+def test_events_list
+  {
+    :events => [
+      {
+        "type"=>"event",
+        "id"=>"69dffca4-7e4a-11e6-a6ba-11ad284998b1",
+        "created_at"=>1474276875,
+        "event_name"=>"invited-friend",
+        "user_id"=>"446",
+        "email"=>"dummy@intercom.io",
+        "intercom_user_id"=>"5591b8d40f8244a7c3000b2c",
+        "metadata"=>{"time_now_at"=>1474276836, "crazy_name"=>"something"}
+      },
+      {
+        "type"=>"event",
+        "id"=>"170351b6-7e4a-11e6-ab63-053fcdba94ec",
+        "created_at"=>1474276736,
+        "event_name"=>"invited-friend",
+        "user_id"=>"446",
+        "email"=>"dummy@intercom.io",
+        "intercom_user_id"=>"5591b8d40f8244a7c3000b2c",
+        "metadata"=>{}
+      }
+    ]
+  }
+end
+
+def test_events_summary_list
+  {
+    # :email => "dummy@intercom.io",
+    :events => [{"name"=>"hamster_catcher", "first"=>"2015-07-02T17:20:22.000Z", "last"=>"2015-07-02T17:20:22.000Z", "count"=>1, "description"=>nil},
+      {"name"=>"invited-friend", "first"=>"2016-09-19T09:18:56.000Z", "last"=>"2016-09-19T09:21:15.000Z", "count"=>2, "description"=>nil}
+    ],
+    # :intercom_user_id=> "5591b8d40f8244a7c3000b2c",
+    # :user_id => "446"
+  }
+end
+
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
 end
