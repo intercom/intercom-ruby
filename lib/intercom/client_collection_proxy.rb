@@ -1,5 +1,4 @@
 require "intercom/utils"
-require "ext/sliceable_hash"
 
 module Intercom
   class ClientCollectionProxy

@@ -1,3 +1,5 @@
+require 'intercom/utils'
+
 module Intercom
   module ApiOperations
     module Load

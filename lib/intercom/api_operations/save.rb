@@ -1,4 +1,5 @@
-require 'intercom/traits/api_resource'
+require 'intercom/utils'
+require 'ext/sliceable_hash'
 
 module Intercom
   module ApiOperations

@@ -1,4 +1,4 @@
-require 'intercom/traits/api_resource'
+require 'intercom/utils'
 
 module Intercom
   module ApiOperations
