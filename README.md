@@ -487,3 +487,20 @@ Calling your client's `rate_limit_details` returns a Hash that contains details 
 intercom.rate_limit_details
 #=> {:limit=>180, :remaining=>179, :reset_at=>2014-10-07 14:58:00 +0100}
 ```
+
+
+### Pull Requests
+
+- **Add tests!** Your patch won't be accepted if it doesn't have tests.
+
+- **Document any change in behaviour**. Make sure the README and any other
+  relevant documentation are kept up-to-date.
+
+- **Create topic branches**. Don't ask us to pull from your master branch.
+
+- **One pull request per feature**. If you want to do more than one thing, send
+  multiple pull requests.
+
+- **Send coherent history**. Make sure each individual commit in your pull
+  request is meaningful. If you had to make multiple intermediate commits while
+  developing, please squash them before sending them to us.
