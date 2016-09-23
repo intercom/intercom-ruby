@@ -148,6 +148,34 @@ describe "Intercom::User" do
     end
   end
 
+  describe "decrementing custom_attributes fields" do
+    before :each do
+      @now = Time.now
+      @user = Intercom::User.new("email" => "jo@example.com", :user_id => "i-1224242", :custom_attributes => {"mad" => 123, "another" => 432, "other" => @now.to_i, :thing => "yay"})
+    end
+
+    it "decrements down by 1 with no args" do
+      @user.decrement("mad")
+      @user.to_hash["custom_attributes"]["mad"].must_equal 122
+    end
+
+    it "decrements down by given value" do
+      @user.decrement("mad", 3)
+      @user.to_hash["custom_attributes"]["mad"].must_equal 120
+    end
+
+    it "can decrement new custom data fields" do
+      @user.decrement("new_field", 5)
+      @user.to_hash["custom_attributes"]["new_field"].must_equal -5
+    end
+
+    it "can call decrement on the same key twice and decrement by 2" do
+      @user.decrement("mad")
+      @user.decrement("mad")
+      @user.to_hash["custom_attributes"]["mad"].must_equal 121
+    end
+  end
+
   it "fetches a user" do
     client.expects(:get).with("/users", {"email" => "bo@example.com"}).returns(test_user)
     user = client.users.find("email" => "bo@example.com")
