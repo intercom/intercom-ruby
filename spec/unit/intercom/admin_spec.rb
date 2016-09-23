@@ -13,4 +13,9 @@ describe "Intercom::Admin" do
     client.expects(:get).with("/admins", {}).returns(test_admin_list)
     client.admins.all.each { |a| }
   end
+
+  it "gets an admin" do
+    client.expects(:get).with("/admins/1234", {}).returns(test_admin)
+    client.admins.find(:id => "1234")
+  end
 end

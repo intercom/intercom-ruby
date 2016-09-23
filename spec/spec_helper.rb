@@ -126,6 +126,15 @@ def test_admin_list
   }
 end
 
+def test_admin
+  {
+    "type" => "admin",
+    "id" => "1234",
+    "name" => "Hoban Washburne",
+    "email" => "wash@serenity.io"
+  }
+end
+
 def test_company
   {
     "type" => "company",
