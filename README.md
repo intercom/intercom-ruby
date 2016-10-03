@@ -108,7 +108,7 @@ result =  = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
 #Bulk operations.
 # Submit bulk job to create users. If any of the items in create_items match an existing user that user will be updated
 intercom.users.submit_bulk_job(create_items: [{user_id: 25, email: "alice@example.com"}, {user_id: 25, email: "bob@example.com"}])
-# Submit bulk job to create users with companies. Companies must be sent as an array of objects nested within each applicable user object 
+# Submit bulk job to create users with companies. Companies must be sent as an array of objects nested within each applicable user object
 intercom.users.submit_bulk_job(create_items: [{user_id: 25, email: "alice@example.com", companies: [{:company_id => 9, :name => "Test Company"}]}])
 # Submit bulk job, to delete users
 intercom.users.submit_bulk_job(delete_items: [{user_id: 25, email: "alice@example.com"}, {user_id: 25, email: "bob@example.com"}])
@@ -318,6 +318,11 @@ intercom.messages.create({
 
 #### Events
 ```ruby
+# Retrieve event list for user with id:'123abc'
+intercom.events.find("type" => "user", "intercom_user_id" => "123abc")
+# Retrieve event summary list for user with user_id:'3204sdf90i32i0ew' or email: 'test@test.com'
+intercom.events.find("type" => "user", "user_id" => "3204sdf90i32i0ew", "summary" => "true")
+intercom.events.find("type" => "user", "email" => "test@test.com", "summary" => "true")
 intercom.events.create(
   :event_name => "invited-friend", :created_at => Time.now.to_i,
   :email => user.email,
@@ -327,8 +332,6 @@ intercom.events.create(
     "found_date" => 12909364407
   }
 )
-
-
 ```
 
 Metadata Objects support a few simple types that Intercom can present on your behalf

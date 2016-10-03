@@ -23,6 +23,23 @@ describe "Intercom::Event" do
     client.events.create(:event_name => "sale of item", :email => 'joe@example.com')
   end
 
+  describe 'find events' do
+    it "fetches a user's events list" do
+      client.expects(:get).with("/events", {"type" => "user", "intercom_user_id" => "123abc"}).returns(test_events_list)
+      events = client.events.find("type" => "user", "intercom_user_id" => "123abc")
+      events.events.length.must_equal 2
+      events.events[0]["email"].must_equal "dummy@intercom.io"
+      events.events[0]["event_name"].must_equal "invited-friend"
+    end
+    it "fetches a user's events summary list" do
+      client.expects(:get).with("/events", {"type" => "user", "intercom_user_id" => "123abc", "summary" => "true"}).returns(test_events_summary_list)
+      events = client.events.find("type" => "user", "intercom_user_id" => "123abc", "summary" => "true")
+      events.events[1]["name"].must_equal "invited-friend"
+      events.events[1]["count"].must_equal 2
+    end
+
+  end
+
   describe 'bulk operations' do
     let (:job) {
       {
