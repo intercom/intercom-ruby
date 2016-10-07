@@ -1,3 +1,11 @@
+3.5.5
+- Add scroll api for contacts
+- Add extra context to IntercomError
+- Add support to find admin by id
+- Add decrement method to incrementable traits
+- Suppress printing of users during test runs
+
+
 3.5.4
 - Add support for scoll API feature
 
