@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'json', '~> 1.8'
   spec.required_ruby_version = '>= 2.1.0'
+  spec.add_development_dependency 'gem-release'
 end
