@@ -31,6 +31,7 @@ Using bundler:
 ```ruby
 intercom = Intercom::Client.new(app_id: 'my_app_id', api_key: 'my_api_key')
 ```
+> Warning: API Keys are being deprecated - you should use a [personal access token](https://app.intercom.io/a/apps/_/settings/personal-access-token) instead. [Learn more](https://developers.intercom.io/docs/personal-access-tokens) about API Keys deprecation
 
 You can get your `app_id` from the URL when you're logged into Intercom (it's the alphanumeric just after `/apps/`) and your API key from the API keys integration settings page (under your app settings - integrations in Intercom).
 
