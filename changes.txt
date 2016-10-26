@@ -1,3 +1,8 @@
+3.5.7
+- Add method to find all events for a user (@reidab)
+
+3.5.6
+
 3.5.5
 - Add scroll api for contacts
 - Add extra context to IntercomError
