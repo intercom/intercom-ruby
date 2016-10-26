@@ -549,6 +549,30 @@ def test_conversation_count
   }
 end
 
+def test_event
+    {
+      "type" => "event",
+      "event_name"  => "invited-friend",
+      "created_at" => 1389913941,
+      "user_id"  => "314159",
+      "metadata" => {
+        "type" => "user",
+        "invitee_email" => "pi@example.org",
+        "invite_code" => "ADDAFRIEND"
+      }
+    }
+end
+
+def test_event_list
+  {
+    "type" => "event.list",
+    "events" => [ test_event ],
+    "pages" => {
+      "next" => "https =>//api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550"
+    }
+  }
+end
+
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
 end

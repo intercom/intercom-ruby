@@ -329,6 +329,8 @@ intercom.events.create(
   }
 )
 
+# Retrieve event list for user with id:'123abc'
+ intercom.events.find_all("type" => "user", "intercom_user_id" => "123abc")
 
 ```
 
