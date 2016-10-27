@@ -1,12 +1,17 @@
 require "spec_helper"
 
 describe "Intercom::Admin" do
-  let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
+  let (:client) { Intercom::Client.new(token: 'token') }
 
   it "returns a CollectionProxy for all without making any requests" do
     client.expects(:execute_request).never
     all = client.admins.all
     all.must_be_instance_of(Intercom::ClientCollectionProxy)
+  end
+
+  it "gets me (access token method only)" do
+    client.expects(:get).with("/me", {}).returns(test_admin)
+    client.admins.me
   end
 
   it 'gets an admin list' do

@@ -109,7 +109,7 @@ result =  = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
 #Bulk operations.
 # Submit bulk job to create users. If any of the items in create_items match an existing user that user will be updated
 intercom.users.submit_bulk_job(create_items: [{user_id: 25, email: "alice@example.com"}, {user_id: 25, email: "bob@example.com"}])
-# Submit bulk job to create users with companies. Companies must be sent as an array of objects nested within each applicable user object 
+# Submit bulk job to create users with companies. Companies must be sent as an array of objects nested within each applicable user object
 intercom.users.submit_bulk_job(create_items: [{user_id: 25, email: "alice@example.com", companies: [{:company_id => 9, :name => "Test Company"}]}])
 # Submit bulk job, to delete users
 intercom.users.submit_bulk_job(delete_items: [{user_id: 25, email: "alice@example.com"}, {user_id: 25, email: "bob@example.com"}])
@@ -119,6 +119,8 @@ intercom.users.submit_bulk_job(create_items: [{user_id: 25, email: "alice@exampl
 
 #### Admins
 ```ruby
+# Find access token owner (only with Personal Access Token and OAuth)
+intercom.admins.me
 # Find an admin by id
 intercom.admins.find(:id => admin_id)
 # Iterate over all admins
