@@ -19,8 +19,8 @@ describe "Intercom::Event" do
   end
 
   it "creates an event without metadata" do
-    client.expects(:post).with('/events', {'event_name' => 'sale of item', 'email' => 'joe@example.com'})
-    client.events.create(:event_name => "sale of item", :email => 'joe@example.com')
+    client.expects(:post).with('/events', {'event_name' => 'sale of item', 'id' => 123})
+    client.events.create(:event_name => "sale of item", :id => 123)
   end
 
   describe 'bulk operations' do
