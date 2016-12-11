@@ -104,7 +104,7 @@ result = intercom.users.scroll.next
 # make a new request
 result.scroll_param
 => "0730e341-63ef-44da-ab9c-9113f886326d"
-result =  = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
+result = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
 
 #Bulk operations.
 # Submit bulk job to create users. If any of the items in create_items match an existing user that user will be updated
