@@ -6,7 +6,7 @@ Ruby bindings for the Intercom API (https://developers.intercom.io/reference).
 
 [Gem Documentation](http://rubydoc.info/github/intercom/intercom-ruby/master/frames)
 
-For generating Intercom javascript script tags for Rails, please see https://github.com/intercom/intercom-rails
+For generating Intercom javascript script tags for Rails, please see https://github.com/intercom/intercom-rails.
 
 ## Upgrading information
 
@@ -357,7 +357,7 @@ intercom.events.create(:event_name => "placed-order", :email => current_user.ema
 ```
 
 The metadata key values in the example are treated as follows-
-- order_date: a Date (key ends with '_date').
+- order_date: a Date (key ends with '_date')
 - stripe_invoice: The identifier of the Stripe invoice (has a 'stripe_invoice' key)
 - order_number: a Rich Link (value contains 'url' and 'value' keys)
 - price: An Amount in US Dollars (value contains 'amount' and 'currency' keys)
