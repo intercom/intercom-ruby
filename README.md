@@ -322,7 +322,8 @@ intercom.messages.create({
 #### Events
 ```ruby
 intercom.events.create(
-  :event_name => "invited-friend", :created_at => Time.now.to_i,
+  :event_name => "invited-friend",
+  :created_at => Time.now.to_i,
   :email => user.email,
   :metadata => {
     "invitee_email" => "pi@example.org",
@@ -339,7 +340,9 @@ intercom.events.create(
 Metadata Objects support a few simple types that Intercom can present on your behalf
 
 ```ruby
-intercom.events.create(:event_name => "placed-order", :email => current_user.email,
+intercom.events.create(
+  :event_name => "placed-order",
+  :email => current_user.email,
   :created_at => 1403001013,
   :metadata => {
     :order_date => Time.now.to_i,
