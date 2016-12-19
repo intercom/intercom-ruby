@@ -6,7 +6,7 @@ Ruby bindings for the Intercom API (https://developers.intercom.io/reference).
 
 [Gem Documentation](http://rubydoc.info/github/intercom/intercom-ruby/master/frames)
 
-For generating Intercom javascript script tags for Rails, please see https://github.com/intercom/intercom-rails
+For generating Intercom javascript script tags for Rails, please see https://github.com/intercom/intercom-rails.
 
 ## Upgrading information
 
@@ -22,7 +22,7 @@ This version of the gem is compatible with `Ruby 2.1` and above.
 
 Using bundler:
 
-    gem 'intercom', "~> 3.5.9"
+    gem 'intercom', '~> 3.5.9'
 
 ## Basic Usage
 
@@ -104,7 +104,7 @@ result = intercom.users.scroll.next
 # make a new request
 result.scroll_param
 => "0730e341-63ef-44da-ab9c-9113f886326d"
-result =  = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
+result = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
 
 #Bulk operations.
 # Submit bulk job to create users. If any of the items in create_items match an existing user that user will be updated
@@ -322,7 +322,8 @@ intercom.messages.create({
 #### Events
 ```ruby
 intercom.events.create(
-  :event_name => "invited-friend", :created_at => Time.now.to_i,
+  :event_name => "invited-friend",
+  :created_at => Time.now.to_i,
   :email => user.email,
   :metadata => {
     "invitee_email" => "pi@example.org",
@@ -339,7 +340,9 @@ intercom.events.create(
 Metadata Objects support a few simple types that Intercom can present on your behalf
 
 ```ruby
-intercom.events.create(:event_name => "placed-order", :email => current_user.email,
+intercom.events.create(
+  :event_name => "placed-order",
+  :email => current_user.email,
   :created_at => 1403001013,
   :metadata => {
     :order_date => Time.now.to_i,
@@ -357,7 +360,7 @@ intercom.events.create(:event_name => "placed-order", :email => current_user.ema
 ```
 
 The metadata key values in the example are treated as follows-
-- order_date: a Date (key ends with '_date').
+- order_date: a Date (key ends with '_date')
 - stripe_invoice: The identifier of the Stripe invoice (has a 'stripe_invoice' key)
 - order_number: a Rich Link (value contains 'url' and 'value' keys)
 - price: An Amount in US Dollars (value contains 'amount' and 'currency' keys)
