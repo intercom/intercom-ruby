@@ -1,4 +1,5 @@
 require 'intercom/scroll_collection_proxy'
+require 'intercom/utils'
 
 module Intercom
   module ApiOperations

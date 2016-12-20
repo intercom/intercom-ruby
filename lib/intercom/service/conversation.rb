@@ -3,6 +3,7 @@ require 'intercom/api_operations/find_all'
 require 'intercom/api_operations/find'
 require 'intercom/api_operations/load'
 require 'intercom/api_operations/save'
+require 'intercom/utils'
 
 module Intercom
   module Service

@@ -1,5 +1,5 @@
-require 'intercom/traits/api_resource'
 require 'intercom/client_collection_proxy'
+require 'intercom/utils'
 
 module Intercom
   module ExtendedApiOperations

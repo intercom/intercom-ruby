@@ -1,6 +1,7 @@
+require 'intercom/utils'
+
 module Intercom
   module Lib
-
       # Responsibility: To decide whether we are deserializing a collection or an
       # entity of a particular type and to dispatch deserialization
       class TypedJsonDeserializer
