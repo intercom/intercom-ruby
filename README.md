@@ -67,15 +67,15 @@ Resources this API supports:
 
 ```ruby
 # Find user by email
-user = intercom.users.find(:email => "bob@example.com")
+user = intercom.users.find(email: "bob@example.com")
 # Find user by user_id
-user = intercom.users.find(:user_id => "1")
+user = intercom.users.find(user_id: "1")
 # Find user by id
-user = intercom.users.find(:id => "1")
+user = intercom.users.find(id: "1")
 # Create a user
-user = intercom.users.create(:email => "bob@example.com", :name => "Bob Smith", :signed_up_at => Time.now.to_i)
+user = intercom.users.create(email: "bob@example.com", name: "Bob Smith", signed_up_at: Time.now.to_i)
 # Delete a user
-user = intercom.users.find(:id => "1")
+user = intercom.users.find(id: "1")
 deleted_user = intercom.users.delete(user)
 # Update custom_attributes for a user
 user.custom_attributes["average_monthly_spend"] = 1234.56
@@ -110,7 +110,7 @@ result = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
 # Submit bulk job to create users. If any of the items in create_items match an existing user that user will be updated
 intercom.users.submit_bulk_job(create_items: [{user_id: "25", email: "alice@example.com"}, {user_id: "25", email: "bob@example.com"}])
 # Submit bulk job to create users with companies. Companies must be sent as an array of objects nested within each applicable user object
-intercom.users.submit_bulk_job(create_items: [{user_id: "25", email: "alice@example.com", companies: [{:company_id => 9, :name => "Test Company"}]}])
+intercom.users.submit_bulk_job(create_items: [{user_id: "25", email: "alice@example.com", companies: [{company_id: 9, name: "Test Company"}]}])
 # Submit bulk job, to delete users
 intercom.users.submit_bulk_job(delete_items: [{user_id: "25", email: "alice@example.com"}, {user_id: "25", email: "bob@example.com"}])
 # Submit bulk job, to add items to existing job
@@ -122,7 +122,7 @@ intercom.users.submit_bulk_job(create_items: [{user_id: "25", email: "alice@exam
 # Find access token owner (only with Personal Access Token and OAuth)
 intercom.admins.me
 # Find an admin by id
-intercom.admins.find(:id => admin_id)
+intercom.admins.find(id: admin_id)
 # Iterate over all admins
 intercom.admins.all.each {|admin| puts admin.email }
 ```
@@ -130,18 +130,18 @@ intercom.admins.all.each {|admin| puts admin.email }
 #### Companies
 ```ruby
 # Add a user to one or more companies
-user = intercom.users.find(:email => "bob@example.com")
-user.companies = [{:company_id => 6, :name => "Intercom"}, {:company_id => 9, :name => "Test Company"}]
+user = intercom.users.find(email: "bob@example.com")
+user.companies = [{company_id: 6, name: "Intercom"}, {company_id: 9, name: "Test Company"}]
 intercom.users.save(user)
 # You can also pass custom attributes within a company as you do this
-user.companies = [{:id => 6, :name => "Intercom", :custom_attributes => {:referral_source => "Google"} } ]
+user.companies = [{id: 6, name: "Intercom", custom_attributes: {referral_source: "Google"} } ]
 intercom.users.save(user)
 # Find a company by company_id
-company = intercom.companies.find(:company_id => "44")
+company = intercom.companies.find(company_id: "44")
 # Find a company by name
-company = intercom.companies.find(:name => "Some company")
+company = intercom.companies.find(name: "Some company")
 # Find a company by id
-company = intercom.companies.find(:id => "41e66f0313708347cb0000d0")
+company = intercom.companies.find(id: "41e66f0313708347cb0000d0")
 # Update a company
 company.name = 'Updated company name'
 intercom.companies.save(company)
@@ -168,7 +168,7 @@ tag = intercom.tags.tag(name: 'blue', companies: [{id: "42ea2f1b93891f6a99000427
 #### Segments
 ```ruby
 # Find a segment
-segment = intercom.segments.find(:id => segment_id)
+segment = intercom.segments.find(id: segment_id)
 # Iterate over all segments
 intercom.segments.all.each {|segment| puts "id: #{segment.id} name: #{segment.name}"}
 ```
@@ -176,37 +176,37 @@ intercom.segments.all.each {|segment| puts "id: #{segment.id} name: #{segment.na
 #### Notes
 ```ruby
 # Find a note by id
-note = intercom.notes.find(:id => note)
+note = intercom.notes.find(id: note)
 # Create a note for a user
-note = intercom.notes.create(:body => "<p>Text for the note</p>", :email => 'joe@example.com')
+note = intercom.notes.create(body: "<p>Text for the note</p>", email: 'joe@example.com')
 # Iterate over all notes for a user via their email address
-intercom.notes.find_all(:email => 'joe@example.com').each {|note| puts note.body}
+intercom.notes.find_all(email: 'joe@example.com').each {|note| puts note.body}
 # Iterate over all notes for a user via their user_id
-intercom.notes.find_all(:user_id => '123').each {|note| puts note.body}
+intercom.notes.find_all(user_id: '123').each {|note| puts note.body}
 ```
 
 #### Conversations
 ```ruby
 # FINDING CONVERSATIONS FOR AN ADMIN
 # Iterate over all conversations (open and closed) assigned to an admin
-intercom.conversations.find_all(:type => 'admin', :id => '7').each {|convo| ... }
+intercom.conversations.find_all(type: 'admin', id: '7').each {|convo| ... }
 # Iterate over all open conversations assigned to an admin
-intercom.conversations.find_all(:type => 'admin', :id => 7, :open => true).each {|convo| ... }
+intercom.conversations.find_all(type: 'admin', id: 7, open: true).each {|convo| ... }
 # Iterate over closed conversations assigned to an admin
-intercom.conversations.find_all(:type => 'admin', :id => 7, :open => false).each {|convo| ... }
+intercom.conversations.find_all(type: 'admin', id: 7, open: false).each {|convo| ... }
 # Iterate over closed conversations for assigned an admin, before a certain moment in time
-intercom.conversations.find_all(:type => 'admin', :id => 7, :open => false, :before => 1374844930).each {|convo| ... }
+intercom.conversations.find_all(type: 'admin', id: 7, open: false, before: 1374844930).each {|convo| ... }
 
 # FINDING CONVERSATIONS FOR A USER
 # Iterate over all conversations (read + unread, correct) with a user based on the users email
-intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user').each {|convo| ... }
+intercom.conversations.find_all(email: 'joe@example.com', type: 'user').each {|convo| ... }
 # Iterate over through all conversations (read + unread) with a user based on the users email
-intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user', :unread => false).each {|convo| ... }
+intercom.conversations.find_all(email: 'joe@example.com', type: 'user', unread: false).each {|convo| ... }
 # Iterate over all unread conversations with a user based on the users email
-intercom.conversations.find_all(:email => 'joe@example.com', :type => 'user', :unread => true).each {|convo| ... }
+intercom.conversations.find_all(email: 'joe@example.com', type: 'user', unread: true).each {|convo| ... }
 
 # FINDING A SINGLE CONVERSATION
-conversation = intercom.conversations.find(:id => '1')
+conversation = intercom.conversations.find(id: '1')
 
 # INTERACTING WITH THE PARTS OF A CONVERSATION
 # Getting the subject of a part (only applies to email-based conversations)
@@ -218,11 +218,11 @@ conversation.conversation_parts[1].body
 
 # REPLYING TO CONVERSATIONS
 # User (identified by email) replies with a comment
-intercom.conversations.reply(:id => conversation.id, :type => 'user', :email => 'joe@example.com', :message_type => 'comment', :body => 'foo')
+intercom.conversations.reply(id: conversation.id, type: 'user', email: 'joe@example.com', message_type: 'comment', body: 'foo')
 # Admin (identified by id) replies with a comment
-intercom.conversations.reply(:id => conversation.id, :type => 'admin', :admin_id => '123', :message_type => 'comment', :body => 'bar')
+intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123', message_type: 'comment', body: 'bar')
 # User (identified by email) replies with a comment and attachment
-intercom.conversations.reply(:id => conversation.id, :type => 'user', :email => 'joe@example.com', :message_type => 'comment', :body => 'foo', :attachment_urls => ['http://www.example.com/attachment.jpg'])
+intercom.conversations.reply(id: conversation.id, type: 'user', email: 'joe@example.com', message_type: 'comment', body: 'foo', attachment_urls: ['http://www.example.com/attachment.jpg'])
 
 # Open
 intercom.conversations.open(id: conversation.id, admin_id: '123')
@@ -234,13 +234,13 @@ intercom.conversations.close(id: conversation.id, admin_id: '123')
 intercom.conversations.assign(id: conversation.id, admin_id: '123', assignee_id: '124')
 
 # Reply and Open
-intercom.conversations.reply(:id => conversation.id, :type => 'admin', :admin_id => '123', :message_type => 'open', :body => 'bar')
+intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123', message_type: 'open', body: 'bar')
 
 # Reply and Close
-intercom.conversations.reply(:id => conversation.id, :type => 'admin', :admin_id => '123', :message_type => 'close', :body => 'bar')
+intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123', message_type: 'close', body: 'bar')
 
 # ASSIGNING CONVERSATIONS TO ADMINS
-intercom.conversations.reply(:id => conversation.id, :type => 'admin', :assignee_id => assignee_admin.id, :admin_id => admin.id, :message_type => 'assignment')
+intercom.conversations.reply(id: conversation.id, type: 'admin', assignee_id: assignee_admin.id, admin_id: admin.id, message_type: 'assignment')
 
 # MARKING A CONVERSATION AS READ
 intercom.conversations.mark_read(conversation.id)
@@ -258,76 +258,76 @@ intercom.users.load(conversation.user)
 
 # InApp message from admin to user
 intercom.messages.create({
-  :message_type => 'inapp',
-  :body => "What's up :)",
-  :from => {
-    :type => 'admin',
-    :id   => "1234"
+  message_type: 'inapp',
+  body: "What's up :)",
+  from: {
+    type: 'admin',
+    id: "1234"
   },
-  :to => {
-    :type => "user",
-    :user_id   => "5678"
+  to: {
+    type: "user",
+    user_id: "5678"
   }
 })
 
 # Email message from admin to user
 intercom.messages.create({
-  :message_type => 'email',
-  :subject  => 'Hey there',
-  :body     => "What's up :)",
-  :template => "plain", # or "personal",
-  :from => {
-    :type => "admin",
-    :id   => "1234"
+  message_type: 'email',
+  subject: 'Hey there',
+  body: "What's up :)",
+  template: "plain", # or "personal",
+  from: {
+    type: "admin",
+    id: "1234"
   },
-  :to => {
-    :type => "user",
-    :id => "536e564f316c83104c000020"
+  to: {
+    type: "user",
+    id: "536e564f316c83104c000020"
   }
 })
 
 # Message from a user
 intercom.messages.create({
-  :from => {
-    :type => "user",
-    :id => "536e564f316c83104c000020"
+  from: {
+    type: "user",
+    id: "536e564f316c83104c000020"
   },
-  :body => "halp"
+  body: "halp"
 })
 
 # Message from admin to contact
 
 intercom.messages.create({
-  :body     => "How can I help :)",
-  :from => {
-    :type => "admin",
-    :id   => "1234"
+  body: "How can I help :)",
+  from: {
+    type: "admin",
+    id: "1234"
   },
-  :to => {
-    :type => "contact",
-    :id => "536e5643as316c83104c400671"
+  to: {
+    type: "contact",
+    id: "536e5643as316c83104c400671"
   }
 })
 
 # Message from a contact
 intercom.messages.create({
-  :from => {
-    :type => "contact",
-    :id => "536e5643as316c83104c400671"
+  from: {
+    type: "contact",
+    id: "536e5643as316c83104c400671"
   },
-  :body => "halp"
+  body: "halp"
 })
 ```
 
 #### Events
 ```ruby
 intercom.events.create(
-  :event_name => "invited-friend",
-  :created_at => Time.now.to_i,
-  :email => user.email,
-  :metadata => {
+  event_name: "invited-friend",
+  created_at: Time.now.to_i,
+  email: user.email,
+  metadata: {
     "invitee_email" => "pi@example.org",
-    :invite_code => "ADDAFRIEND",
+    invite_code: "ADDAFRIEND",
     "found_date" => 12909364407
   }
 )
@@ -341,19 +341,19 @@ Metadata Objects support a few simple types that Intercom can present on your be
 
 ```ruby
 intercom.events.create(
-  :event_name => "placed-order",
-  :email => current_user.email,
-  :created_at => 1403001013,
-  :metadata => {
-    :order_date => Time.now.to_i,
-    :stripe_invoice => 'inv_3434343434',
-    :order_number => {
-      :value => '3434-3434',
-      :url => 'https://example.org/orders/3434-3434'
+  event_name: "placed-order",
+  email: current_user.email,
+  created_at: 1403001013,
+  metadata: {
+    order_date: Time.now.to_i,
+    stripe_invoice: 'inv_3434343434',
+    order_number: {
+      value: '3434-3434',
+      url: 'https://example.org/orders/3434-3434'
     },
     price: {
-      :currency => 'usd',
-      :amount => 2999
+      currency: 'usd',
+      amount: 2999
     }
   }
 )
@@ -453,10 +453,10 @@ Subscribe to events in Intercom to receive webhooks.
 
 ```ruby
 # create a subscription
-intercom.subscriptions.create(:url => "http://example.com", :topics => ["user.created"])
+intercom.subscriptions.create(url: "http://example.com", topics: ["user.created"])
 
 # fetch a subscription
-intercom.subscriptions.find(:id => "nsub_123456789")
+intercom.subscriptions.find(id: "nsub_123456789")
 
 # list subscriptions
 intercom.subscriptions.all
