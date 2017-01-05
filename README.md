@@ -28,7 +28,7 @@ Using bundler:
 
 ### Configure your client
 
-> If you already have a personal access token you can find it [here](https://app.intercom.io/a/apps/_/settings/personal-access-token). If you want to create or learn more about personal access token then see [heree](https://developers.intercom.io/docs/personal-access-tokens) about API Keys deprecation
+> If you already have a personal access token you can find it [here](https://app.intercom.io/a/apps/_/settings/personal-access-token). If you want to create or learn more about personal access tokens then you can find more info [here](https://developers.intercom.io/docs/personal-access-tokens).
 
 ```ruby
 # With an OAuth or Personal Access token:
