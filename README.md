@@ -145,6 +145,15 @@ intercom.companies.all.each {|company| puts %Q(#{company.name} - #{company.custo
 intercom.companies.all.map {|company| company.name }
 # Get a list of users in a company
 intercom.companies.users(company.id)
+
+# Bulk Operations
+# You can also bulk update companies by using the bulk users endpoint.
+# By selecting one user per company and adding the updated company data
+user_1 = intercom.users.find(user_id: 1)
+user_2 = intercom.users.find(user_id: 2)
+company_1 = intercom.companies.find(company_id: 1)
+company_2 = intercom.companies.find(company_id: 2)
+intercom.users.submit_bulk_job(create_items: [{ user_id: user_1.id, email: user_1.email, companies: [{ company_id: company_1.id, name: "New name" }]}, { user_id: user_2.id, email: user_2.email, companies: [{ company_id: company_2.id, name: "Another new name" }]}])
 ```
 
 #### Tags
