@@ -28,10 +28,10 @@ Using bundler:
 
 ### Configure your client
 
-> If you already have a personal access token you can find it [here](https://app.intercom.io/a/apps/_/settings/personal-access-token). If you want to create or learn more about personal access tokens then you can find more info [here](https://developers.intercom.io/docs/personal-access-tokens).
+> If you already have an access token you can find it [here](https://app.intercom.com/developers/_). If you want to create or learn more about access tokens then you can find more info [here](https://developers.intercom.io/docs/personal-access-tokens).
 
 ```ruby
-# With an OAuth or Personal Access token:
+# With an OAuth or Access token:
 intercom = Intercom::Client.new(token: 'my_token')
 ```
 
@@ -114,7 +114,7 @@ intercom.users.submit_bulk_job(create_items: [{user_id: "25", email: "alice@exam
 
 #### Admins
 ```ruby
-# Find access token owner (only with Personal Access Token and OAuth)
+# Find access token owner (only with Access Token and OAuth)
 intercom.admins.me
 # Find an admin by id
 intercom.admins.find(id: admin_id)
