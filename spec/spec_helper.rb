@@ -568,10 +568,22 @@ def test_event_list
     "type" => "event.list",
     "events" => [ test_event ],
     "pages" => {
-      "next" => "https =>//api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550"
+      "next" => "https://api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550"
     }
   }
 end
+
+def page_of_events(include_next_link=false)
+  {
+     "type" => "event.list",
+     "events" => [ test_event ],
+     "pages" =>
+      {
+        "next" => (include_next_link ? "https://api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550" : nil),
+      }
+  }
+end
+
 
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
