@@ -1,3 +1,5 @@
+require 'intercom/client_collection_proxy'
+
 module Intercom
   module Service
     class BaseService
@@ -9,6 +11,10 @@ module Intercom
 
       def collection_class
         raise NotImplementedError
+      end
+
+      def collection_proxy_class
+        Intercom::ClientCollectionProxy
       end
 
       def from_api(api_response)

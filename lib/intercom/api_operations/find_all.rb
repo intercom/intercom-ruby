@@ -16,7 +16,7 @@ module Intercom
           finder_details[:url] = "/#{collection_name}"
           finder_details[:params] = params
         end
-        ClientCollectionProxy.new(collection_name, finder_details: finder_details,  client: @client)
+        collection_proxy_class.new(collection_name, finder_details: finder_details,  client: @client)
       end
 
       private

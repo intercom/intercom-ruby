@@ -11,6 +11,25 @@ describe "Intercom::Event" do
     client.events.find_all(type: 'user', email: 'joe@example.com').first
   end
 
+  it "has the correct collection proxy class" do
+    client.events.collection_proxy_class.must_equal Intercom::EventCollectionProxy
+  end
+
+  it "stops iterating if no next link" do
+    client.expects(:get).with("/events", type: 'user', email: 'joe@example.com').returns(page_of_events(false))
+    event_names = []
+    client.events.find_all(type: 'user', email: 'joe@example.com').each { |event| event_names << event.event_name }
+    event_names.must_equal %W(invited-friend)
+  end
+
+  it "keeps iterating if next link" do
+    client.expects(:get).with("/events", type: 'user', email: 'joe@example.com').returns(page_of_events(true))
+    client.expects(:get).with("https://api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550", {}).returns(page_of_events(false))
+    event_names = []
+    client.events.find_all(type: 'user', email: 'joe@example.com').each { |event| event_names << event.event_name }
+    event_names.must_equal %W(invited-friend invited-friend)
+  end
+
   it "creates an event with metadata" do
     client.expects(:post).with('/events', {'event_name' => 'Eventful 1', 'created_at' => created_time.to_i, 'email' => 'joe@example.com', 'metadata' => {'invitee_email' => 'pi@example.org', :invite_code => 'ADDAFRIEND', 'found_date' => 12909364407}}).returns(:status => 202)
 
