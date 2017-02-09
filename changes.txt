@@ -1,3 +1,6 @@
+3.5.10
+  - Add Support for find_all events pagination (@jkeyes)
+
 3.5.9
  - Fix event create method
 
