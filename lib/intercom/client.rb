@@ -108,9 +108,9 @@ module Intercom
     end
 
     def execute_request(request)
-      result = request.execute(@base_url, username: @username_part, secret: @password_part)
+      request.execute(@base_url, username: @username_part, secret: @password_part)
+    ensure
       @rate_limit_details = request.rate_limit_details
-      result
     end
 
     def base_url=(new_url)
