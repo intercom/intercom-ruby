@@ -115,6 +115,8 @@ module Intercom
         raise Intercom::AuthenticationError.new('Unauthorized')
       elsif res.code.to_i.eql?(403)
         raise Intercom::AuthenticationError.new('Forbidden')
+      elsif res.code.to_i.eql?(429)
+        raise Intercom::RateLimitExceeded.new('Rate Limit Exceeded')
       elsif res.code.to_i.eql?(500)
         raise Intercom::ServerError.new('Server Error')
       elsif res.code.to_i.eql?(502)
