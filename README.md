@@ -453,6 +453,10 @@ intercom.subscriptions.create(url: "http://example.com", topics: ["user.created"
 # fetch a subscription
 intercom.subscriptions.find(id: "nsub_123456789")
 
+# delete a subscription
+subscription = intercom.subscriptions.find(id: "nsub_123456789")
+intercom.subscriptions.delete(subscription)
+
 # list subscriptions
 intercom.subscriptions.all
 ```
