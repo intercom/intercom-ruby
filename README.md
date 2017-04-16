@@ -58,6 +58,8 @@ Resources this API supports:
 
 ### Examples
 
+APIs shold be used as normal Rails calls, meaning .find methods will throw exception if not found
+
 #### Users
 
 ```ruby
