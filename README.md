@@ -54,7 +54,6 @@ Resources this API supports:
     https://api.intercom.io/messages
     https://api.intercom.io/subscriptions
     https://api.intercom.io/jobs
-    https://api.intercom.io/bulk
 
 ### Examples
 
@@ -100,16 +99,6 @@ result = intercom.users.scroll.next
 result.scroll_param
 => "0730e341-63ef-44da-ab9c-9113f886326d"
 result = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
-
-#Bulk operations.
-# Submit bulk job to create users. If any of the items in create_items match an existing user that user will be updated
-intercom.users.submit_bulk_job(create_items: [{user_id: "25", email: "alice@example.com"}, {user_id: "25", email: "bob@example.com"}])
-# Submit bulk job to create users with companies. Companies must be sent as an array of objects nested within each applicable user object
-intercom.users.submit_bulk_job(create_items: [{user_id: "25", email: "alice@example.com", companies: [{company_id: 9, name: "Test Company"}]}])
-# Submit bulk job, to delete users
-intercom.users.submit_bulk_job(delete_items: [{user_id: "25", email: "alice@example.com"}, {user_id: "25", email: "bob@example.com"}])
-# Submit bulk job, to add items to existing job
-intercom.users.submit_bulk_job(create_items: [{user_id: "25", email: "alice@example.com"}], delete_items: [{user_id: "25", email: "bob@example.com"}], job_id:'job_abcd1234')
 ```
 
 #### Admins
@@ -362,54 +351,6 @@ The metadata key values in the example are treated as follows-
 
 *NB:* This version of the gem reserves the field name `type` in Event data.
 
-Bulk operations.
-```ruby
-# Submit bulk job, to create events
-intercom.events.submit_bulk_job(create_items: [
-  {
-    event_name: "ordered-item",
-    created_at: 1438944980,
-    user_id: "314159",
-    metadata: {
-      order_date: 1438944980,
-      stripe_invoice: "inv_3434343434"
-    }
-  },
-  {
-    event_name: "invited-friend",
-    created_at: 1438944979,
-    user_id: "314159",
-    metadata: {
-      invitee_email: "pi@example.org",
-      invite_code: "ADDAFRIEND"
-    }
-  }
-])
-
-
-# Submit bulk job, to add items to existing job
-intercom.events.submit_bulk_job(create_items: [
-  {
-    event_name: "ordered-item",
-    created_at: 1438944980,
-    user_id: "314159",
-    metadata: {
-      order_date: 1438944980,
-      stripe_invoice: "inv_3434343434"
-    }
-  },
-  {
-    event_name: "invited-friend",
-    created_at: 1438944979,
-    user_id: "314159",
-    metadata: {
-      invitee_email: "pi@example.org",
-      invite_code: "ADDAFRIEND"
-    }
-  }
-], job_id:'job_abcd1234')
-```
-
 ### Contacts
 
 `Contacts` represent logged out users of your application.
@@ -459,15 +400,6 @@ intercom.subscriptions.delete(subscription)
 
 # list subscriptions
 intercom.subscriptions.all
-```
-### Bulk jobs
-
-```ruby
-# fetch a job
-intercom.jobs.find(id: 'job_abcd1234')
-
-# fetch a job's error feed
-intercom.jobs.errors(id: 'job_abcd1234')
 ```
 
 ### Errors
