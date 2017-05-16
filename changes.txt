@@ -1,3 +1,6 @@
+3.5.12
+- Use base_url in initialize parameter
+
 3.5.11
 - Add scroll api for companies
 

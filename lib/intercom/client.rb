@@ -14,7 +14,7 @@ module Intercom
       end
     end
 
-    def initialize(app_id: 'my_app_id', api_key: 'my_api_key', token: nil)
+    def initialize(app_id: 'my_app_id', api_key: 'my_api_key', token: nil, base_url:'https://api.intercom.io')
       if token
         @username_part = token
         @password_part = ""
@@ -24,7 +24,7 @@ module Intercom
       end
       validate_credentials!
 
-      @base_url = 'https://api.intercom.io'
+      @base_url = base_url
       @rate_limit_details = {}
     end
 
