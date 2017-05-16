@@ -178,7 +178,7 @@ intercom.conversations.find_all(type: 'admin', id: '7').each {|convo| ... }
 intercom.conversations.find_all(type: 'admin', id: 7, open: true).each {|convo| ... }
 # Iterate over closed conversations assigned to an admin
 intercom.conversations.find_all(type: 'admin', id: 7, open: false).each {|convo| ... }
-# Iterate over closed conversations for assigned an admin, before a certain moment in time
+# Iterate over closed conversations which are assigned to an admin, and where updated_at is before a certain moment in time
 intercom.conversations.find_all(type: 'admin', id: 7, open: false, before: 1374844930).each {|convo| ... }
 
 # FINDING CONVERSATIONS FOR A USER
