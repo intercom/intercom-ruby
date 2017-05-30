@@ -9,6 +9,7 @@ require 'intercom/api_operations/delete'
 require 'intercom/api_operations/bulk/submit'
 require 'intercom/extended_api_operations/tags'
 require 'intercom/extended_api_operations/segments'
+require 'intercom/extended_api_operations/bulk_create'
 
 module Intercom
   module Service
@@ -23,6 +24,7 @@ module Intercom
       include ApiOperations::Bulk::Submit
       include ExtendedApiOperations::Tags
       include ExtendedApiOperations::Segments
+      include ExtendedApiOperations::BulkCreate
 
       def collection_class
         Intercom::User
