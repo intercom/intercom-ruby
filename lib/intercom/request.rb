@@ -139,7 +139,7 @@ module Intercom
         :request_id => error_list_details['request_id']
       }
       case error_code
-      when 'unauthorized', 'forbidden'
+      when 'unauthorized', 'forbidden', 'token_not_found'
         raise Intercom::AuthenticationError.new(error_details['message'], error_context)
       when "bad_request", "missing_parameter", 'parameter_invalid', 'parameter_not_found'
         raise Intercom::BadRequestError.new(error_details['message'], error_context)

@@ -23,8 +23,8 @@ module Intercom
     end
   end
 
-  # Raised when the credentials you provide don't match a valid account on Intercom.
-  # Check that you have set <b>Intercom.app_id=</b> and <b>Intercom.app_api_key=</b> correctly.
+  # Raised when the token you provided is incorrect or not authorized to access certain type of data.
+  # Check that you have set Intercom.token correctly.
   class AuthenticationError < IntercomError; end
 
   # Raised when something goes wrong on within the Intercom API service.
