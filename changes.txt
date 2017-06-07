@@ -1,3 +1,10 @@
+3.5.15
+- UnauthorizedError on invalid token
+- BlockerUserError on restoring blocked user
+
+3.5.14
+- Rate Limit Exception (@jaimeiniesta)
+
 3.5.12
 - Use base_url in initialize parameter
 
