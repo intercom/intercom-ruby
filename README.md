@@ -416,6 +416,7 @@ Intercom::ServerError
 Intercom::ServiceUnavailableError
 Intercom::ServiceConnectionError
 Intercom::ResourceNotFound
+Intercom::BlockedUserError
 Intercom::BadRequestError
 Intercom::RateLimitExceeded
 Intercom::AttributeNotSetError # Raised when you try to call a getter that does not exist on an object
