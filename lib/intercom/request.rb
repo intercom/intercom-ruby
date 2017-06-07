@@ -143,6 +143,8 @@ module Intercom
         raise Intercom::AuthenticationError.new(error_details['message'], error_context)
       when "bad_request", "missing_parameter", 'parameter_invalid', 'parameter_not_found'
         raise Intercom::BadRequestError.new(error_details['message'], error_context)
+      when "not_restorable"
+        raise Intercom::BlockedUser.new(error_details['message'], error_context)
       when "not_found"
         raise Intercom::ResourceNotFound.new(error_details['message'], error_context)
       when "rate_limit_exceeded"

@@ -54,6 +54,9 @@ module Intercom
   # Raised when multiple users match the query (typically duplicate email addresses)
   class MultipleMatchingUsersError < IntercomError; end
 
+  # Raised when restoring a blocked user
+  class BlockedUserError < IntercomError ; end
+
   # Raised when you try to call a non-setter method that does not exist on an object
   class Intercom::AttributeNotSetError < IntercomError ; end
 
@@ -71,4 +74,5 @@ module Intercom
   class Intercom::NoMethodMissingHandler < IntercomInternalError; end
 
   class Intercom::DeserializationError < IntercomInternalError; end
+
 end
