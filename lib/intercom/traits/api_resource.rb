@@ -78,13 +78,13 @@ module Intercom
       end
 
       def custom_attribute_field?(attribute)
-        attribute == 'custom_attributes'
+        attribute.to_s == 'custom_attributes'
       end
-      
+
       def message_from_field?(attribute, value)
         attribute.to_s == 'from' && value.is_a?(Hash) && value['type']
       end
-      
+
       def message_to_field?(attribute, value)
         attribute.to_s == 'to' && value.is_a?(Hash) && value['type']
       end
@@ -94,7 +94,7 @@ module Intercom
           !custom_attribute_field?(attribute) &&
           !message_from_field?(attribute, value) &&
           !message_to_field?(attribute, value) &&
-          attribute != 'metadata'
+          attribute.to_s != 'metadata'
       end
 
       def typed_value?(value)
@@ -107,7 +107,7 @@ module Intercom
       end
 
       def type_field?(attribute)
-        attribute == 'type'
+        attribute.to_s == 'type'
       end
 
       def initialize_missing_flat_store_attributes

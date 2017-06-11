@@ -17,6 +17,26 @@ describe Intercom::Traits::ApiResource do
        "color"=>"cyan"
      }}
   end
+
+  let(:object_hash) do
+    {
+      type: "company",
+      id: "aaaaaaaaaaaaaaaaaaaaaaaa",
+      app_id: "some-app-id",
+      name: "SuperSuite",
+      plan_id: 1,
+      remote_company_id: "8",
+      remote_created_at: 103201,
+      created_at: 1374056196,
+      user_count: 1,
+      custom_attributes: { type: "ping" },
+      metadata: {
+        type: "user",
+        color: "cyan"
+      }
+    }
+  end
+
   let(:api_resource) { DummyClass.new.extend(Intercom::Traits::ApiResource)}
 
   before(:each) { api_resource.from_response(object_json) }
@@ -76,18 +96,29 @@ describe Intercom::Traits::ApiResource do
     proc { api_resource.send(:flubber=, 'a', 'b') }.must_raise NoMethodError
   end
 
-  it "an initialized ApiResource is equal to on generated from a response" do
+  it "an initialized ApiResource is equal to one generated from a response" do
     class ConcreteApiResource; include Intercom::Traits::ApiResource; end
     initialized_api_resource = ConcreteApiResource.new(object_json)
     except(object_json, 'type').keys.each do |attribute|
       assert_equal initialized_api_resource.send(attribute), api_resource.send(attribute)
     end
   end
-  
+
+  it "initialized ApiResource using hash is equal to one generated from response" do
+    class ConcreteApiResource; include Intercom::Traits::ApiResource; end
+
+    api_resource.from_hash(object_hash)
+    initialized_api_resource = ConcreteApiResource.new(object_hash)
+
+    except(object_json, 'type').keys.each do |attribute|
+      assert_equal initialized_api_resource.send(attribute), api_resource.send(attribute)
+    end
+  end
+
   def except(h, *keys)
     keys.each { |key| h.delete(key) }
     h
   end
-  
+
   class DummyClass; end
 end
