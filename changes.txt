@@ -1,3 +1,6 @@
+3.5.16
+ - Standardize comparison of attribute as string when input is Hash or JSON
+
 3.5.15
 - UnauthorizedError on invalid token
 - BlockerUserError on restoring blocked user
