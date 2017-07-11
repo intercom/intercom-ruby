@@ -1,3 +1,6 @@
+3.5.17
+ - Fix BlockedUserError typo
+
 3.5.16
  - Standardize comparison of attribute as string when input is Hash or JSON
 
