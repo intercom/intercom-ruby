@@ -134,6 +134,9 @@ intercom.companies.all.each {|company| puts %Q(#{company.name} - #{company.custo
 intercom.companies.all.map {|company| company.name }
 # Get a list of users in a company
 intercom.companies.users(company.id)
+# Get a large list of companies using scroll
+intercom.companies.scroll.each { |comp| puts comp.name}
+# Please see users scroll for more details of how to use scroll
 ```
 
 #### Tags
@@ -371,6 +374,10 @@ intercom.contacts.convert(contact, user)
 
 # Delete a contact
 intercom.contacts.delete(contact)
+
+# Get a large list of contacts using scroll
+intercom.contacts.scroll.each { |lead| puts lead.id}
+# Please see users scroll for more details of how to use scroll
 ```
 
 ### Counts
