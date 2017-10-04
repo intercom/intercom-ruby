@@ -440,6 +440,12 @@ intercom.rate_limit_details
 #=> {:limit=>180, :remaining=>179, :reset_at=>2014-10-07 14:58:00 +0100}
 ```
 
+You can handle the rate limits yourself but a simply option is to use the handle_rate_limit flag.
+This will automatically catch the 429 rate limit exceeded error and wait until the reset time to retry.
+
+```
+intercom = Intercom::Client.new(token: ENV['AT'], handle_rate_limit: true)
+```
 
 ### Pull Requests
 
