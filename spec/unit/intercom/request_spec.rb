@@ -1,7 +1,5 @@
 require 'spec_helper'
 require 'ostruct'
-require 'webmock'
-include WebMock::API
 
 WebMock.enable!
 
@@ -20,22 +18,41 @@ describe 'Intercom::Request' do
 
   describe 'Intercom::Client' do
     let (:client) { Intercom::Client.new(token: 'foo', handle_rate_limit: true) }
-
+    let (:uri) {"https://api.intercom.io/users"}
 
     it 'should have handle_rate_limit set' do
        client.handle_rate_limit.must_equal(true)
     end
 
-    it 'should call sleep for rate limit error' do
-      test_uri = "https://api.intercom.io/users"
+    it 'should call sleep for rate limit error three times' do
       # Use webmock to mock the HTTP request
-      stub_request(:any, test_uri).\
+      stub_request(:any, uri).\
+      to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 })
+      req = Intercom::Request.get(uri, "")
+      req.handle_rate_limit=true
+      req.expects(:sleep).times(3).with(any_parameters)
+      req.execute(target_base_url=uri, username: "ted", secret: "")
+    end
+
+    it 'should not call sleep for rate limit error' do
+      # Use webmock to mock the HTTP request
+      stub_request(:any, uri).\
+      to_return(status: [200, "OK"], headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 })
+      req = Intercom::Request.get(uri, "")
+      req.handle_rate_limit=true
+      req.expects(:sleep).never.with(any_parameters)
+      req.execute(target_base_url=uri, username: "ted", secret: "")
+    end
+
+    it 'should call sleep for rate limit error just once' do
+      # Use webmock to mock the HTTP request
+      stub_request(:any, uri).\
       to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 }).\
       then.to_return(status: [200, "OK"])
-      req = Intercom::Request.get(test_uri, "")
+      req = Intercom::Request.get(uri, "")
       req.handle_rate_limit=true
-      req.expects(:sleep).at_least_once.with(any_parameters)
-      req.execute(target_base_url=test_uri, username: "ted", secret: "")
+      req.expects(:sleep).with(any_parameters)
+      req.execute(target_base_url=uri, username: "ted", secret: "")
     end
 
   end

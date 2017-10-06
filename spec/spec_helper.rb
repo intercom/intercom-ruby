@@ -1,6 +1,8 @@
 require 'intercom'
 require 'minitest/autorun'
 require 'mocha/setup'
+require 'webmock'
+include WebMock::API
 
 def test_user(email="bob@example.com")
   {
