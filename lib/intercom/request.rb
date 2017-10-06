@@ -3,11 +3,12 @@ require 'net/https'
 
 module Intercom
   class Request
-    attr_accessor :path, :net_http_method, :rate_limit_details
+    attr_accessor :path, :net_http_method, :rate_limit_details, :handle_rate_limit
 
     def initialize(path, net_http_method)
       self.path = path
       self.net_http_method = net_http_method
+      self.handle_rate_limit = false
     end
 
     def set_common_headers(method, base_uri)
@@ -58,6 +59,7 @@ module Intercom
     end
 
     def execute(target_base_url=nil, username:, secret: nil)
+      retries = 3
       base_uri = URI.parse(target_base_url)
       set_common_headers(net_http_method, base_uri)
       set_basic_auth(net_http_method, username, secret)
@@ -70,6 +72,13 @@ module Intercom
             parsed_body = parse_body(decoded_body, response)
             raise_errors_on_failure(response)
             parsed_body
+          rescue Intercom::RateLimitExceeded => e
+            if @handle_rate_limit
+              sleep (@rate_limit_details[:reset_at] - Time.now.utc).ceil
+              retry unless (retries -=1).zero?
+            else
+              raise e
+            end
           rescue Timeout::Error
             raise Intercom::ServiceUnavailableError.new('Service Unavailable [request timed out]')
           end

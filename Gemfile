@@ -1,5 +1,6 @@
 source "http://rubygems.org"
 
+gem 'webmock'
 gemspec
 
 group :development, :test do
