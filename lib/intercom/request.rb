@@ -8,6 +8,7 @@ module Intercom
     def initialize(path, net_http_method)
       self.path = path
       self.net_http_method = net_http_method
+      self.handle_rate_limit = false
     end
 
     def set_common_headers(method, base_uri)
