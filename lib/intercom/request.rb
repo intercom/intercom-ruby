@@ -58,7 +58,7 @@ module Intercom
     end
 
     def execute(target_base_url=nil, username:, secret: nil)
-      retries ||= 3
+      retries = 3
       base_uri = URI.parse(target_base_url)
       set_common_headers(net_http_method, base_uri)
       set_basic_auth(net_http_method, username, secret)
