@@ -100,7 +100,8 @@ module Intercom
       rescue JSON::ParserError => _
         raise_errors_on_failure(response)
       end
-      raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body && parsed_body['type'] == 'error.list'
+      raise_errors_on_failure(response) if parsed_body.nil?
+      raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
       parsed_body
     end
 
