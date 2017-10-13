@@ -62,4 +62,10 @@ describe 'Intercom::Request' do
     req = Intercom::Request.new('path/', 'GET')
     assert_nil(req.parse_body(nil, response))
   end
+
+  it 'parse_body returns nil if the decoded_body is "null"' do
+    response = OpenStruct.new(:code => 500)
+    req = Intercom::Request.new('path/', 'GET')
+    req.parse_body('null', response).must_equal(nil)
+  end
 end
