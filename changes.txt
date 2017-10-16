@@ -1,3 +1,8 @@
+3.5.21
+ - Fix for PR-353 which addressed "NoMethodError in intercom/request"
+ - There were issues on older versions of Ruby (<2.3)
+ - This PR does not use lonely operator and instead simple checks for nil parsed_body
+
 3.5.17
  - Fix BlockedUserError typo
 
