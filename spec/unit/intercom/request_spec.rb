@@ -16,6 +16,12 @@ describe 'Intercom::Request' do
     proc {req.parse_body('<html>somethjing</html>', response)}.must_raise(Intercom::RateLimitExceeded)
   end
 
+  it 'parse_body raises an error if the decoded_body is "null"' do
+    response = OpenStruct.new(:code => 500)
+    req = Intercom::Request.new('path/', 'GET')
+    proc { req.parse_body('null', response)}.must_raise(Intercom::ServerError)
+  end
+
   describe 'Intercom::Client' do
     let (:client) { Intercom::Client.new(token: 'foo', handle_rate_limit: true) }
     let (:uri) {"https://api.intercom.io/users"}
@@ -61,11 +67,5 @@ describe 'Intercom::Request' do
     response = OpenStruct.new(:code => 500)
     req = Intercom::Request.new('path/', 'GET')
     assert_nil(req.parse_body(nil, response))
-  end
-
-  it 'parse_body returns nil if the decoded_body is "null"' do
-    response = OpenStruct.new(:code => 500)
-    req = Intercom::Request.new('path/', 'GET')
-    req.parse_body('null', response).must_equal(nil)
   end
 end
