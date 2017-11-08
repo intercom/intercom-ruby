@@ -41,10 +41,6 @@ describe Intercom::Traits::ApiResource do
 
   before(:each) { api_resource.from_response(object_json) }
 
-  it "does not set type on parsing json" do
-    api_resource.wont_respond_to :type
-  end
-
   it "coerces time on parsing json" do
     assert_equal Time.at(1374056196), api_resource.created_at
   end
