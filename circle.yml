@@ -1,3 +1,6 @@
 machine:
   ruby:
     version: 2.1.0
+test:
+  post:
+  - bundle exec rake
