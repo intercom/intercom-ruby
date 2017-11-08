@@ -24,6 +24,7 @@ module Intercom
 
       def from_hash(hash)
         hash.each do |attribute, value|
+          next if type_field?(attribute)
           initialize_property(attribute, value)
         end
         initialize_missing_flat_store_attributes if respond_to? :flat_store_attributes
@@ -103,6 +104,10 @@ module Intercom
       def call_setter_for_attribute(attribute, value)
         setter_method = "#{attribute.to_s}="
         self.send(setter_method, value)
+      end
+
+      def type_field?(attribute)
+        attribute.to_s == 'type'
       end
 
       def initialize_missing_flat_store_attributes
