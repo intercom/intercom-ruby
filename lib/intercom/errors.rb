@@ -41,7 +41,10 @@ module Intercom
 
   # Raised when requesting resources on behalf of a user that doesn't exist in your application on Intercom.
   class ResourceNotFound < IntercomError; end
-  
+
+  # Raised when trying to create a resource that already exists in Intercom.
+  class ResourceNotUniqueError < IntercomError; end
+
   # Raised when the request has bad syntax
   class BadRequestError < IntercomError; end
 
