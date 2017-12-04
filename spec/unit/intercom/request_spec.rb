@@ -18,7 +18,7 @@ describe 'Intercom::Request' do
 
   it 'raises a ResourceConflictError error when the response code is 429' do
     response = OpenStruct.new(:error_code => 'resource_conflict')
-    req = Intercom::Request.new('path/', 'PUT')
+    req = Intercom::Request.new('path/', 'GET')
     proc {req.parse_body('<html>something</html>', response)}.must_raise(Intercom::ResourceConflictError)
   end
 
