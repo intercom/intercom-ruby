@@ -164,7 +164,7 @@ module Intercom
       when 'conflict', 'unique_user_constraint'
         raise Intercom::MultipleMatchingUsersError.new(error_details['message'], error_context)
       when 'resource_conflict'
-        raise Intercom::ResourceConflictError.new(error_details['message'], error_context)
+        raise Intercom::ResourceNotUniqueError.new(error_details['message'], error_context)
       when nil, ''
         raise Intercom::UnexpectedError.new(message_for_unexpected_error_without_type(error_details, parsed_http_code), error_context)
       else
