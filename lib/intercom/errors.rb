@@ -42,6 +42,9 @@ module Intercom
   # Raised when requesting resources on behalf of a user that doesn't exist in your application on Intercom.
   class ResourceNotFound < IntercomError; end
 
+  # Raised when trying to create a request that already exists in Intercom.
+  class ResourceNotUniqueError < IntercomError; end
+
   # Raised when the request has bad syntax
   class BadRequestError < IntercomError; end
 
@@ -55,13 +58,13 @@ module Intercom
   class MultipleMatchingUsersError < IntercomError; end
 
   # Raised when restoring a blocked user
-  class BlockedUserError < IntercomError ; end
+  class BlockedUserError < IntercomError; end
 
   # Raised when you try to call a non-setter method that does not exist on an object
-  class Intercom::AttributeNotSetError < IntercomError ; end
+  class Intercom::AttributeNotSetError < IntercomError; end
 
   # Raised when unexpected nil returned from server
-  class Intercom::HttpError < IntercomError ; end
+  class Intercom::HttpError < IntercomError; end
 
   #
   # Non-public errors (internal to the gem)

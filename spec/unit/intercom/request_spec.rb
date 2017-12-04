@@ -7,13 +7,13 @@ describe 'Intercom::Request' do
   it 'raises an error when a html error page rendered' do
     response = OpenStruct.new(:code => 500)
     req = Intercom::Request.new('path/', 'GET')
-    proc {req.parse_body('<html>somethjing</html>', response)}.must_raise(Intercom::ServerError)
+    proc {req.parse_body('<html>something</html>', response)}.must_raise(Intercom::ServerError)
   end
 
   it 'raises a RateLimitExceeded error when the response code is 429' do
     response = OpenStruct.new(:code => 429)
     req = Intercom::Request.new('path/', 'GET')
-    proc {req.parse_body('<html>somethjing</html>', response)}.must_raise(Intercom::RateLimitExceeded)
+    proc {req.parse_body('<html>something</html>', response)}.must_raise(Intercom::RateLimitExceeded)
   end
 
   it 'parse_body raises an error if the decoded_body is "null"' do
@@ -23,8 +23,8 @@ describe 'Intercom::Request' do
   end
 
   describe 'Intercom::Client' do
-    let (:client) { Intercom::Client.new(token: 'foo', handle_rate_limit: true) }
-    let (:uri) {"https://api.intercom.io/users"}
+    let(:client) { Intercom::Client.new(token: 'foo', handle_rate_limit: true) }
+    let(:uri) {"https://api.intercom.io/users"}
 
     it 'should have handle_rate_limit set' do
        client.handle_rate_limit.must_equal(true)
