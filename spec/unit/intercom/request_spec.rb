@@ -16,12 +16,6 @@ describe 'Intercom::Request' do
     proc {req.parse_body('<html>something</html>', response)}.must_raise(Intercom::RateLimitExceeded)
   end
 
-  it 'raises a ResourceConflictError error when error code is resource_conflict' do
-    response = OpenStruct.new(:error_code => 'resource_conflict')
-    req = Intercom::Request.new('path/', 'GET')
-    proc {req.parse_body('<html>something</html>', response)}.must_raise(Intercom::ResourceConflictError)
-  end
-
   it 'parse_body raises an error if the decoded_body is "null"' do
     response = OpenStruct.new(:code => 500)
     req = Intercom::Request.new('path/', 'GET')
