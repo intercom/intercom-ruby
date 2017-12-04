@@ -1,3 +1,6 @@
+3.5.23
+ - New type of error (ResourceNotUniqueError). Thrown when trying to create a resource that already exists in Intercom
+
 3.5.22
  - Return object type
 
