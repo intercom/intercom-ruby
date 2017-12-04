@@ -66,7 +66,7 @@ describe 'Intercom::Request' do
 
   describe "Application errors on failure" do
     let(:uri) {"https://api.intercom.io/conversations/reply"}
-    it 'should raise error' do
+    it 'should raise ResourceNotUniqueError error on resource_conflict code' do
       # Use webmock to mock the HTTP request
       stub_request(:put, uri).\
       to_return(status: [409, "Resource Already Exists"], headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 }, body: {type: "error.list", errors: [ code: "resource_conflict" ]}.to_json)
