@@ -13,6 +13,7 @@ require 'intercom/service/segment'
 require 'intercom/service/tag'
 require 'intercom/service/user'
 require 'intercom/service/visitor'
+require 'intercom/service/data_attribute'
 require 'intercom/options'
 require 'intercom/client'
 require "intercom/contact"
@@ -31,6 +32,7 @@ require "intercom/request"
 require "intercom/subscription"
 require "intercom/errors"
 require "intercom/visitor"
+require "intercom/data_attribute"
 require "json"
 
 ##

@@ -85,6 +85,10 @@ module Intercom
       Intercom::Service::Job.new(self)
     end
 
+    def data_attributes
+      Intercom::Service::DataAttribute.new(self)
+    end
+
     def get(path, params)
       execute_request Intercom::Request.get(path, params)
     end
