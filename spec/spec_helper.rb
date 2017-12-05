@@ -235,7 +235,7 @@ def users_scroll(include_users= false)
   }
 end
 
-def users_pagination(include_next_link=false, per_page=0, page=0, total_pages=0, total_count=0, user_list=[])
+def users_pagination(include_next_link:, per_page:, page:, total_pages:, total_count:, user_list:)
   {
       "type"=>"user.list",
       "pages"=>
