@@ -49,7 +49,7 @@ describe "Intercom::Visitors" do
   it "returns a ClientCollectionProxy for all without making any requests" do
     client.expects(:execute_request).never
     all = client.visitors.all
-    all.must_be_instance_of(Intercom::ClientCollectionProxy)
+    all.is_a?(Intercom::ClientCollectionProxy)
   end
 
   it "deletes a visitor" do

@@ -6,7 +6,7 @@ describe "Intercom::Admin" do
   it "returns a CollectionProxy for all without making any requests" do
     client.expects(:execute_request).never
     all = client.admins.all
-    all.must_be_instance_of(Intercom::ClientCollectionProxy)
+    all.is_a?(Intercom::ClientCollectionProxy)
   end
 
   it "gets me (access token method only)" do

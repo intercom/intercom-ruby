@@ -260,7 +260,7 @@ describe "Intercom::User" do
   it "returns a ClientCollectionProxy for all without making any requests" do
     client.expects(:execute_request).never
     all = client.users.all
-    all.must_be_instance_of(Intercom::ClientCollectionProxy)
+    all.is_a?(Intercom::ClientCollectionProxy)
   end
 
   it 'can print users without crashing' do
