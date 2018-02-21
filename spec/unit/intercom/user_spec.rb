@@ -239,7 +239,7 @@ describe "Intercom::User" do
   it "allows setting dates to nil without converting them to 0" do
     client.expects(:post).with("/users", {"email" => "jo@example.com", 'custom_attributes' => {}, "remote_created_at" => nil}).returns({"email" => "jo@example.com"})
     user = client.users.create("email" => "jo@example.com", "remote_created_at" => nil)
-    user.remote_created_at.must_equal nil
+    assert_nil user.remote_created_at
   end
 
   it "sets/gets rw keys" do
