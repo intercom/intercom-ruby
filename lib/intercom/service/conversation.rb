@@ -36,6 +36,11 @@ module Intercom
         reply reply_data.merge(message_type: 'close', type: 'admin')
       end
 
+      def snooze(reply_data)
+        snoozed_until = reply_data.fetch(:assignee_id) { fail 'snoozed_until field is required' }
+        reply reply_data.merge(message_type: 'snoozed', type: 'admin')
+      end
+
       def assign(reply_data)
         assignee_id = reply_data.fetch(:assignee_id) { fail 'assignee_id is required' }
         reply reply_data.merge(message_type: 'assignment', assignee_id: assignee_id, type: 'admin')
