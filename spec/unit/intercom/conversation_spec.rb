@@ -39,8 +39,8 @@ describe "Intercom::Conversation" do
   end
 
   it 'snoozes a conversation' do
-    client.expects(:post).with('/conversations/147/reply', { type: 'admin', message_type: 'snoozed', conversation_id: '147', admin_id: '123', snooze_until: '1501512795'}).returns(test_conversation)
-    client.conversations.snooze(id: '147', admin_id: '123', snooze_until: '1501512795')
+    client.expects(:post).with('/conversations/147/reply', { type: 'admin', message_type: 'snoozed', conversation_id: '147', admin_id: '123', snoozed_until: tomorrow}).returns(test_conversation)
+    client.conversations.snooze(id: '147', admin_id: '123', snoozed_until: tomorrow)
   end
 
   # it "creates a subscription" do
