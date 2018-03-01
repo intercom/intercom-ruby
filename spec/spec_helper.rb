@@ -586,6 +586,9 @@ def page_of_events(include_next_link=false)
   }
 end
 
+def future_time
+  (DateTime.now + 1).to_time.to_i
+end
 
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError
