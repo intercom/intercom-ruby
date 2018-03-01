@@ -226,6 +226,9 @@ intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123'
 # Reply and Close
 intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123', message_type: 'close', body: 'bar')
 
+# Snooze conversation
+intercom.conversations.snooze(id: conversation.id, admin_id: '123', snoozed_until: 9999999999)
+
 # ASSIGNING CONVERSATIONS TO ADMINS
 intercom.conversations.reply(id: conversation.id, type: 'admin', assignee_id: assignee_admin.id, admin_id: admin.id, message_type: 'assignment')
 
