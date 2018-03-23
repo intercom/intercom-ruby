@@ -74,7 +74,8 @@ module Intercom
             parsed_body
           rescue Intercom::RateLimitExceeded => e
             if @handle_rate_limit
-              sleep (@rate_limit_details[:reset_at] - Time.now.utc).ceil
+              seconds_to_retry = (@rate_limit_details[:reset_at] - Time.now.utc).ceil
+              sleep seconds_to_retry unless seconds_to_retry < 0
               retry unless (retries -=1).zero?
             else
               raise e
@@ -109,7 +110,7 @@ module Intercom
       rate_limit_details = {}
       rate_limit_details[:limit] = response['X-RateLimit-Limit'].to_i if response['X-RateLimit-Limit']
       rate_limit_details[:remaining] = response['X-RateLimit-Remaining'].to_i if response['X-RateLimit-Remaining']
-      rate_limit_details[:reset_at] = Time.at(response['X-RateLimit-Reset'].to_i) if response['X-RateLimit-Reset']
+      rate_limit_details[:reset_at] = Time.parse(response['X-RateLimit-Reset']) if response['X-RateLimit-Reset']
       @rate_limit_details = rate_limit_details
     end
 
