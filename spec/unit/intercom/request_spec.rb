@@ -61,6 +61,17 @@ describe 'Intercom::Request' do
       req.execute(target_base_url=uri, username: "ted", secret: "")
     end
 
+    it 'should not sleep if rate limit reset time has passed' do
+      # Use webmock to mock the HTTP request
+      stub_request(:any, uri).\
+      to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => Time.parse("February 25 2010").utc }).\
+      then.to_return(status: [200, "OK"])
+      req = Intercom::Request.get(uri, "")
+      req.handle_rate_limit=true
+      req.expects(:sleep).never.with(any_parameters)
+      req.execute(target_base_url=uri, username: "ted", secret: "")
+    end
+
   end
 
 
