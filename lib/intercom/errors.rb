@@ -27,6 +27,15 @@ module Intercom
   # Check that you have set Intercom.token correctly.
   class AuthenticationError < IntercomError; end
 
+  # Raised when the token provided is linked to a deleted application.
+  class AppSuspendedError < AuthenticationError; end
+
+  # Raised when the token provided has been revoked.
+  class TokenRevokedError < AuthenticationError; end
+
+  # Raised when the token provided can't be decoded, and is most likely invalid.
+  class TokenUnauthorizedError < AuthenticationError; end
+
   # Raised when something goes wrong on within the Intercom API service.
   class ServerError < IntercomError; end
 
