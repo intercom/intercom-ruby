@@ -110,7 +110,7 @@ module Intercom
       rate_limit_details = {}
       rate_limit_details[:limit] = response['X-RateLimit-Limit'].to_i if response['X-RateLimit-Limit']
       rate_limit_details[:remaining] = response['X-RateLimit-Remaining'].to_i if response['X-RateLimit-Remaining']
-      rate_limit_details[:reset_at] = Time.parse(response['X-RateLimit-Reset']) if response['X-RateLimit-Reset']
+      rate_limit_details[:reset_at] = Time.at(response['X-RateLimit-Reset'].to_i) if response['X-RateLimit-Reset']
       @rate_limit_details = rate_limit_details
     end
 
