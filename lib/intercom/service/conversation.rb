@@ -28,6 +28,12 @@ module Intercom
         collection_class.new.from_response(response)
       end
 
+      def reply_to_last(reply_data)
+        collection_name = Utils.resource_class_to_collection_name(collection_class)
+        response = @client.post("/#{collection_name}/last/reply", reply_data)
+        collection_class.new.from_response(response)
+      end
+
       def open(reply_data)
         reply reply_data.merge(message_type: 'open', type: 'admin')
       end
