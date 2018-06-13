@@ -370,6 +370,11 @@ intercom.contacts.save(contact)
 contacts = intercom.contacts.find_all(email: "some_contact@example.com")
 
 # Convert a contact into a user
+user = Intercom::User.new(:user_id => "123abc")
+intercom.contacts.convert(contact, user)
+
+# Merge a contact into an existing user
+user = intercom.users.find(user_id: "123abc")
 intercom.contacts.convert(contact, user)
 
 # Delete a contact
