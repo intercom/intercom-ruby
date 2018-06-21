@@ -75,8 +75,12 @@ module Intercom
           rescue Intercom::RateLimitExceeded => e
             if @handle_rate_limit
               seconds_to_retry = (@rate_limit_details[:reset_at] - Time.now.utc).ceil
-              sleep seconds_to_retry unless seconds_to_retry < 0
-              retry unless (retries -=1).zero?
+              if (retries-=1) < 0
+                raise Intercom::RateLimitExceeded.new('armbar from the back')
+              else
+                sleep seconds_to_retry unless seconds_to_retry < 0
+                retry
+              end
             else
               raise e
             end

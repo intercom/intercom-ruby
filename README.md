@@ -441,7 +441,7 @@ intercom.rate_limit_details
 ```
 
 You can handle the rate limits yourself but a simple option is to use the handle_rate_limit flag.
-This will automatically catch the 429 rate limit exceeded error and wait until the reset time to retry.
+This will automatically catch the 429 rate limit exceeded error and wait until the reset time to retry. After three retries a rate limit exception will be raised. Encountering this error frequently may require a revisiting of your usage of the API.
 
 ```
 intercom = Intercom::Client.new(token: ENV['AT'], handle_rate_limit: true)
