@@ -5,7 +5,7 @@ module Intercom
   module ApiOperations
     module FindAll
 
-      def find_all(params)
+      def find_all(params={})
         raise BadRequestError, "#find takes a hash as its parameter but you supplied #{params.inspect}" unless params.is_a? Hash
         collection_name = Utils.resource_class_to_collection_name(collection_class)
         finder_details = {}
