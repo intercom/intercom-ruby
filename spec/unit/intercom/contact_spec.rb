@@ -50,4 +50,10 @@ describe "Intercom::Contact" do
     client.contacts.delete(contact)
   end
 
+  it "sends a request for a hard deletion" do
+    contact = Intercom::Contact.new("id" => "1")
+    client.expects(:post).with("/user_delete_requests", {intercom_user_id: "1"}).returns({id: contact.id})
+    client.contacts.request_hard_delete(contact)
+  end
+
 end
