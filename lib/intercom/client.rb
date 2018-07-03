@@ -12,6 +12,17 @@ module Intercom
           Proc.new { |obj| set_base_url(old_url).call(o) }
         end
       end
+
+      def set_timeouts(open_timeout: nil, read_timeout: nil)
+        return Proc.new do |o|
+          old_timeouts = o.timeouts
+          timeouts = {}
+          timeouts[:open_timeout] = open_timeout if open_timeout
+          timeouts[:read_timeout] = read_timeout if read_timeout
+          o.send(:timeouts=, timeouts)
+          Proc.new { |obj| set_timeouts(old_timeouts).call(o) }
+        end
+      end
     end
 
     def initialize(app_id: 'my_app_id', api_key: 'my_api_key', token: nil, base_url:'https://api.intercom.io', handle_rate_limit: false)
@@ -121,6 +132,10 @@ module Intercom
 
     def base_url=(new_url)
       @base_url = new_url
+    end
+
+    def timeouts=(timeouts)
+      @timeouts = @timeouts.merge(timeouts)
     end
   end
 end

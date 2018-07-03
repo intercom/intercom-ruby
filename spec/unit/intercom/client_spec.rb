@@ -17,6 +17,27 @@ module Intercom
       client.base_url.must_equal('https://api.intercom.io')
     end
 
+    it 'should be able to change the timeouts' do
+      prev = client.options(Intercom::Client.set_timeouts(open_timeout: 10, read_timeout: 15))
+      client.timeouts.must_equal(open_timeout: 10, read_timeout: 15)
+      client.options(prev)
+      client.timeouts.must_equal(open_timeout: 30, read_timeout: 90)
+    end
+
+    it 'should be able to change the open timeout individually' do
+      prev = client.options(Intercom::Client.set_timeouts(open_timeout: 50))
+      client.timeouts.must_equal(open_timeout: 50, read_timeout: 90)
+      client.options(prev)
+      client.timeouts.must_equal(open_timeout: 30, read_timeout: 90)
+    end
+
+    it 'should be able to change the read timeout individually' do
+      prev = client.options(Intercom::Client.set_timeouts(read_timeout: 50))
+      client.timeouts.must_equal(open_timeout: 30, read_timeout: 50)
+      client.options(prev)
+      client.timeouts.must_equal(open_timeout: 30, read_timeout: 90)
+    end
+
     it 'should raise on nil credentials' do
       proc { Client.new(app_id: nil, api_key: nil) }.must_raise MisconfiguredClientError
     end
