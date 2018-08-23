@@ -149,7 +149,7 @@ intercom.tags.untag(name: 'blue',  users: [{user_id: "42ea2f1b93891f6a99000427"}
 intercom.tags.all.each {|tag| "#{tag.id} - #{tag.name}" }
 intercom.tags.all.map {|tag| tag.name }
 # Tag companies
-tag = intercom.tags.tag(name: 'blue', companies: [{id: "42ea2f1b93891f6a99000427"}])
+tag = intercom.tags.tag(name: 'blue', companies: [{company_id: "42ea2f1b93891f6a99000427"}])
 ```
 
 #### Segments
