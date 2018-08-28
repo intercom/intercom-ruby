@@ -369,8 +369,31 @@ intercom.contacts.save(contact)
 # Find contacts by email
 contacts = intercom.contacts.find_all(email: "some_contact@example.com")
 
+# Using find to search for contacts by email
+contact_list = intercom.contacts.find(email: "some_contact@example.com")
+# This returns a Contact object with type contact.list
+# Note: Multiple contacts can be returned in this list if there are multiple matching contacts found
+# #<Intercom::Contact:0x00007ff3a80789f8
+#   @changed_fields=#<Set: {}>,
+#   @contacts=
+#     [{"type"=>"contact",
+#       "id"=>"5b7fd9b683681ac52274b9c7",
+#       "user_id"=>"05bc4d17-72cc-433e-88ae-0bf88db5d0e6",
+#       "anonymous"=>true,
+#       "email"=>"some_contact@example.com",
+#       ...}],
+#   @custom_attributes={},
+#   @limited=false,
+#   @pages=#<Intercom::Pages:0x00007ff3a7413c58 @changed_fields=#<Set: {}>, @next=nil, @page=1, @per_page=50, @total_pages=1, @type="pages">,
+#   @total_count=1,
+#   @type="contact.list">
+# Access the contact's data
+contact_list.contacts.first
+
 # Convert a contact into a user
+contact = intercom.contacts.find(id: "536e564f316c83104c000020")
 intercom.contacts.convert(contact, Intercom::User.new(email: email))
+# Using find with email will not work here. See https://github.com/intercom/intercom-ruby/issues/419 for more information
 
 # Delete a contact
 intercom.contacts.delete(contact)
