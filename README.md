@@ -372,6 +372,7 @@ contacts = intercom.contacts.find_all(email: "some_contact@example.com")
 # Using find to search for contacts by email
 contact_list = intercom.contacts.find(email: "some_contact@example.com")
 # This returns a Contact object with type contact.list
+# Note: Multiple contacts can be returned in this list if there are multiple matching contacts found
 # #<Intercom::Contact:0x00007ff3a80789f8
 #   @changed_fields=#<Set: {}>,
 #   @contacts=
