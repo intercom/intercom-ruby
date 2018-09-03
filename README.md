@@ -191,6 +191,11 @@ intercom.conversations.find_all(email: 'joe@example.com', type: 'user').each {|c
 intercom.conversations.find_all(email: 'joe@example.com', type: 'user', unread: false).each {|convo| ... }
 # Iterate over all unread conversations with a user based on the users email
 intercom.conversations.find_all(email: 'joe@example.com', type: 'user', unread: true).each {|convo| ... }
+# Iterate over all conversations for a user with their Intercom user ID
+intercom.conversations.find_all(intercom_user_id: '536e564f316c83104c000020', type: 'user').each {|convo| ... }
+# Iterate over all conversations for a lead 
+# NOTE: to iterate over a lead's conversations you MUST use their Intercom User ID and type User
+intercom.conversations.find_all(intercom_user_id: lead.id, type: 'user').each {|convo| ... }
 
 # FINDING A SINGLE CONVERSATION
 conversation = intercom.conversations.find(id: '1')
