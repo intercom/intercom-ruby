@@ -46,25 +46,25 @@ module Intercom
       {'Accept-Encoding' => 'gzip, deflate', 'Accept' => 'application/vnd.intercom.3+json', 'User-Agent' => "Intercom-Ruby/#{Intercom::VERSION}"}
     end
 
-    def client(uri)
+    def client(uri, read_timeout:, open_timeout:)
       net = Net::HTTP.new(uri.host, uri.port)
       if uri.is_a?(URI::HTTPS)
         net.use_ssl = true
         net.verify_mode = OpenSSL::SSL::VERIFY_PEER
         net.ca_file = File.join(File.dirname(__FILE__), '../data/cacert.pem')
       end
-      net.read_timeout = 90
-      net.open_timeout = 30
+      net.read_timeout = read_timeout
+      net.open_timeout = open_timeout
       net
     end
 
-    def execute(target_base_url=nil, username:, secret: nil)
+    def execute(target_base_url=nil, username:, secret: nil, read_timeout: 90, open_timeout: 30)
       retries = 3
       base_uri = URI.parse(target_base_url)
       set_common_headers(net_http_method, base_uri)
       set_basic_auth(net_http_method, username, secret)
       begin
-        client(base_uri).start do |http|
+        client(base_uri, read_timeout: read_timeout, open_timeout: open_timeout).start do |http|
           begin
             response = http.request(net_http_method)
             set_rate_limit_details(response)
