@@ -33,7 +33,7 @@ describe 'Intercom::Request' do
     it 'should call sleep for rate limit error three times' do
       # Use webmock to mock the HTTP request
       stub_request(:any, uri).\
-      to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 })
+      to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s })
       req = Intercom::Request.get(uri, "")
       req.handle_rate_limit=true
       req.expects(:sleep).times(3).with(any_parameters)
@@ -53,11 +53,22 @@ describe 'Intercom::Request' do
     it 'should call sleep for rate limit error just once' do
       # Use webmock to mock the HTTP request
       stub_request(:any, uri).\
-      to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 }).\
+      to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s }).\
       then.to_return(status: [200, "OK"])
       req = Intercom::Request.get(uri, "")
       req.handle_rate_limit=true
       req.expects(:sleep).with(any_parameters)
+      req.execute(target_base_url=uri, username: "ted", secret: "")
+    end
+
+    it 'should not sleep if rate limit reset time has passed' do
+      # Use webmock to mock the HTTP request
+      stub_request(:any, uri).\
+      to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => Time.parse("February 25 2010").utc.to_i.to_s }).\
+      then.to_return(status: [200, "OK"])
+      req = Intercom::Request.get(uri, "")
+      req.handle_rate_limit=true
+      req.expects(:sleep).never.with(any_parameters)
       req.execute(target_base_url=uri, username: "ted", secret: "")
     end
 
@@ -69,7 +80,7 @@ describe 'Intercom::Request' do
     it 'should raise ResourceNotUniqueError error on resource_conflict code' do
       # Use webmock to mock the HTTP request
       stub_request(:put, uri).\
-      to_return(status: [409, "Resource Already Exists"], headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 }, body: {type: "error.list", errors: [ code: "resource_conflict" ]}.to_json)
+      to_return(status: [409, "Resource Already Exists"], headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s }, body: {type: "error.list", errors: [ code: "resource_conflict" ]}.to_json)
       req = Intercom::Request.put(uri, "")
       expect { req.execute(target_base_url=uri, username: "ted", secret: "") }.must_raise(Intercom::ResourceNotUniqueError)
     end
