@@ -2,7 +2,7 @@ module Intercom
   class MisconfiguredClientError < StandardError; end
   class Client
     include Options
-    attr_reader :base_url, :rate_limit_details, :username_part, :password_part, :handle_rate_limit
+    attr_reader :base_url, :rate_limit_details, :username_part, :password_part, :handle_rate_limit, :timeouts
 
     class << self
       def set_base_url(base_url)
@@ -10,6 +10,17 @@ module Intercom
           old_url = o.base_url
           o.send(:base_url=, base_url)
           Proc.new { |obj| set_base_url(old_url).call(o) }
+        end
+      end
+
+      def set_timeouts(open_timeout: nil, read_timeout: nil)
+        return Proc.new do |o|
+          old_timeouts = o.timeouts
+          timeouts = {}
+          timeouts[:open_timeout] = open_timeout if open_timeout
+          timeouts[:read_timeout] = read_timeout if read_timeout
+          o.send(:timeouts=, timeouts)
+          Proc.new { |obj| set_timeouts(old_timeouts).call(o) }
         end
       end
     end
@@ -27,6 +38,10 @@ module Intercom
       @base_url = base_url
       @rate_limit_details = {}
       @handle_rate_limit = handle_rate_limit
+      @timeouts = {
+        open_timeout: 30,
+        read_timeout: 90
+      }
     end
 
     def admins
@@ -110,13 +125,17 @@ module Intercom
 
     def execute_request(request)
       request.handle_rate_limit = handle_rate_limit
-      request.execute(@base_url, username: @username_part, secret: @password_part)
+      request.execute(@base_url, username: @username_part, secret: @password_part, **timeouts)
     ensure
       @rate_limit_details = request.rate_limit_details
     end
 
     def base_url=(new_url)
       @base_url = new_url
+    end
+
+    def timeouts=(timeouts)
+      @timeouts = @timeouts.merge(timeouts)
     end
   end
 end
