@@ -30,14 +30,15 @@ describe 'Intercom::Request' do
        client.handle_rate_limit.must_equal(true)
     end
 
-    it 'should call sleep for rate limit error three times' do
-      # Use webmock to mock the HTTP request
-      stub_request(:any, uri).\
-      to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s })
-      req = Intercom::Request.get(uri, "")
-      req.handle_rate_limit=true
-      req.expects(:sleep).times(3).with(any_parameters)
-      req.execute(target_base_url=uri, username: "ted", secret: "")
+    it 'should call sleep for rate limit error three times and raise a rate limit error otherwise' do
+      expect {
+        stub_request(:any, uri).\
+        to_return(status: [429, "Too Many Requests"], headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s })
+        req = Intercom::Request.get(uri, "")
+        req.handle_rate_limit=true
+        req.expects(:sleep).times(3).with(any_parameters)
+        req.execute(target_base_url=uri, username: "ted", secret: "")
+      }.must_raise(Intercom::RateLimitExceeded)
     end
 
     it 'should not call sleep for rate limit error' do
