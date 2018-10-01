@@ -24,7 +24,7 @@ describe Intercom::Company do
 
   it 'gets users in a company' do
     client.expects(:get).with("/companies/abc123/users", {}).returns(page_of_users(false))
-    client.companies.users('abc123').each do |u|
+    client.companies.users(id: 'abc123').each do |u|
     end
   end
 
