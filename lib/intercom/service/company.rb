@@ -18,12 +18,23 @@ module Intercom
       include ApiOperations::List
       include ApiOperations::Scroll
       include ApiOperations::Save
-      include ExtendedApiOperations::Users
       include ExtendedApiOperations::Tags
       include ExtendedApiOperations::Segments
 
       def collection_class
         Intercom::Company
+      end
+
+      def users_by_intercom_company_id(id)
+        get_users(url: "/companies/#{id}/users")
+      end
+
+      def users_by_company_id(id)
+        get_users(url: "/companies", params: { company_id: id, type: "user" })
+      end
+
+      private def get_users(url:, params: {})
+        ClientCollectionProxy.new("users", finder_details: { url: url, params: params }, client: @client)
       end
     end
   end
