@@ -5,7 +5,6 @@ require 'intercom/api_operations/find'
 require 'intercom/api_operations/find_all'
 require 'intercom/api_operations/save'
 require 'intercom/api_operations/load'
-require 'intercom/extended_api_operations/users'
 require 'intercom/extended_api_operations/tags'
 require 'intercom/extended_api_operations/segments'
 
