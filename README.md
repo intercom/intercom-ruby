@@ -177,7 +177,7 @@ intercom.notes.find_all(user_id: '123').each {|note| puts note.body}
 #### Conversations
 ```ruby
 # Iterate over all conversations for your app
-intercom.conversations.all 
+intercom.conversations.all.each { |convo| ... }
 
 # FINDING CONVERSATIONS FOR AN ADMIN
 # Iterate over all conversations (open and closed) assigned to an admin
