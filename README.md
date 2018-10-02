@@ -132,8 +132,10 @@ intercom.companies.save(company)
 # Iterate over all companies
 intercom.companies.all.each {|company| puts %Q(#{company.name} - #{company.custom_attributes["referral_source"]}) }
 intercom.companies.all.map {|company| company.name }
-# Get a list of users in a company
-intercom.companies.users(company.id)
+# Get a list of users in a company by Intercom Company ID
+intercom.companies.users_by_intercom_company_id(company.id)
+# Get a list of users in a company by external company_id
+intercom.companies.users_by_company_id(company.company_id) 
 # Get a large list of companies using scroll
 intercom.companies.scroll.each { |comp| puts comp.name}
 # Please see users scroll for more details of how to use scroll
