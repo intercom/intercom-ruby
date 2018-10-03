@@ -9,6 +9,7 @@ module Intercom
   module Service
     class Conversation < BaseService
       include ApiOperations::FindAll
+      include ApiOperations::List
       include ApiOperations::Find
       include ApiOperations::Load
       include ApiOperations::Save

@@ -8,6 +8,11 @@ describe "Intercom::Conversation" do
     client.conversations.find(:id => "147")
   end
 
+  it "gets all conversations" do
+    client.expects(:get).with("/conversations", {}).returns(test_conversation_list)
+    client.conversations.all.each { |c| }
+  end
+
   it 'marks a conversation as read' do
     client.expects(:put).with('/conversations/147', { read: true })
     client.conversations.mark_read('147')
