@@ -291,6 +291,56 @@ def test_conversation
   }
 end
 
+def test_conversation_list
+  {
+    "type" => "conversation.list",
+   "pages" => {
+     "type" => "pages",
+     "page" => 1,
+     "per_page" => 20,
+     "total_pages" => 1
+   },
+   "conversations" => [
+     {
+       "type" => "conversation",
+       "id" => "147",
+       "created_at" => 1400850973,
+       "updated_at" => 1400857494,
+       "conversation_message" => {
+         "type" => "conversation_message",
+         "subject" => "",
+         "body" => "<p>Hi Alice,</p>\n\n<p>We noticed you using our Product, do you have any questions?</p> \n<p>- Jane</p>",
+         "author" => {
+           "type" => "admin",
+           "id" => "25"
+         },
+         "attachments" => [
+           {
+             "name" => "signature",
+             "url" => "http =>//someurl.com/signature.jpg"
+           }
+         ]
+       },
+       "user" => {
+         "type" => "user",
+         "id" => "536e564f316c83104c000020"
+       },
+       "assignee" => {
+         "type" => "admin",
+         "id" => "25"
+       },
+       "open" => true,
+       "read" => true,
+       "conversation_parts" => {
+         "type" => "conversation_part.list",
+         "conversation_parts" => [
+         ]
+       }
+     }
+   ]
+  }
+end
+
 def segment
   {
     "type" => "segment",
