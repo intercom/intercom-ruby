@@ -71,6 +71,9 @@ user = intercom.users.create(email: "bob@example.com", name: "Bob Smith", signed
 # Delete a user
 user = intercom.users.find(id: "1")
 deleted_user = intercom.users.delete(user)
+#Send a request to permanently delete a user. User data will be hard deleted within 90 days.
+user = intercom.users.find(id:"1")
+deleted_user = intercom.users.request_hard_delete(user)
 # Update custom_attributes for a user
 user.custom_attributes["average_monthly_spend"] = 1234.56
 intercom.users.save(user)
