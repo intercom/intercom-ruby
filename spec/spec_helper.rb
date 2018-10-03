@@ -2,6 +2,7 @@ require 'intercom'
 require 'minitest/autorun'
 require 'mocha/setup'
 require 'webmock'
+require 'time'
 include WebMock::API
 
 def test_user(email="bob@example.com")
@@ -623,6 +624,10 @@ def test_event_list
       "next" => "https://api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550"
     }
   }
+end
+
+def tomorrow
+  (DateTime.now.to_time + 1).to_i
 end
 
 def page_of_events(include_next_link=false)
