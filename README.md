@@ -228,6 +228,7 @@ intercom.conversations.open(id: conversation.id, admin_id: '123')
 intercom.conversations.close(id: conversation.id, admin_id: '123')
 
 # Assign
+# Note: Conversations can be assigned to teams. However, the entity that performs the operation of assigning the conversation has to be a real admin.
 intercom.conversations.assign(id: conversation.id, admin_id: '123', assignee_id: '124')
 
 # Snooze
