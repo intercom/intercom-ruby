@@ -1,3 +1,8 @@
+3.6.2
+#384 Add ability to snooze conversation
+You can now snooze conversations in your app via:
+intercom.conversations.snooze(...)
+
 3.6.1
 #430 Allow all conversations to be listed
 You can now iterate over all conversations for your app via:
