@@ -100,6 +100,10 @@ module Intercom
       Intercom::Service::Job.new(self)
     end
 
+    def tours
+      Intercom::Service::Tour.new(self)
+    end
+
     def get(path, params)
       execute_request Intercom::Request.get(path, params)
     end

@@ -7,6 +7,7 @@ require 'intercom/service/count'
 require 'intercom/service/event'
 require 'intercom/service/message'
 require 'intercom/service/note'
+require 'intercom/service/tour'
 require 'intercom/service/job'
 require 'intercom/service/subscription'
 require 'intercom/service/segment'
@@ -20,6 +21,7 @@ require "intercom/count"
 require "intercom/user"
 require "intercom/company"
 require "intercom/note"
+require "intercom/tour"
 require "intercom/job"
 require "intercom/tag"
 require "intercom/segment"
