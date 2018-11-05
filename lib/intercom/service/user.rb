@@ -7,6 +7,7 @@ require 'intercom/api_operations/find_all'
 require 'intercom/api_operations/save'
 require 'intercom/api_operations/delete'
 require 'intercom/api_operations/bulk/submit'
+require 'intercom/api_operations/request_hard_delete'
 require 'intercom/extended_api_operations/tags'
 require 'intercom/extended_api_operations/segments'
 
@@ -20,6 +21,7 @@ module Intercom
       include ApiOperations::FindAll
       include ApiOperations::Save
       include ApiOperations::Delete
+      include ApiOperations::RequestHardDelete
       include ApiOperations::Bulk::Submit
       include ExtendedApiOperations::Tags
       include ExtendedApiOperations::Segments
