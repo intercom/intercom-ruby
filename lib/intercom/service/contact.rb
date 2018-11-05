@@ -23,7 +23,12 @@ module Intercom
       include ApiOperations::Save
       include ApiOperations::Scroll
       include ApiOperations::Convert
+<<<<<<< HEAD
       include ApiOperations::Delete
+=======
+      include ApiOperations::Archive
+      include ApiOperations::RequestHardDelete
+>>>>>>> 4995356... update to Archive module
 
       def collection_class
         Intercom::Contact
