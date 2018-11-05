@@ -1,3 +1,30 @@
+3.6.2
+#384 Add ability to snooze conversation
+You can now snooze conversations in your app via:
+intercom.conversations.snooze(...)
+
+3.6.1
+#430 Allow all conversations to be listed
+You can now iterate over all conversations for your app via:
+intercom.conversations.all.each { |convo| ... }
+
+3.6.0
+BREAKING CHANGE companies
+We updated companies to be able to list users via company_id as well as id (#428 )
+Note that this is a breaking change as we had to remove the old way of listing users via company.
+
+Previously it was:
+intercom.companies.users(company.id)
+
+Now you get a list of users in a company by Intercom Company ID
+intercom.companies.users_by_intercom_company_id(company.id)
+
+Now you get a list of users in a company by external company_id
+intercom.companies.users_by_company_id(company.company_id)
+
+Rate limit handling
+We also improved the way we handle rate limits in PR #409 which was related to issue #405
+
 3.5.23
  - New type of error (ResourceNotUniqueError). Thrown when trying to create a resource that already exists in Intercom
 

@@ -22,7 +22,7 @@ This version of the gem is compatible with `Ruby 2.1` and above.
 
 Using bundler:
 
-    gem 'intercom', '~> 3.5.25'
+    gem 'intercom', '~> 3.6.2'
 
 ## Basic Usage
 
@@ -132,8 +132,10 @@ intercom.companies.save(company)
 # Iterate over all companies
 intercom.companies.all.each {|company| puts %Q(#{company.name} - #{company.custom_attributes["referral_source"]}) }
 intercom.companies.all.map {|company| company.name }
-# Get a list of users in a company
-intercom.companies.users(company.id)
+# Get a list of users in a company by Intercom Company ID
+intercom.companies.users_by_intercom_company_id(company.id)
+# Get a list of users in a company by external company_id
+intercom.companies.users_by_company_id(company.company_id) 
 # Get a large list of companies using scroll
 intercom.companies.scroll.each { |comp| puts comp.name}
 # Please see users scroll for more details of how to use scroll
@@ -149,7 +151,7 @@ intercom.tags.untag(name: 'blue',  users: [{user_id: "42ea2f1b93891f6a99000427"}
 intercom.tags.all.each {|tag| "#{tag.id} - #{tag.name}" }
 intercom.tags.all.map {|tag| tag.name }
 # Tag companies
-tag = intercom.tags.tag(name: 'blue', companies: [{id: "42ea2f1b93891f6a99000427"}])
+tag = intercom.tags.tag(name: 'blue', companies: [{company_id: "42ea2f1b93891f6a99000427"}])
 ```
 
 #### Segments
@@ -174,6 +176,9 @@ intercom.notes.find_all(user_id: '123').each {|note| puts note.body}
 
 #### Conversations
 ```ruby
+# Iterate over all conversations for your app
+intercom.conversations.all.each { |convo| ... }
+
 # FINDING CONVERSATIONS FOR AN ADMIN
 # Iterate over all conversations (open and closed) assigned to an admin
 intercom.conversations.find_all(type: 'admin', id: '7').each {|convo| ... }
@@ -191,6 +196,11 @@ intercom.conversations.find_all(email: 'joe@example.com', type: 'user').each {|c
 intercom.conversations.find_all(email: 'joe@example.com', type: 'user', unread: false).each {|convo| ... }
 # Iterate over all unread conversations with a user based on the users email
 intercom.conversations.find_all(email: 'joe@example.com', type: 'user', unread: true).each {|convo| ... }
+# Iterate over all conversations for a user with their Intercom user ID
+intercom.conversations.find_all(intercom_user_id: '536e564f316c83104c000020', type: 'user').each {|convo| ... }
+# Iterate over all conversations for a lead 
+# NOTE: to iterate over a lead's conversations you MUST use their Intercom User ID and type User
+intercom.conversations.find_all(intercom_user_id: lead.id, type: 'user').each {|convo| ... }
 
 # FINDING A SINGLE CONVERSATION
 conversation = intercom.conversations.find(id: '1')
@@ -218,7 +228,12 @@ intercom.conversations.open(id: conversation.id, admin_id: '123')
 intercom.conversations.close(id: conversation.id, admin_id: '123')
 
 # Assign
+# Note: Conversations can be assigned to teams. However, the entity that performs the operation of assigning the conversation has to be an existing teammate. 
+#       You can use `intercom.admins.all.each {|a| puts a.inspect if a.type == 'admin' }` to list all of your teammates.
 intercom.conversations.assign(id: conversation.id, admin_id: '123', assignee_id: '124')
+
+# Snooze
+intercom.conversations.snooze(id: conversation.id, admin_id: '123', snoozed_until: 9999999999)
 
 # Reply and Open
 intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123', message_type: 'open', body: 'bar')
@@ -357,20 +372,50 @@ The metadata key values in the example are treated as follows-
 ### Contacts
 
 `Contacts` represent logged out users of your application.
+Note that `contacts` are referred to as `leads` in the [Intercom](https://developers.intercom.com/intercom-api-reference/reference#leads)
 
 ```ruby
 # Create a contact
 contact = intercom.contacts.create(email: "some_contact@example.com")
 
-# Update a contact
+# Update a contact (via create method)
+# You can update a contact by calling the create method but you MUST provide an id or user_id
+# If you just provide an email, for example, it will create a new contact
+# See https://developers.intercom.com/intercom-api-reference/reference#update-lead for more detail
+contact = intercom.contacts.create(email: "some_contact@example.com", id: "3be0398668071a6bc6850413", name:"update_contact")
+
+# Update a contact (via contact object)
 contact.custom_attributes['foo'] = 'bar'
 intercom.contacts.save(contact)
 
 # Find contacts by email
 contacts = intercom.contacts.find_all(email: "some_contact@example.com")
 
+# Using find to search for contacts by email
+contact_list = intercom.contacts.find(email: "some_contact@example.com")
+# This returns a Contact object with type contact.list
+# Note: Multiple contacts can be returned in this list if there are multiple matching contacts found
+# #<Intercom::Contact:0x00007ff3a80789f8
+#   @changed_fields=#<Set: {}>,
+#   @contacts=
+#     [{"type"=>"contact",
+#       "id"=>"5b7fd9b683681ac52274b9c7",
+#       "user_id"=>"05bc4d17-72cc-433e-88ae-0bf88db5d0e6",
+#       "anonymous"=>true,
+#       "email"=>"some_contact@example.com",
+#       ...}],
+#   @custom_attributes={},
+#   @limited=false,
+#   @pages=#<Intercom::Pages:0x00007ff3a7413c58 @changed_fields=#<Set: {}>, @next=nil, @page=1, @per_page=50, @total_pages=1, @type="pages">,
+#   @total_count=1,
+#   @type="contact.list">
+# Access the contact's data
+contact_list.contacts.first
+
 # Convert a contact into a user
-intercom.contacts.convert(contact, user)
+contact = intercom.contacts.find(id: "536e564f316c83104c000020")
+intercom.contacts.convert(contact, Intercom::User.new(email: email))
+# Using find with email will not work here. See https://github.com/intercom/intercom-ruby/issues/419 for more information
 
 # Delete a contact
 intercom.contacts.delete(contact)
@@ -441,7 +486,7 @@ intercom.rate_limit_details
 ```
 
 You can handle the rate limits yourself but a simple option is to use the handle_rate_limit flag.
-This will automatically catch the 429 rate limit exceeded error and wait until the reset time to retry.
+This will automatically catch the 429 rate limit exceeded error and wait until the reset time to retry. After three retries a rate limit exception will be raised. Encountering this error frequently may require a revisiting of your usage of the API.
 
 ```
 intercom = Intercom::Client.new(token: ENV['AT'], handle_rate_limit: true)

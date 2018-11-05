@@ -8,6 +8,11 @@ describe "Intercom::Conversation" do
     client.conversations.find(:id => "147")
   end
 
+  it "gets all conversations" do
+    client.expects(:get).with("/conversations", {}).returns(test_conversation_list)
+    client.conversations.all.each { |c| }
+  end
+
   it 'marks a conversation as read' do
     client.expects(:put).with('/conversations/147', { read: true })
     client.conversations.mark_read('147')
@@ -36,6 +41,11 @@ describe "Intercom::Conversation" do
   it 'assigns a conversation' do
     client.expects(:post).with('/conversations/147/reply', { type: 'admin', message_type: 'assignment', conversation_id: '147', admin_id: '123', assignee_id: '124'}).returns(test_conversation)
     client.conversations.assign(id: '147', admin_id: '123', assignee_id: '124')
+  end
+
+  it 'snoozes a conversation' do
+    client.expects(:post).with('/conversations/147/reply', { type: 'admin', message_type: 'snoozed', conversation_id: '147', admin_id: '123', snoozed_until: tomorrow}).returns(test_conversation)
+    client.conversations.snooze(id: '147', admin_id: '123', snoozed_until: tomorrow)
   end
 
   # it "creates a subscription" do
