@@ -372,12 +372,19 @@ The metadata key values in the example are treated as follows-
 ### Contacts
 
 `Contacts` represent logged out users of your application.
+Note that `contacts` are referred to as `leads` in the [Intercom](https://developers.intercom.com/intercom-api-reference/reference#leads)
 
 ```ruby
 # Create a contact
 contact = intercom.contacts.create(email: "some_contact@example.com")
 
-# Update a contact
+# Update a contact (via create method)
+# You can update a contact by calling the create method but you MUST provide an id or user_id
+# If you just provide an email, for example, it will create a new contact
+# See the [API reference](https://developers.intercom.com/intercom-api-reference/reference#update-lead) for more detail
+contact = intercom.contacts.create(email: "rubytest1@example.com", id: "3be0398668071a6bc6850413", name:"update_contact")
+
+# Update a contact (via contact object)
 contact.custom_attributes['foo'] = 'bar'
 intercom.contacts.save(contact)
 
