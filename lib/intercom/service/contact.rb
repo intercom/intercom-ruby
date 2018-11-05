@@ -7,6 +7,7 @@ require 'intercom/api_operations/save'
 require 'intercom/api_operations/scroll'
 require 'intercom/api_operations/convert'
 require 'intercom/api_operations/delete'
+require 'intercom/api_operations/request_hard_delete'
 
 module Intercom
   module Service
@@ -19,6 +20,7 @@ module Intercom
       include ApiOperations::Scroll
       include ApiOperations::Convert
       include ApiOperations::Delete
+      include ApiOperations::RequestHardDelete
 
       def collection_class
         Intercom::Contact
