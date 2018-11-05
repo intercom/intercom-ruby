@@ -6,7 +6,12 @@ require 'intercom/api_operations/find_all'
 require 'intercom/api_operations/save'
 require 'intercom/api_operations/scroll'
 require 'intercom/api_operations/convert'
+<<<<<<< HEAD
 require 'intercom/api_operations/delete'
+=======
+require 'intercom/api_operations/archive'
+require 'intercom/api_operations/request_hard_delete'
+>>>>>>> ff82f10... refactor delete method into archive with delete alias and reflect changes in readme
 
 module Intercom
   module Service

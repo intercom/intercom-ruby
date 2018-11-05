@@ -218,7 +218,13 @@ describe "Intercom::User" do
     client.users.save(user)
   end
 
-  it "deletes a user" do
+  it "archives a user" do
+    user = Intercom::User.new("id" => "1")
+    client.expects(:delete).with("/users/1", {}).returns(user)
+    client.users.archive(user)
+  end
+
+  it "has an alias to archive a user" do
     user = Intercom::User.new("id" => "1")
     client.expects(:delete).with("/users/1", {}).returns(user)
     client.users.delete(user)
