@@ -2,7 +2,7 @@ require 'intercom/api_operations/list'
 require 'intercom/api_operations/find_all'
 require 'intercom/api_operations/find'
 require 'intercom/api_operations/save'
-require 'intercom/api_operations/delete'
+require 'intercom/api_operations/archive'
 
 module Intercom
   module Service
@@ -11,7 +11,7 @@ module Intercom
       include ApiOperations::Find
       include ApiOperations::FindAll
       include ApiOperations::Save
-      include ApiOperations::Delete
+      include ApiOperations::Archive
 
       def collection_class
         Intercom::Subscription
