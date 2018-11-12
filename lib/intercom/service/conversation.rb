@@ -9,6 +9,7 @@ module Intercom
   module Service
     class Conversation < BaseService
       include ApiOperations::FindAll
+      include ApiOperations::List
       include ApiOperations::Find
       include ApiOperations::Load
       include ApiOperations::Save
@@ -40,6 +41,11 @@ module Intercom
 
       def close(reply_data)
         reply reply_data.merge(message_type: 'close', type: 'admin')
+      end
+
+      def snooze(reply_data)
+        snoozed_until = reply_data.fetch(:snoozed_until) { fail 'snoozed_until field is required' }
+        reply reply_data.merge(message_type: 'snoozed', type: 'admin')
       end
 
       def assign(reply_data)
