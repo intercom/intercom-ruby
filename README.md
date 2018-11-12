@@ -135,7 +135,7 @@ intercom.companies.all.map {|company| company.name }
 # Get a list of users in a company by Intercom Company ID
 intercom.companies.users_by_intercom_company_id(company.id)
 # Get a list of users in a company by external company_id
-intercom.companies.users_by_company_id(company.company_id) 
+intercom.companies.users_by_company_id(company.company_id)
 # Get a large list of companies using scroll
 intercom.companies.scroll.each { |comp| puts comp.name}
 # Please see users scroll for more details of how to use scroll
@@ -198,7 +198,7 @@ intercom.conversations.find_all(email: 'joe@example.com', type: 'user', unread: 
 intercom.conversations.find_all(email: 'joe@example.com', type: 'user', unread: true).each {|convo| ... }
 # Iterate over all conversations for a user with their Intercom user ID
 intercom.conversations.find_all(intercom_user_id: '536e564f316c83104c000020', type: 'user').each {|convo| ... }
-# Iterate over all conversations for a lead 
+# Iterate over all conversations for a lead
 # NOTE: to iterate over a lead's conversations you MUST use their Intercom User ID and type User
 intercom.conversations.find_all(intercom_user_id: lead.id, type: 'user').each {|convo| ... }
 
@@ -221,6 +221,9 @@ intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123'
 # User (identified by email) replies with a comment and attachment
 intercom.conversations.reply(id: conversation.id, type: 'user', email: 'joe@example.com', message_type: 'comment', body: 'foo', attachment_urls: ['http://www.example.com/attachment.jpg'])
 
+#reply to a user's last conversation
+intercom.conversations.reply_to_last(type: 'user', body: 'Thanks again', message_type: 'comment', user_id: '12345', admin_id: '123')
+
 # Open
 intercom.conversations.open(id: conversation.id, admin_id: '123')
 
@@ -228,7 +231,7 @@ intercom.conversations.open(id: conversation.id, admin_id: '123')
 intercom.conversations.close(id: conversation.id, admin_id: '123')
 
 # Assign
-# Note: Conversations can be assigned to teams. However, the entity that performs the operation of assigning the conversation has to be an existing teammate. 
+# Note: Conversations can be assigned to teams. However, the entity that performs the operation of assigning the conversation has to be an existing teammate.
 #       You can use `intercom.admins.all.each {|a| puts a.inspect if a.type == 'admin' }` to list all of your teammates.
 intercom.conversations.assign(id: conversation.id, admin_id: '123', assignee_id: '124')
 
