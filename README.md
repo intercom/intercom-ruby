@@ -241,6 +241,12 @@ intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123'
 # Reply and Close
 intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123', message_type: 'close', body: 'bar')
 
+# Admin reply to last conversation
+intercom.conversations.reply_to_last(intercom_user_id: '5678', type: 'admin', admin_id: '123', message_type: 'comment', body: 'bar')
+
+# User reply to last conversation
+intercom.conversations.reply_to_last(intercom_user_id: '5678', type: 'user', message_type: 'comment', body: 'bar')
+
 # ASSIGNING CONVERSATIONS TO ADMINS
 intercom.conversations.reply(id: conversation.id, type: 'admin', assignee_id: assignee_admin.id, admin_id: admin.id, message_type: 'assignment')
 
