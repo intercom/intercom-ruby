@@ -230,6 +230,12 @@ describe "Intercom::User" do
     client.users.delete(user)
   end
 
+  it "sends a request for a hard deletion" do
+    user = Intercom::User.new("id" => "1")
+    client.expects(:post).with("/user_delete_requests", {intercom_user_id: "1"}).returns({id: user.id})
+    client.users.request_hard_delete(user)
+  end
+
   it "can use client.users.create for convenience" do
     client.expects(:post).with("/users", {'custom_attributes' => {}, "email" => "jo@example.com", "user_id" => "i-1224242"}).returns({"email" => "jo@example.com", "user_id" => "i-1224242"})
     user = client.users.create("email" => "jo@example.com", :user_id => "i-1224242")

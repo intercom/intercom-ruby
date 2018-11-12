@@ -20,6 +20,7 @@ module Intercom
       include ApiOperations::Scroll
       include ApiOperations::Convert
       include ApiOperations::Delete
+      include ApiOperations::RequestHardDelete
 
       def collection_class
         Intercom::Contact
