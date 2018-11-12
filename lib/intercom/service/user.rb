@@ -19,12 +19,8 @@ module Intercom
       include ApiOperations::Find
       include ApiOperations::FindAll
       include ApiOperations::Save
-<<<<<<< HEAD
-      include ApiOperations::Delete
-=======
       include ApiOperations::Archive
       include ApiOperations::RequestHardDelete
->>>>>>> 4995356... update to Archive module
       include ApiOperations::Bulk::Submit
       include ExtendedApiOperations::Tags
       include ExtendedApiOperations::Segments
