@@ -22,7 +22,7 @@ This version of the gem is compatible with `Ruby 2.1` and above.
 
 Using bundler:
 
-    gem 'intercom', '~> 3.6.2'
+    gem 'intercom', '~> 3.7.0'
 
 ## Basic Usage
 
@@ -69,9 +69,10 @@ user = intercom.users.find(id: "1")
 # Create a user
 user = intercom.users.create(email: "bob@example.com", name: "Bob Smith", signed_up_at: Time.now.to_i)
 # archive a user
-user = intercom.users.find(id: "1")	user = intercom.users.find(id: "1")
-deleted_user = intercom.users.delete(user)	archived_user = intercom.users.archive(user)
-# request a hard delete for a user(https://developers.intercom.com/intercom-api-reference/reference#delete-users)
+user = intercom.users.find(id: "1")
+archived_user = intercom.users.archive(user)
+# request a hard delete for a user
+(https://developers.intercom.com/intercom-api-reference/reference#delete-users)
 user = intercom.users.find(id: "1")
 deleted_user = intercom.users.request_hard_delete(user)
 # Update custom_attributes for a user
