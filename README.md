@@ -68,9 +68,12 @@ user = intercom.users.find(user_id: "1")
 user = intercom.users.find(id: "1")
 # Create a user
 user = intercom.users.create(email: "bob@example.com", name: "Bob Smith", signed_up_at: Time.now.to_i)
-# Delete a user
+# archive a user
+user = intercom.users.find(id: "1")	user = intercom.users.find(id: "1")
+deleted_user = intercom.users.delete(user)	archived_user = intercom.users.archive(user)
+# request a hard delete for a user(https://developers.intercom.com/intercom-api-reference/reference#delete-users)
 user = intercom.users.find(id: "1")
-deleted_user = intercom.users.delete(user)
+deleted_user = intercom.users.request_hard_delete(user)
 # Update custom_attributes for a user
 user.custom_attributes["average_monthly_spend"] = 1234.56
 intercom.users.save(user)
@@ -426,8 +429,8 @@ contact = intercom.contacts.find(id: "536e564f316c83104c000020")
 intercom.contacts.convert(contact, Intercom::User.new(email: email))
 # Using find with email will not work here. See https://github.com/intercom/intercom-ruby/issues/419 for more information
 
-# Delete a contact
-intercom.contacts.delete(contact)
+# archive a contact
+intercom.contacts.archive(contact)
 
 # Get a large list of contacts using scroll
 intercom.contacts.scroll.each { |lead| puts lead.id}
