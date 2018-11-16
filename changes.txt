@@ -1,3 +1,15 @@
+3.7.0
+Providing the ability to hard delete users as described here:
+https://developers.intercom.com/intercom-api-reference/reference#archive-a-user
+
+This chaged the previous delete action to an archive action and added a new hard delete option
+You can still use the delete method but it will archive a user, we added an alias for delete.
+#442 archiving alias
+#410 add ability to hard delete users
+
+Alos enabling reply to last from the SDK
+#443 Residently conversations last reply
+
 3.6.2
 #384 Add ability to snooze conversation
 You can now snooze conversations in your app via:
