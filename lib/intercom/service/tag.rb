@@ -9,7 +9,7 @@ module Intercom
       include ApiOperations::Save
       include ApiOperations::List
       include ApiOperations::FindAll
-      include ApiOperations::Delete
+      include ApiOperations::Archive
 
       def collection_class
         Intercom::Tag
