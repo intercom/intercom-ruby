@@ -224,6 +224,9 @@ intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123'
 # User (identified by email) replies with a comment and attachment
 intercom.conversations.reply(id: conversation.id, type: 'user', email: 'joe@example.com', message_type: 'comment', body: 'foo', attachment_urls: ['http://www.example.com/attachment.jpg'])
 
+#reply to a user's last conversation
+intercom.conversations.reply_to_last(type: 'user', body: 'Thanks again', message_type: 'comment', user_id: '12345', admin_id: '123')
+
 # Open
 intercom.conversations.open(id: conversation.id, admin_id: '123')
 
@@ -243,6 +246,12 @@ intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123'
 
 # Reply and Close
 intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123', message_type: 'close', body: 'bar')
+
+# Admin reply to last conversation
+intercom.conversations.reply_to_last(intercom_user_id: '5678', type: 'admin', admin_id: '123', message_type: 'comment', body: 'bar')
+
+# User reply to last conversation
+intercom.conversations.reply_to_last(intercom_user_id: '5678', type: 'user', message_type: 'comment', body: 'bar')
 
 # ASSIGNING CONVERSATIONS TO ADMINS
 intercom.conversations.reply(id: conversation.id, type: 'admin', assignee_id: assignee_admin.id, admin_id: admin.id, message_type: 'assignment')

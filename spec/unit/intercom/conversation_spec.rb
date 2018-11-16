@@ -28,6 +28,11 @@ describe "Intercom::Conversation" do
     client.conversations.reply(id: '147', type: 'user', body: 'Thanks again', message_type: 'comment', user_id: 'ac4', attachment_urls: ["http://www.example.com/attachment.jpg"])
   end
 
+  it 'sends a reply to a users last conversation from an admin' do
+    client.expects(:post).with('/conversations/last/reply', { type: 'admin', body: 'Thanks again', message_type: 'comment', user_id: 'ac4', admin_id: '123' }).returns(test_conversation)
+    client.conversations.reply_to_last(type: 'admin', body: 'Thanks again', message_type: 'comment', user_id: 'ac4', admin_id: '123')
+  end
+
   it 'opens a conversation' do
     client.expects(:post).with('/conversations/147/reply', { type: 'admin', message_type: 'open', conversation_id: '147', admin_id: '123'}).returns(test_conversation)
     client.conversations.open(id: '147', admin_id: '123')
