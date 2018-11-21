@@ -1,3 +1,6 @@
+3.7.1
+Extra version bump after faulty previous bump
+
 3.7.0
 Providing the ability to hard delete users as described here:
 https://developers.intercom.com/intercom-api-reference/reference#archive-a-user
