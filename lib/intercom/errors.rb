@@ -63,6 +63,9 @@ module Intercom
   # Raised when the request throws an error not accounted for
   class UnexpectedError < IntercomError; end
 
+  # Raised when the CDA limit for the app has been reached
+  class CDALimitReachedError < IntercomError; end
+
   # Raised when multiple users match the query (typically duplicate email addresses)
   class MultipleMatchingUsersError < IntercomError; end
 

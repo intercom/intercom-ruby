@@ -170,6 +170,8 @@ module Intercom
         raise Intercom::ResourceNotFound.new(error_details['message'], error_context)
       when "rate_limit_exceeded"
         raise Intercom::RateLimitExceeded.new(error_details['message'], error_context)
+      when "custom_data_limit_reached"
+        raise Intercom::CDALimitReachedError.new(error_details['message'], error_context)
       when 'service_unavailable'
         raise Intercom::ServiceUnavailableError.new(error_details['message'], error_context)
       when 'conflict', 'unique_user_constraint'
