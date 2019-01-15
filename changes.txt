@@ -1,3 +1,6 @@
+3.7.2
+Added error handling for when an app's custom attribute limits have been reached.
+
 3.7.1
 Extra version bump after faulty previous bump
 
