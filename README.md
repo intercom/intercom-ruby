@@ -91,6 +91,14 @@ intercom.users.all.map {|user| user.email }
 intercom.users.find_all(type: 'users', page: 1, per_page: 10, created_since: 2, order: :asc).to_a.each_with_index {|usr, i| puts "#{i+1}: #{usr.name}"};
 # Paginate through your list of users choosing how many to return per page (default and max is 50 per page)
 intercom.users.find_all(type: 'users', page: 1, per_page: 10, order: :asc).to_a.each_with_index {|usr, i| puts "#{i+1}: #{usr.name}"}
+
+# Duplicate users? If you have duplicate users you can search for them via their email address. 
+# Note this feature is only available from version 1.1 of the API so you will need to switch to that version
+# This will return multiple users if they have the same email address
+usrs = intercom.users.find_all(type: 'users', email: 'myemail@example.com', page: 1, per_page: 10, order: :asc)
+# This returns a user.list so you can access it via
+usrs.to_a.each_with_index {|usr, i| puts "#{i+1}: #{usr.id}"};
+
 # If you have over 10,000 users then you will need to use the scroll function to list your users
 # otherwise you will encounter a page limit with list all your users
 # You can use the scroll method to list all your users
