@@ -1,3 +1,6 @@
+3.7.3
+Added error handling for when an admin cannot be found.
+
 3.7.2
 Added error handling for when an app's custom attribute limits have been reached.
 
