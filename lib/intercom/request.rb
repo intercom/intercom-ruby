@@ -168,6 +168,8 @@ module Intercom
         raise Intercom::BlockedUserError.new(error_details['message'], error_context)
       when "not_found"
         raise Intercom::ResourceNotFound.new(error_details['message'], error_context)
+      when "admin_not_found"
+        raise Intercom::AdminNotFound.new(error_details['message'], error_context)
       when "rate_limit_exceeded"
         raise Intercom::RateLimitExceeded.new(error_details['message'], error_context)
       when "custom_data_limit_reached"

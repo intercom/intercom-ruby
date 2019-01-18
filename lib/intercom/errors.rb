@@ -51,6 +51,9 @@ module Intercom
   # Raised when requesting resources on behalf of a user that doesn't exist in your application on Intercom.
   class ResourceNotFound < IntercomError; end
 
+  # Raised when requesting an admin that doesn't exist in your Intercom workspace.
+  class AdminNotFound < IntercomError; end
+
   # Raised when trying to create a resource that already exists in Intercom.
   class ResourceNotUniqueError < IntercomError; end
 
