@@ -81,6 +81,8 @@ module Intercom
   # Raised when unexpected nil returned from server
   class Intercom::HttpError < IntercomError; end
 
+  class ApiVersionInvalid < IntercomError; end
+
   #
   # Non-public errors (internal to the gem)
   #

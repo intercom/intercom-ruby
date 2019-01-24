@@ -1,9 +1,6 @@
 module Intercom
   class MisconfiguredClientError < StandardError; end
   class Client
-    API_VERSIONS = ['1.0', '1.1']
-    private_constant :API_VERSIONS
-
     include Options
     attr_reader :base_url, :rate_limit_details, :username_part, :password_part, :handle_rate_limit, :timeouts, :api_version
 
@@ -28,7 +25,7 @@ module Intercom
       end
     end
 
-    def initialize(app_id: 'my_app_id', api_key: 'my_api_key', token: nil, base_url:'https://api.intercom.io', handle_rate_limit: false, api_version: '1.0')
+    def initialize(app_id: 'my_app_id', api_key: 'my_api_key', token: nil, base_url:'https://api.intercom.io', handle_rate_limit: false, api_version: nil)
       if token
         @username_part = token
         @password_part = ""
@@ -130,8 +127,8 @@ module Intercom
     end
 
     def validate_api_version!
-      error = MisconfiguredClientError.new("api_version must be one of the following: #{API_VERSIONS.join(', ')}")
-      fail error unless API_VERSIONS.include?(@api_version)
+      error = MisconfiguredClientError.new("api_version must be either nil or a valid API version")
+      fail error if (@api_version && Gem::Version.new(@api_version) < Gem::Version.new('1.0'))
     end
 
     def execute_request(request)

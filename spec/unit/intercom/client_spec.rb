@@ -43,19 +43,15 @@ module Intercom
     end
 
     describe 'API version' do
-      it 'should set the api version default' do
-        client.api_version.must_equal('1.0')
+      it 'does not set the api version by default' do
+        assert_nil(client.api_version)
       end
 
-      it 'should allow api version to be provided' do
-        Client.new(app_id: app_id, api_key: api_key, api_version: '1.1').api_version.must_equal('1.1')
+      it 'allows api version to be provided' do
+        Client.new(app_id: app_id, api_key: api_key, api_version: '1.0').api_version.must_equal('1.0')
       end
 
-      it 'should raise on nil api version' do
-        proc { Client.new(app_id: app_id, api_key: api_key, api_version: nil) }.must_raise MisconfiguredClientError
-      end
-
-      it 'should raise on invalid api version' do
+      it 'raises on invalid api version' do
         proc { Client.new(app_id: app_id, api_key: api_key, api_version: '0.2') }.must_raise MisconfiguredClientError
       end
     end
