@@ -51,8 +51,17 @@ module Intercom
         Client.new(app_id: app_id, api_key: api_key, api_version: '1.0').api_version.must_equal('1.0')
       end
 
+      it 'allows api version to be nil' do
+        # matches default behavior, and will honor version set in the Developer Hub
+        assert_nil(Client.new(app_id: app_id, api_key: api_key, api_version: nil).api_version)
+      end
+
       it 'raises on invalid api version' do
         proc { Client.new(app_id: app_id, api_key: api_key, api_version: '0.2') }.must_raise MisconfiguredClientError
+      end
+
+      it 'raises on empty api version' do
+        proc { Client.new(app_id: app_id, api_key: api_key, api_version: '') }.must_raise MisconfiguredClientError
       end
     end
 
