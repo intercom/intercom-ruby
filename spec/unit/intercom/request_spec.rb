@@ -84,6 +84,14 @@ describe 'Intercom::Request' do
       req = Intercom::Request.put(uri, "")
       expect { req.execute(target_base_url=uri, username: "ted", secret: "") }.must_raise(Intercom::ResourceNotUniqueError)
     end
+
+    it 'should raise ApiVersionInvalid error on intercom_version_invalid code' do
+      # Use webmock to mock the HTTP request
+      stub_request(:put, uri).\
+      to_return(status: [400, "Bad Request"], headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s }, body: {type: "error.list", errors: [ code: "intercom_version_invalid" ]}.to_json)
+      req = Intercom::Request.put(uri, "")
+      expect { req.execute(uri, username: "ted", secret: "") }.must_raise(Intercom::ApiVersionInvalid)
+    end
   end
 
   it 'parse_body returns nil if decoded_body is nil' do

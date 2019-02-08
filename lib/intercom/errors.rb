@@ -81,6 +81,7 @@ module Intercom
   # Raised when unexpected nil returned from server
   class Intercom::HttpError < IntercomError; end
 
+  # Raised when an invalid api version is used
   class ApiVersionInvalid < IntercomError; end
 
   #
