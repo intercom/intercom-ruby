@@ -15,24 +15,30 @@ Version 3 of intercom-ruby is not backwards compatible with previous versions.
 Version 3 moves away from a global setup approach to the use of an Intercom Client.
 
 This version of the gem is compatible with `Ruby 2.1` and above.
-
+i
 ## Installation
-
+i
     gem install intercom
 
 Using bundler:
 
-    gem 'intercom', '~> 3.7.3'
+    gem 'intercom', '~> 3.7.4'
 
 ## Basic Usage
 
+
 ### Configure your client
 
-> If you already have a personal access token you can find it [here](https://app.intercom.io/developers/_/access-token). If you want to create or learn more about personal access tokens then you can find more info [here](https://developers.intercom.io/docs/personal-access-tokens).
+> If you already have a personal access token you can find it [here](https://app.intercom.io/a/apps/_/developer_hub/). If you want to create or learn more about personal access tokens then you can find more info [here](https://developers.intercom.io/docs/personal-access-tokens).
 
 ```ruby
 # With an OAuth or Personal Access token:
 intercom = Intercom::Client.new(token: 'my_token')
+```
+
+```ruby
+# With a versioned app:
+intercom = Intercom::Client.new(token: 'my_token', api_version: '1.0')
 ```
 
 If you are building a third party application you can get your access_tokens by [setting-up-oauth](https://developers.intercom.io/page/setting-up-oauth) for Intercom.
