@@ -15,8 +15,10 @@ Version 3 of intercom-ruby is not backwards compatible with previous versions.
 Version 3 moves away from a global setup approach to the use of an Intercom Client.
 
 This version of the gem is compatible with `Ruby 2.1` and above.
-i
+
+
 ## Installation
+
 i
     gem install intercom
 
