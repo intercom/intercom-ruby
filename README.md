@@ -16,10 +16,8 @@ Version 3 moves away from a global setup approach to the use of an Intercom Clie
 
 This version of the gem is compatible with `Ruby 2.1` and above.
 
-
 ## Installation
 
-i
     gem install intercom
 
 Using bundler:
