@@ -1,3 +1,6 @@
+3.7.5
+Added error handling for scroll_exists error state
+
 3.7.4
 Added support for API versioning via
 Intercom::Client.new(token: "token", api_version "1.1")
