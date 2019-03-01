@@ -84,6 +84,9 @@ module Intercom
   # Raised when an invalid api version is used
   class ApiVersionInvalid < IntercomError; end
 
+  # Raised when an creating a scroll if one already exists
+  class ScrollAlreadyExistsError < IntercomError; end
+
   #
   # Non-public errors (internal to the gem)
   #
