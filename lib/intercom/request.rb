@@ -19,6 +19,10 @@ module Intercom
       method.basic_auth(CGI.unescape(username), CGI.unescape(secret))
     end
 
+    def set_api_version(method, api_version)
+      method.add_field('Intercom-Version', api_version)
+    end
+
     def self.get(path, params)
       new(path, Net::HTTP::Get.new(append_query_string_to_url(path, params), default_headers))
     end
@@ -58,11 +62,12 @@ module Intercom
       net
     end
 
-    def execute(target_base_url=nil, username:, secret: nil, read_timeout: 90, open_timeout: 30)
+    def execute(target_base_url=nil, username:, secret: nil, read_timeout: 90, open_timeout: 30, api_version: nil)
       retries = 3
       base_uri = URI.parse(target_base_url)
       set_common_headers(net_http_method, base_uri)
       set_basic_auth(net_http_method, username, secret)
+      set_api_version(net_http_method, api_version) if api_version
       begin
         client(base_uri, read_timeout: read_timeout, open_timeout: open_timeout).start do |http|
           begin
@@ -180,6 +185,8 @@ module Intercom
         raise Intercom::MultipleMatchingUsersError.new(error_details['message'], error_context)
       when 'resource_conflict'
         raise Intercom::ResourceNotUniqueError.new(error_details['message'], error_context)
+      when 'intercom_version_invalid'
+        raise Intercom::ApiVersionInvalid.new(error_details['message'], error_context)
       when nil, ''
         raise Intercom::UnexpectedError.new(message_for_unexpected_error_without_type(error_details, parsed_http_code), error_context)
       else

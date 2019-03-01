@@ -2,7 +2,7 @@ module Intercom
   class MisconfiguredClientError < StandardError; end
   class Client
     include Options
-    attr_reader :base_url, :rate_limit_details, :username_part, :password_part, :handle_rate_limit, :timeouts
+    attr_reader :base_url, :rate_limit_details, :username_part, :password_part, :handle_rate_limit, :timeouts, :api_version
 
     class << self
       def set_base_url(base_url)
@@ -25,7 +25,7 @@ module Intercom
       end
     end
 
-    def initialize(app_id: 'my_app_id', api_key: 'my_api_key', token: nil, base_url:'https://api.intercom.io', handle_rate_limit: false)
+    def initialize(app_id: 'my_app_id', api_key: 'my_api_key', token: nil, base_url:'https://api.intercom.io', handle_rate_limit: false, api_version: nil)
       if token
         @username_part = token
         @password_part = ""
@@ -34,6 +34,9 @@ module Intercom
         @password_part = api_key
       end
       validate_credentials!
+
+      @api_version = api_version
+      validate_api_version!
 
       @base_url = base_url
       @rate_limit_details = {}
@@ -123,9 +126,14 @@ module Intercom
       fail error if @username_part.nil?
     end
 
+    def validate_api_version!
+      error = MisconfiguredClientError.new("api_version must be either nil or a valid API version")
+      fail error if (@api_version && Gem::Version.new(@api_version) < Gem::Version.new('1.0'))
+    end
+
     def execute_request(request)
       request.handle_rate_limit = handle_rate_limit
-      request.execute(@base_url, username: @username_part, secret: @password_part, **timeouts)
+      request.execute(@base_url, username: @username_part, secret: @password_part, api_version: @api_version, **timeouts)
     ensure
       @rate_limit_details = request.rate_limit_details
     end
