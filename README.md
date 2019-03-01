@@ -26,7 +26,6 @@ Using bundler:
 
 ## Basic Usage
 
-
 ### Configure your client
 
 > If you already have a personal access token you can find it [here](https://app.intercom.io/a/apps/_/developer_hub/). If you want to create or learn more about personal access tokens then you can find more info [here](https://developers.intercom.io/docs/personal-access-tokens).
