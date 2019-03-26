@@ -179,6 +179,8 @@ module Intercom
         raise Intercom::RateLimitExceeded.new(error_details['message'], error_context)
       when "custom_data_limit_reached"
         raise Intercom::CDALimitReachedError.new(error_details['message'], error_context)
+      when "invalid_document"
+        raise Intercom::InvalidDocumentError.new(error_details['message'], error_context)
       when 'service_unavailable'
         raise Intercom::ServiceUnavailableError.new(error_details['message'], error_context)
       when 'conflict', 'unique_user_constraint'
