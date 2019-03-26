@@ -87,6 +87,9 @@ module Intercom
   # Raised when an creating a scroll if one already exists
   class ScrollAlreadyExistsError < IntercomError; end
 
+  # Raised when a CDA is invalid
+  class InvalidDocumentError < IntercomError; end
+
   #
   # Non-public errors (internal to the gem)
   #
