@@ -1,3 +1,6 @@
+3.7.6
+Added error handling for invalid_document error state
+
 3.7.5
 Added error handling for scroll_exists error state
 
