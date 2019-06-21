@@ -360,6 +360,13 @@ intercom.events.create(
   }
 )
 
+# Alternatively, use "user_id" in case your app allows multiple accounts having the same email
+intercom.events.create(
+  event_name: "invited-friend",
+  created_at: Time.now.to_i,
+  user_id: user.uuid,
+)
+
 # Retrieve event list for user with id:'123abc'
  intercom.events.find_all("type" => "user", "intercom_user_id" => "123abc")
 
