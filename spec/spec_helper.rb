@@ -5,6 +5,13 @@ require 'webmock'
 require 'time'
 include WebMock::API
 
+def test_customer(email="bob@example.com")
+  customer = test_user(email)
+  customer["type"] = "customer"
+  customer["role"] = "user"
+  customer
+end
+
 def test_user(email="bob@example.com")
   {
     "type" =>"user",
@@ -224,6 +231,22 @@ def page_of_users(include_next_link= false)
         "total_pages"=>7
       },
       "users"=> [test_user("user1@example.com"), test_user("user2@example.com"), test_user("user3@example.com")],
+      "total_count"=>314
+  }
+end
+
+def page_of_customers(include_starting_after= false)
+  {
+     "type"=>"customer.list",
+     "pages"=>
+      {
+        "type"=>"pages",
+        "next"=> (include_starting_after ? { "page" => 2, "starting_after" => "EnCrYpTeDsTrInG" } : nil),
+        "page"=>1,
+        "per_page"=>50,
+        "total_pages"=>7
+      },
+      "customers"=> [test_customer("user1@example.com"), test_customer("user2@example.com"), test_customer("user3@example.com")],
       "total_count"=>314
   }
 end
