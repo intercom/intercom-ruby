@@ -1,3 +1,7 @@
+3.8.0
+Add support for Customer Search (currently in Unstable API Version)
+https://developers.intercom.com/intercom-api-reference/v0/reference#customers
+
 3.7.7
 Remove deprecated features from Gemspec
 
