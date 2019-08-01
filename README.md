@@ -97,7 +97,7 @@ intercom.users.find_all(type: 'users', page: 1, per_page: 10, created_since: 2, 
 # Paginate through your list of users choosing how many to return per page (default and max is 50 per page)
 intercom.users.find_all(type: 'users', page: 1, per_page: 10, order: :asc).to_a.each_with_index {|usr, i| puts "#{i+1}: #{usr.name}"}
 
-# Duplicate users? If you have duplicate users you can search for them via their email address. 
+# Duplicate users? If you have duplicate users you can search for them via their email address.
 # Note this feature is only available from version 1.1 of the API so you will need to switch to that version
 # This will return multiple users if they have the same email address
 usrs = intercom.users.find_all(type: 'users', email: 'myemail@example.com', page: 1, per_page: 10, order: :asc)
@@ -402,7 +402,7 @@ The metadata key values in the example are treated as follows-
 
 *NB:* This version of the gem reserves the field name `type` in Event data.
 
-### Contacts
+#### Contacts
 
 `Contacts` represent logged out users of your application.
 Note that `contacts` are referred to as `leads` in the [Intercom](https://developers.intercom.com/intercom-api-reference/reference#leads)
@@ -458,7 +458,13 @@ intercom.contacts.scroll.each { |lead| puts lead.id}
 # Please see users scroll for more details of how to use scroll
 ```
 
-### Counts
+#### Customers
+
+# Search for customers
+customers = intercom.customers.search(query: { "field": "name", "operator": "=", "value": "Alice"}, per_page: 50, sort_field: "name", sort_order: "ascending")
+customers.each { |customer| p customer.name }
+
+#### Counts
 
 ```ruby
 # App-wide counts
@@ -468,7 +474,7 @@ intercom.counts.for_app
 intercom.counts.for_type(type: 'user', count: 'segment')
 ```
 
-### Subscriptions
+#### Subscriptions
 
 Subscribe to events in Intercom to receive webhooks.
 
