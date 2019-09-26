@@ -55,7 +55,7 @@ module Intercom
 
       def run_assignment_rules(id)
         collection_name = Utils.resource_class_to_collection_name(collection_class)
-        response = @client.post("/#{collection_name}/#{id}/run_assignment_rules", {:conversation_id => id})
+        response = @client.post("/#{collection_name}/#{id}/run_assignment_rules")
         collection_class.new.from_response(response)
       end
 
