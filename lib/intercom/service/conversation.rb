@@ -52,6 +52,13 @@ module Intercom
         assignee_id = reply_data.fetch(:assignee_id) { fail 'assignee_id is required' }
         reply reply_data.merge(message_type: 'assignment', assignee_id: assignee_id, type: 'admin')
       end
+
+      def run_assignment_rules(id)
+        collection_name = Utils.resource_class_to_collection_name(collection_class)
+        response = @client.post("/#{collection_name}/#{id}/run_assignment_rules", {:conversation_id => id})
+        collection_class.new.from_response(response)
+      end
+
     end
   end
 end
