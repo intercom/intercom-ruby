@@ -37,7 +37,7 @@ describe 'Intercom::Request' do
         req = Intercom::Request.get(uri, "")
         req.handle_rate_limit=true
         req.expects(:sleep).times(3).with(any_parameters)
-        req.execute(target_base_url=uri, username: "ted", secret: "")
+        req.execute(uri, username: "ted", secret: "")
       }.must_raise(Intercom::RateLimitExceeded)
     end
 
@@ -48,7 +48,7 @@ describe 'Intercom::Request' do
       req = Intercom::Request.get(uri, "")
       req.handle_rate_limit=true
       req.expects(:sleep).never.with(any_parameters)
-      req.execute(target_base_url=uri, username: "ted", secret: "")
+      req.execute(uri, username: "ted", secret: "")
     end
 
     it 'should call sleep for rate limit error just once' do
@@ -59,7 +59,7 @@ describe 'Intercom::Request' do
       req = Intercom::Request.get(uri, "")
       req.handle_rate_limit=true
       req.expects(:sleep).with(any_parameters)
-      req.execute(target_base_url=uri, username: "ted", secret: "")
+      req.execute(uri, username: "ted", secret: "")
     end
 
     it 'should not sleep if rate limit reset time has passed' do
@@ -70,7 +70,7 @@ describe 'Intercom::Request' do
       req = Intercom::Request.get(uri, "")
       req.handle_rate_limit=true
       req.expects(:sleep).never.with(any_parameters)
-      req.execute(target_base_url=uri, username: "ted", secret: "")
+      req.execute(uri, username: "ted", secret: "")
     end
   end
 
@@ -82,7 +82,7 @@ describe 'Intercom::Request' do
       stub_request(:put, uri).\
       to_return(status: [409, "Resource Already Exists"], headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s }, body: {type: "error.list", errors: [ code: "resource_conflict" ]}.to_json)
       req = Intercom::Request.put(uri, "")
-      expect { req.execute(target_base_url=uri, username: "ted", secret: "") }.must_raise(Intercom::ResourceNotUniqueError)
+      expect { req.execute(uri, username: "ted", secret: "") }.must_raise(Intercom::ResourceNotUniqueError)
     end
 
     it 'should raise ApiVersionInvalid error on intercom_version_invalid code' do
@@ -91,6 +91,13 @@ describe 'Intercom::Request' do
       to_return(status: [400, "Bad Request"], headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s }, body: {type: "error.list", errors: [ code: "intercom_version_invalid" ]}.to_json)
       req = Intercom::Request.put(uri, "")
       expect { req.execute(uri, username: "ted", secret: "") }.must_raise(Intercom::ApiVersionInvalid)
+    end
+
+    it 'should raise ResourceNotFound error on company_not_found code' do
+      stub_request(:put, uri).\
+      to_return(status: [404, "Not Found"], headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s }, body: {type: "error.list", errors: [ code: "company_not_found" ]}.to_json)
+      req = Intercom::Request.put(uri, "")
+      expect { req.execute(uri, username: "ted", secret: "") }.must_raise(Intercom::ResourceNotFound)
     end
   end
 

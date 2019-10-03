@@ -171,7 +171,7 @@ module Intercom
         raise Intercom::BadRequestError.new(error_details['message'], error_context)
       when "not_restorable"
         raise Intercom::BlockedUserError.new(error_details['message'], error_context)
-      when "not_found"
+      when "not_found", "company_not_found"
         raise Intercom::ResourceNotFound.new(error_details['message'], error_context)
       when "admin_not_found"
         raise Intercom::AdminNotFound.new(error_details['message'], error_context)
