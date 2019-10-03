@@ -18,11 +18,12 @@ This version of the gem is compatible with `Ruby 2.1` and above.
 
 ## Installation
 
+
     gem install intercom
 
 Using bundler:
 
-    gem 'intercom', '~> 3.8.0'
+    gem 'intercom', '~> 3.8.1'
 
 ## Basic Usage
 

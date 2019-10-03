@@ -1,3 +1,6 @@
+3.8.1
+Added error handling for company_not_found
+
 3.8.0
 Add support for Customer Search (currently in Unstable API Version)
 https://developers.intercom.com/intercom-api-reference/v0/reference#customers
