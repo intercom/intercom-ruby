@@ -12,6 +12,7 @@ require 'intercom/service/job'
 require 'intercom/service/subscription'
 require 'intercom/service/segment'
 require 'intercom/service/tag'
+require 'intercom/service/team'
 require 'intercom/service/user'
 require 'intercom/service/visitor'
 require 'intercom/options'
@@ -31,6 +32,7 @@ require "intercom/message"
 require "intercom/admin"
 require "intercom/request"
 require "intercom/subscription"
+require "intercom/team"
 require "intercom/errors"
 require "intercom/visitor"
 require "json"
