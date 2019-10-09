@@ -1,5 +1,5 @@
 3.9.0
-Added Teams endpoint functionalityy
+Added Teams endpoint functionality
 
 3.8.1
 Added error handling for company_not_found
