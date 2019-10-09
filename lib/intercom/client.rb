@@ -95,6 +95,10 @@ module Intercom
       Intercom::Service::Tag.new(self)
     end
 
+    def teams
+      Intercom::Service::Team.new(self)
+    end
+
     def users
       Intercom::Service::User.new(self)
     end

@@ -145,6 +145,35 @@ def test_admin
   }
 end
 
+def test_team_list
+  {
+    "type"=> "team.list",
+    "teams" => [
+      {
+        "type"=> "team",
+        "id"=> "2744328",
+        "name"=> "the_a_team",
+        "admin_ids"=> [646303, 814860],
+      },
+      {
+        "type"=> "team",
+        "id"=> "814865",
+        "name"=> "BA_App",
+        "admin_ids" => [492881, 1195856]
+      },
+    ]
+  }
+end
+
+def test_team
+  {
+      "type" => "team",
+      "id" => "2744328",
+      "name" => "the_a_team",
+      "admin_ids" => [646303, 814860]
+  }
+end
+
 def test_company
   {
     "type" => "company",

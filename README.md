@@ -49,6 +49,7 @@ You can also use the [omniauth-intercom lib](https://github.com/intercom/omniaut
 Resources this API supports:
 
     https://api.intercom.io/users
+    https://api.intercom.io/teams
     https://api.intercom.io/contacts
     https://api.intercom.io/companies
     https://api.intercom.io/counts
@@ -127,6 +128,14 @@ intercom.admins.me
 intercom.admins.find(id: admin_id)
 # Iterate over all admins
 intercom.admins.all.each {|admin| puts admin.email }
+```
+
+#### Teams
+```ruby
+# Find a team by id
+intercom.teams.find(id: team_id)
+# Iterate over all teams
+intercom.teams.all.each {|team| puts team.name }
 ```
 
 #### Companies
