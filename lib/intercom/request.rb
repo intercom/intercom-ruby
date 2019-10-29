@@ -107,8 +107,8 @@ module Intercom
       return parsed_body if decoded_body.nil? || decoded_body.strip.empty?
       begin
         parsed_body = JSON.parse(decoded_body)
-      rescue JSON::ParserError => _
-        raise_errors_on_failure(response)
+      rescue JSON::ParserError
+        # noop
       end
       raise_errors_on_failure(response) if parsed_body.nil?
       raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
