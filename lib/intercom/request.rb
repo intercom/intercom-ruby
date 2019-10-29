@@ -129,19 +129,21 @@ module Intercom
     end
 
     def raise_errors_on_failure(res)
-      if res.code.to_i.eql?(404)
+      code = res.code.to_i
+
+      if code == 404
         raise Intercom::ResourceNotFound.new('Resource Not Found')
-      elsif res.code.to_i.eql?(401)
+      elsif code == 401
         raise Intercom::AuthenticationError.new('Unauthorized')
-      elsif res.code.to_i.eql?(403)
+      elsif code == 403
         raise Intercom::AuthenticationError.new('Forbidden')
-      elsif res.code.to_i.eql?(429)
+      elsif code == 429
         raise Intercom::RateLimitExceeded.new('Rate Limit Exceeded')
-      elsif res.code.to_i.eql?(500)
+      elsif code == 500
         raise Intercom::ServerError.new('Server Error')
-      elsif res.code.to_i.eql?(502)
+      elsif code == 502
         raise Intercom::BadGatewayError.new('Bad Gateway Error')
-      elsif res.code.to_i.eql?(503)
+      elsif code == 503
         raise Intercom::ServiceUnavailableError.new('Service Unavailable')
       end
     end
