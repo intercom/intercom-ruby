@@ -84,6 +84,12 @@ module Intercom
       end
     end
 
+    private
+
+    attr_accessor :path,
+                  :net_http_method,
+                  :rate_limit_details
+
     def parse_body(decoded_body, response)
       parsed_body = nil
       return parsed_body if decoded_body.nil? || decoded_body.strip.empty?
@@ -96,12 +102,6 @@ module Intercom
       raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
       parsed_body
     end
-
-    private
-
-    attr_accessor :path,
-                  :net_http_method,
-                  :rate_limit_details
 
     def client(uri, read_timeout:, open_timeout:)
       net = Net::HTTP.new(uri.host, uri.port)
