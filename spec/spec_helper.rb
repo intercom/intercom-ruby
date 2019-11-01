@@ -3,6 +3,7 @@ require 'minitest/autorun'
 require 'mocha/setup'
 require 'webmock'
 require 'time'
+require 'pry'
 include WebMock::API
 
 def test_customer(email="bob@example.com")
