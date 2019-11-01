@@ -58,10 +58,14 @@ module Intercom
         client(base_uri, read_timeout: read_timeout, open_timeout: open_timeout).start do |http|
           begin
             response = http.request(net_http_method)
+
             set_rate_limit_details(response)
-            decoded_body = decode_body(response)
-            parsed_body = parse_body(decoded_body, response)
             raise_errors_on_failure(response)
+
+            parsed_body = extract_response_body(response)
+
+            raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
+
             parsed_body
           rescue Intercom::RateLimitExceeded => e
             if @handle_rate_limit
@@ -90,19 +94,6 @@ module Intercom
                   :net_http_method,
                   :rate_limit_details
 
-    def parse_body(decoded_body, response)
-      parsed_body = nil
-      return parsed_body if decoded_body.nil? || decoded_body.strip.empty?
-      begin
-        parsed_body = JSON.parse(decoded_body)
-      rescue JSON::ParserError
-        # noop
-      end
-      raise_errors_on_failure(response) if parsed_body.nil?
-      raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
-      parsed_body
-    end
-
     def client(uri, read_timeout:, open_timeout:)
       net = Net::HTTP.new(uri.host, uri.port)
       if uri.is_a?(URI::HTTPS)
@@ -115,8 +106,21 @@ module Intercom
       net
     end
 
-    def decode_body(response)
-      decode(response['content-encoding'], response.body)
+    def extract_response_body(response)
+      decoded_body = decode(response['content-encoding'], response.body)
+
+      json_parse(decoded_body)
+    end
+
+    def decode(content_encoding, body)
+      return body if (!body) || body.empty? || content_encoding != 'gzip'
+      Zlib::GzipReader.new(StringIO.new(body)).read.force_encoding("utf-8")
+    end
+
+    def json_parse(str)
+      JSON.parse(str)
+    rescue JSON::ParserError
+      nil
     end
 
     def set_rate_limit_details(response)
@@ -125,11 +129,6 @@ module Intercom
       rate_limit_details[:remaining] = response['X-RateLimit-Remaining'].to_i if response['X-RateLimit-Remaining']
       rate_limit_details[:reset_at] = Time.at(response['X-RateLimit-Reset'].to_i) if response['X-RateLimit-Reset']
       @rate_limit_details = rate_limit_details
-    end
-
-    def decode(content_encoding, body)
-      return body if (!body) || body.empty? || content_encoding != 'gzip'
-      Zlib::GzipReader.new(StringIO.new(body)).read.force_encoding("utf-8")
     end
 
     def set_common_headers(method, base_uri)
