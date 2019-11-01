@@ -3,7 +3,42 @@ require 'net/https'
 
 module Intercom
   class Request
-    attr_accessor :path, :net_http_method, :rate_limit_details, :handle_rate_limit
+    class << self
+      def get(path, params)
+        new(path, Net::HTTP::Get.new(append_query_string_to_url(path, params), default_headers))
+      end
+
+      def post(path, form_data)
+        new(path, method_with_body(Net::HTTP::Post, path, form_data))
+      end
+
+      def delete(path, params)
+        new(path, method_with_body(Net::HTTP::Delete, path, params))
+      end
+
+      def put(path, form_data)
+        new(path, method_with_body(Net::HTTP::Put, path, form_data))
+      end
+
+      private
+
+      def method_with_body(http_method, path, params)
+        request = http_method.send(:new, path, default_headers)
+        request.body = params.to_json
+        request["Content-Type"] = "application/json"
+        request
+      end
+
+      def default_headers
+        {'Accept-Encoding' => 'gzip, deflate', 'Accept' => 'application/vnd.intercom.3+json', 'User-Agent' => "Intercom-Ruby/#{Intercom::VERSION}"}
+      end
+
+      def append_query_string_to_url(url, params)
+        return url if params.empty?
+        query_string = params.map { |k, v| "#{k.to_s}=#{CGI::escape(v.to_s)}" }.join('&')
+        url + "?#{query_string}"
+      end
+    end
 
     def initialize(path, net_http_method)
       self.path = path
@@ -11,56 +46,7 @@ module Intercom
       self.handle_rate_limit = false
     end
 
-    def set_common_headers(method, base_uri)
-      method.add_field('AcceptEncoding', 'gzip, deflate')
-    end
-
-    def set_basic_auth(method, username, secret)
-      method.basic_auth(CGI.unescape(username), CGI.unescape(secret))
-    end
-
-    def set_api_version(method, api_version)
-      method.add_field('Intercom-Version', api_version)
-    end
-
-    def self.get(path, params)
-      new(path, Net::HTTP::Get.new(append_query_string_to_url(path, params), default_headers))
-    end
-
-    def self.post(path, form_data)
-      new(path, method_with_body(Net::HTTP::Post, path, form_data))
-    end
-
-    def self.delete(path, params)
-      new(path, method_with_body(Net::HTTP::Delete, path, params))
-    end
-
-    def self.put(path, form_data)
-      new(path, method_with_body(Net::HTTP::Put, path, form_data))
-    end
-
-    def self.method_with_body(http_method, path, params)
-      request = http_method.send(:new, path, default_headers)
-      request.body = params.to_json
-      request["Content-Type"] = "application/json"
-      request
-    end
-
-    def self.default_headers
-      {'Accept-Encoding' => 'gzip, deflate', 'Accept' => 'application/vnd.intercom.3+json', 'User-Agent' => "Intercom-Ruby/#{Intercom::VERSION}"}
-    end
-
-    def client(uri, read_timeout:, open_timeout:)
-      net = Net::HTTP.new(uri.host, uri.port)
-      if uri.is_a?(URI::HTTPS)
-        net.use_ssl = true
-        net.verify_mode = OpenSSL::SSL::VERIFY_PEER
-        net.ca_file = File.join(File.dirname(__FILE__), '../data/cacert.pem')
-      end
-      net.read_timeout = read_timeout
-      net.open_timeout = open_timeout
-      net
-    end
+    attr_accessor :handle_rate_limit
 
     def execute(target_base_url=nil, username:, secret: nil, read_timeout: 90, open_timeout: 30, api_version: nil)
       retries = 3
@@ -98,10 +84,6 @@ module Intercom
       end
     end
 
-    def decode_body(response)
-      decode(response['content-encoding'], response.body)
-    end
-
     def parse_body(decoded_body, response)
       parsed_body = nil
       return parsed_body if decoded_body.nil? || decoded_body.strip.empty?
@@ -115,6 +97,28 @@ module Intercom
       parsed_body
     end
 
+    private
+
+    attr_accessor :path,
+                  :net_http_method,
+                  :rate_limit_details
+
+    def client(uri, read_timeout:, open_timeout:)
+      net = Net::HTTP.new(uri.host, uri.port)
+      if uri.is_a?(URI::HTTPS)
+        net.use_ssl = true
+        net.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        net.ca_file = File.join(File.dirname(__FILE__), '../data/cacert.pem')
+      end
+      net.read_timeout = read_timeout
+      net.open_timeout = open_timeout
+      net
+    end
+
+    def decode_body(response)
+      decode(response['content-encoding'], response.body)
+    end
+
     def set_rate_limit_details(response)
       rate_limit_details = {}
       rate_limit_details[:limit] = response['X-RateLimit-Limit'].to_i if response['X-RateLimit-Limit']
@@ -126,6 +130,18 @@ module Intercom
     def decode(content_encoding, body)
       return body if (!body) || body.empty? || content_encoding != 'gzip'
       Zlib::GzipReader.new(StringIO.new(body)).read.force_encoding("utf-8")
+    end
+
+    def set_common_headers(method, base_uri)
+      method.add_field('AcceptEncoding', 'gzip, deflate')
+    end
+
+    def set_basic_auth(method, username, secret)
+      method.basic_auth(CGI.unescape(username), CGI.unescape(secret))
+    end
+
+    def set_api_version(method, api_version)
+      method.add_field('Intercom-Version', api_version)
     end
 
     def raise_errors_on_failure(res)
@@ -206,12 +222,6 @@ module Intercom
 
     def message_for_unexpected_error_without_type(error_details, parsed_http_code)
       "An unexpected error occured. It occurred with the message: #{error_details['message']} and http_code: '#{parsed_http_code}'. Please contact Intercom with these details."
-    end
-
-    def self.append_query_string_to_url(url, params)
-      return url if params.empty?
-      query_string = params.map { |k, v| "#{k.to_s}=#{CGI::escape(v.to_s)}" }.join('&')
-      url + "?#{query_string}"
     end
   end
 end
