@@ -6,6 +6,7 @@ WebMock.enable!
 describe 'Intercom::Request', '#execute' do
   let(:uri) {"https://api.intercom.io/users"}
   let(:req) { Intercom::Request.get(uri, {}) }
+  let(:default_body) { { data: "test" }.to_json }
 
   def execute!
     req.execute(uri, username: 'ted', secret: '')
@@ -14,7 +15,8 @@ describe 'Intercom::Request', '#execute' do
   it 'should call sleep for rate limit error three times and raise a rate limit error otherwise' do
     stub_request(:any, uri).to_return(
       status: [429, "Too Many Requests"],
-      headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s }
+      headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s },
+      body: default_body
     )
 
     req.handle_rate_limit=true
@@ -27,7 +29,8 @@ describe 'Intercom::Request', '#execute' do
   it 'should not call sleep for rate limit error' do
     stub_request(:any, uri).to_return(
       status: [200, "OK"],
-      headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 }
+      headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 },
+      body: default_body
     )
 
     req.handle_rate_limit=true
@@ -39,8 +42,8 @@ describe 'Intercom::Request', '#execute' do
   it 'should call sleep for rate limit error just once' do
     stub_request(:any, uri).to_return(
       status: [429, "Too Many Requests"],
-      headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s }
-    ).then.to_return(status: [200, "OK"])
+      headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s },
+    ).then.to_return(status: [200, "OK"], body: default_body)
 
     req.handle_rate_limit=true
     req.expects(:sleep).with(any_parameters)
@@ -51,8 +54,9 @@ describe 'Intercom::Request', '#execute' do
   it 'should not sleep if rate limit reset time has passed' do
     stub_request(:any, uri).to_return(
       status: [429, "Too Many Requests"],
-      headers: { 'X-RateLimit-Reset' => Time.parse("February 25 2010").utc.to_i.to_s }
-    ).then.to_return(status: [200, "OK"])
+      headers: { 'X-RateLimit-Reset' => Time.parse("February 25 2010").utc.to_i.to_s },
+      body: default_body
+    ).then.to_return(status: [200, "OK"], body: default_body)
 
     req.handle_rate_limit=true
     req.expects(:sleep).never.with(any_parameters)
@@ -70,6 +74,15 @@ describe 'Intercom::Request', '#execute' do
   end
 
   describe 'HTTP error handling' do
+    it 'raises an error when the response is successful but the body is not JSON' do
+      stub_request(:any, uri).to_return(
+        status: 200,
+        body: '<html>something</html>'
+      )
+
+      expect { execute! }.must_raise(Intercom::UnexpectedResponseError)
+    end
+
     it 'raises an error when an html error page rendered' do
       stub_request(:any, uri).to_return(
         status: 500,

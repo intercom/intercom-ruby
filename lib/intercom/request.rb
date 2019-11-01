@@ -64,6 +64,8 @@ module Intercom
 
             parsed_body = extract_response_body(response)
 
+            return nil if parsed_body.nil?
+
             raise_application_errors_on_failure(parsed_body, response.code.to_i) if parsed_body['type'] == 'error.list'
 
             parsed_body
@@ -109,7 +111,7 @@ module Intercom
     def extract_response_body(response)
       decoded_body = decode(response['content-encoding'], response.body)
 
-      json_parse(decoded_body)
+      json_parse_response(decoded_body, response.code)
     end
 
     def decode(content_encoding, body)
@@ -117,10 +119,17 @@ module Intercom
       Zlib::GzipReader.new(StringIO.new(body)).read.force_encoding("utf-8")
     end
 
-    def json_parse(str)
+    def json_parse_response(str, code)
+      return nil if str.to_s.empty?
+
       JSON.parse(str)
     rescue JSON::ParserError
-      nil
+      msg = <<~MSG.gsub(/[[:space:]]+/, " ").strip # #squish from ActiveSuppor
+        Expected a JSON response body. Instead got '#{str}'
+        with status code '#{code}'.
+      MSG
+
+      raise UnexpectedResponseError, msg
     end
 
     def set_rate_limit_details(response)

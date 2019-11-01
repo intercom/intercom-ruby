@@ -63,6 +63,9 @@ module Intercom
   # Raised when you have exceeded the API rate limit
   class RateLimitExceeded < IntercomError; end
 
+  # Raised when some attribute of the response cannot be handled
+  class UnexpectedResponseError < IntercomError; end
+
   # Raised when the request throws an error not accounted for
   class UnexpectedError < IntercomError; end
 
