@@ -4,10 +4,20 @@ module Intercom
   describe Client do
     let(:app_id) { 'myappid' }
     let(:api_key) { 'myapikey' }
-    let(:client) { Client.new(app_id: app_id, api_key: api_key) }
+    let(:client) do
+      Client.new(
+        app_id: app_id,
+        api_key: api_key,
+        handle_rate_limit: true
+      )
+    end
 
     it 'should set the base url' do
       client.base_url.must_equal('https://api.intercom.io')
+    end
+
+    it 'should have handle_rate_limit set' do
+      _(client.handle_rate_limit).must_equal(true)
     end
 
     it 'should be able to change the base url' do
