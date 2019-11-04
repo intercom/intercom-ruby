@@ -470,9 +470,13 @@ intercom.contacts.scroll.each { |lead| puts lead.id}
 
 #### Customers
 
+Our Customer API is a central place for all the information on your customers, whether they're users or leads. More detail in our API documentation on [Customers](https://developers.intercom.com/intercom-api-reference/v0/reference#customers).
+
+```ruby
 # Search for customers
 customers = intercom.customers.search(query: { "field": "name", "operator": "=", "value": "Alice"}, per_page: 50, sort_field: "name", sort_order: "ascending")
 customers.each { |customer| p customer.name }
+```
 
 #### Counts
 
