@@ -20,20 +20,18 @@ module Intercom
         new(path, method_with_body(Net::HTTP::Put, path, form_data))
       end
 
-      private
-
-      def method_with_body(http_method, path, params)
+      private def method_with_body(http_method, path, params)
         request = http_method.send(:new, path, default_headers)
         request.body = params.to_json
         request["Content-Type"] = "application/json"
         request
       end
 
-      def default_headers
+      private def default_headers
         {'Accept-Encoding' => 'gzip, deflate', 'Accept' => 'application/vnd.intercom.3+json', 'User-Agent' => "Intercom-Ruby/#{Intercom::VERSION}"}
       end
 
-      def append_query_string_to_url(url, params)
+      private def append_query_string_to_url(url, params)
         return url if params.empty?
         query_string = params.map { |k, v| "#{k.to_s}=#{CGI::escape(v.to_s)}" }.join('&')
         url + "?#{query_string}"
@@ -90,13 +88,15 @@ module Intercom
       end
     end
 
-    private
-
     attr_accessor :path,
                   :net_http_method,
                   :rate_limit_details
 
-    def client(uri, read_timeout:, open_timeout:)
+    private :path,
+            :net_http_method,
+            :rate_limit_details
+
+    private def client(uri, read_timeout:, open_timeout:)
       net = Net::HTTP.new(uri.host, uri.port)
       if uri.is_a?(URI::HTTPS)
         net.use_ssl = true
@@ -108,18 +108,18 @@ module Intercom
       net
     end
 
-    def extract_response_body(response)
+    private def extract_response_body(response)
       decoded_body = decode(response['content-encoding'], response.body)
 
       json_parse_response(decoded_body, response.code)
     end
 
-    def decode(content_encoding, body)
+    private def decode(content_encoding, body)
       return body if (!body) || body.empty? || content_encoding != 'gzip'
       Zlib::GzipReader.new(StringIO.new(body)).read.force_encoding("utf-8")
     end
 
-    def json_parse_response(str, code)
+    private def json_parse_response(str, code)
       return nil if str.to_s.empty?
 
       JSON.parse(str)
@@ -132,7 +132,7 @@ module Intercom
       raise UnexpectedResponseError, msg
     end
 
-    def set_rate_limit_details(response)
+    private def set_rate_limit_details(response)
       rate_limit_details = {}
       rate_limit_details[:limit] = response['X-RateLimit-Limit'].to_i if response['X-RateLimit-Limit']
       rate_limit_details[:remaining] = response['X-RateLimit-Remaining'].to_i if response['X-RateLimit-Remaining']
@@ -140,19 +140,19 @@ module Intercom
       @rate_limit_details = rate_limit_details
     end
 
-    def set_common_headers(method, base_uri)
+    private def set_common_headers(method, base_uri)
       method.add_field('AcceptEncoding', 'gzip, deflate')
     end
 
-    def set_basic_auth(method, username, secret)
+    private def set_basic_auth(method, username, secret)
       method.basic_auth(CGI.unescape(username), CGI.unescape(secret))
     end
 
-    def set_api_version(method, api_version)
+    private def set_api_version(method, api_version)
       method.add_field('Intercom-Version', api_version)
     end
 
-    def raise_errors_on_failure(res)
+    private def raise_errors_on_failure(res)
       code = res.code.to_i
 
       if code == 404
@@ -172,7 +172,7 @@ module Intercom
       end
     end
 
-    def raise_application_errors_on_failure(error_list_details, http_code)
+    private def raise_application_errors_on_failure(error_list_details, http_code)
       # Currently, we don't support multiple errors
       error_details = error_list_details['errors'].first
       error_code = error_details['type'] || error_details['code']
@@ -224,11 +224,11 @@ module Intercom
       end
     end
 
-    def message_for_unexpected_error_with_type(error_details, parsed_http_code)
+    private def message_for_unexpected_error_with_type(error_details, parsed_http_code)
       "The error of type '#{error_details['type']}' is not recognized. It occurred with the message: #{error_details['message']} and http_code: '#{parsed_http_code}'. Please contact Intercom with these details."
     end
 
-    def message_for_unexpected_error_without_type(error_details, parsed_http_code)
+    private def message_for_unexpected_error_without_type(error_details, parsed_http_code)
       "An unexpected error occured. It occurred with the message: #{error_details['message']} and http_code: '#{parsed_http_code}'. Please contact Intercom with these details."
     end
   end
