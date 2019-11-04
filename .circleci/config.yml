@@ -1,12 +1,35 @@
 version: 2
 jobs:
-  build:
+  "Test against Ruby 2.4":
     docker:
-      - image: circleci/ruby:2.4.6
-
+      - image: circleci/ruby:2.4.9
     working_directory: ~/intercom-ruby
-
     steps:
       - checkout
       - run: bundle install
       - run: bundle exec rake
+  "Test against Ruby 2.5":
+    docker:
+      - image: circleci/ruby:2.5.7
+    working_directory: ~/intercom-ruby
+    steps:
+      - checkout
+      - run: bundle install
+      - run: bundle exec rake
+  "Test against Ruby 2.6":
+    docker:
+      - image: circleci/ruby:2.6.5
+    working_directory: ~/intercom-ruby
+    steps:
+      - checkout
+      - run: bundle install
+      - run: bundle exec rake
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - "Test against Ruby 2.4"
+      - "Test against Ruby 2.5"
+      - "Test against Ruby 2.6"
+
