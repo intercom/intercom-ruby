@@ -17,8 +17,11 @@ describe "Intercom::DataAttribute" do
   end
 
   it "updates an existing attribute" do
-    client.expects(:put).with("/data_attributes/123")
-    client.data_attributes.save(test_data_attribute)
+    attribute = client.data_attributes.create("name": "blah",
+                                               "model": "contact",
+                                               "data_type": "string")
+    client.expects(:put).with("/data_attributes/#{attribute.id}")
+    client.data_attributes.save(attribute)
   end
 
   it 'gets a list of attributes' do
