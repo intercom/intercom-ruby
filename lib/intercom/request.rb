@@ -93,8 +93,7 @@ module Intercom
                   :rate_limit_details
 
     private :path,
-            :net_http_method,
-            :rate_limit_details
+            :net_http_method
 
     private def client(uri, read_timeout:, open_timeout:)
       net = Net::HTTP.new(uri.host, uri.port)

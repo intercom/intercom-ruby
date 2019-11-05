@@ -73,6 +73,16 @@ module Intercom
       it 'raises on empty api version' do
         proc { Client.new(app_id: app_id, api_key: api_key, api_version: '') }.must_raise MisconfiguredClientError
       end
+
+      it "assigns works" do
+        stub_request(:any, "https://api.intercom.io/users?id=123").to_return(
+          status: [200, "OK"],
+          headers: { 'X-RateLimit-Reset' => Time.now.utc + 10 },
+          body: { "test": "testing" }.to_json
+        )
+
+        client.get("/users", { id: "123" })
+      end
     end
 
     describe 'OAuth clients' do
