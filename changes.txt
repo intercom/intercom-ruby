@@ -1,3 +1,9 @@
+3.9.2
+Added error handling for malformed responses
+
+3.9.1
+Version skipped in error
+
 3.9.0
 Added Teams endpoint functionality
 
