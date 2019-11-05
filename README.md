@@ -478,6 +478,32 @@ customers = intercom.customers.search(query: { "field": "name", "operator": "=",
 customers.each { |customer| p customer.name }
 ```
 
+#### Data Attributes
+
+Data Attributes are a type of metadata used to describe your customer and company models. These include standard and custom attributes.
+
+```ruby
+#Create a new custom data attribute
+intercom.data_attributes.create({ "name": "test_attribute", "model": "contact",   "data_type": "string" })
+
+#List all data attributes
+attributes = intercom.data_attributes.all
+attributes.each { |attribute| p attribute.name }
+
+#Update an attribute
+attribute = intercom.data_attributes.all.first
+attribute.label = "New label"
+intercom.data_attributes.save(attribute)
+
+#Archive an attribute
+attribute.archived = true
+intercom.data_attributes.save(attribute)
+
+#Find all customer attributes including archived 
+customer_attributes_incl_archived = intercom.data_attributes.find_all({"model": "contact", "include_archived": true})
+customer_attributes_incl_archived.each { |attr| p attribute.name }
+```
+
 #### Counts
 
 ```ruby
