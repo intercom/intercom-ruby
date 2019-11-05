@@ -697,7 +697,7 @@ end
 def test_data_attribute
   {
       'type' => 'data_attribute',
-      'model' => 'customer',
+      'model' => 'contact',
       'name' => 'region_name',
       'full_name' => 'location_data.region_name',
       'label' => 'Region',
