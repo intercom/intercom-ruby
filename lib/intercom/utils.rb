@@ -23,7 +23,13 @@ module Intercom
       end
 
       def resource_class_to_singular_name(resource_class)
-        resource_class.to_s.split('::')[-1].downcase
+        resource_name = resource_class.to_s.split('::')[-1]
+        resource_name = maybe_underscore_name(resource_name)
+        resource_name.downcase
+      end
+
+      def maybe_underscore_name(resource_name)
+        resource_name.gsub!(/(.)([A-Z])/, '\1_\2') || resource_name
       end
 
       def resource_class_to_collection_name(resource_class)

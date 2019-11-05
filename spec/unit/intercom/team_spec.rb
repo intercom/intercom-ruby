@@ -1,4 +1,4 @@
-require "spec_helper"
+ require "spec_helper"
 
 describe "Intercom::Team" do
   let (:client) { Intercom::Client.new(token: 'token') }

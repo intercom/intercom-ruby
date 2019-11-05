@@ -694,6 +694,62 @@ def page_of_events(include_next_link=false)
   }
 end
 
+def test_data_attribute
+  {
+      'type' => 'data_attribute',
+      'model' => 'customer',
+      'name' => 'region_name',
+      'full_name' => 'location_data.region_name',
+      'label' => 'Region',
+      'description' => '',
+      'data_type' => 'string',
+      'api_writable' => false,
+      'ui_writable' => true,
+      'custom' => false,
+      'archived' => false
+  }
+end
+
+def test_data_attribute_list
+  {
+      'type' => 'data_attribute.list',
+      'data_attributes' => [
+          {
+            'type' => 'data_attribute',
+            'model' => 'customer',
+            'name' => 'paid_subscriber',
+            'full_name' => 'custom_attributes.paid_subscriber',
+            'label' => 'paid_subscriber',
+            'description' => '',
+            'data_type' => 'string',
+            'options' => %w[
+              pick_value_1
+              pick_value_2
+        ],
+            'api_writable' => true,
+            'ui_writable' => true,
+            'custom' => true,
+            'archived' => false,
+            'admin_id' => '1',
+            'created_at' => 1_392_734_388,
+            'updated_at' => 1_392_734_388
+          },
+          {
+            'type' => 'data_attribute',
+            'model' => 'customer',
+            'name' => 'region_name',
+            'full_name' => 'location_data.region_name',
+            'label' => 'Region',
+            'description' => '',
+            'data_type' => 'string',
+            'api_writable' => false,
+            'ui_writable' => true,
+            'custom' => false,
+            'archived' => false
+          }
+      ]
+  }
+end
 
 def error_on_modify_frozen
   RUBY_VERSION =~ /1.8/ ? TypeError : RuntimeError

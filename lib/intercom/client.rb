@@ -111,6 +111,10 @@ module Intercom
       Intercom::Service::Job.new(self)
     end
 
+    def data_attributes
+      Intercom::Service::DataAttribute.new(self)
+    end
+
     def get(path, params)
       execute_request Intercom::Request.get(path, params)
     end
@@ -135,6 +139,8 @@ module Intercom
     end
 
     def validate_api_version!
+      return if @api_version == "Unstable"
+
       error = MisconfiguredClientError.new("api_version must be either nil or a valid API version")
       fail error if (@api_version && Gem::Version.new(@api_version) < Gem::Version.new('1.0'))
     end
