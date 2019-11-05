@@ -1,7 +1,6 @@
 source "http://rubygems.org"
 
 gem 'webmock'
-gem 'mocha'
 gemspec
 
 group :development, :test do
