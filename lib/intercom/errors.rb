@@ -42,6 +42,9 @@ module Intercom
   # Raised when we have bad gateway errors.
   class BadGatewayError < IntercomError; end
 
+  # Raised when we have gateway timeout errors.
+  class GatewayTimeoutError < IntercomError; end
+
   # Raised when we experience a socket read timeout
   class ServiceUnavailableError < IntercomError; end
 
