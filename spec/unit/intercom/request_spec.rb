@@ -109,6 +109,15 @@ describe 'Intercom::Request', '#execute' do
 
       expect { execute! }.must_raise(Intercom::RateLimitExceeded)
     end
+
+    it 'raises a GatewayTimeoutError error when the response code is 504' do
+      stub_request(:any, uri).to_return(
+        status: 504,
+        body: '<html> <head><title>504 Gateway Time-out</title></head> <body bgcolor="white"> <center><h1>504 Gateway Time-out</h1></center> </body> </html>'
+      )
+
+      expect { execute! }.must_raise(Intercom::GatewayTimeoutError)
+    end
   end
 
   describe "application error handling" do

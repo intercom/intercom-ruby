@@ -168,6 +168,8 @@ module Intercom
         raise Intercom::BadGatewayError.new('Bad Gateway Error')
       elsif code == 503
         raise Intercom::ServiceUnavailableError.new('Service Unavailable')
+      elsif code == 504
+        raise Intercom::GatewayTimeoutError.new('Gateway Timeout')
       end
     end
 
