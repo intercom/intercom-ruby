@@ -1,3 +1,6 @@
+3.9.4
+Add handling for Gateway Timeouts
+
 3.9.3
 Fix regression added in 3.9.2
 

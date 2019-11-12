@@ -23,7 +23,7 @@ This version of the gem is compatible with `Ruby 2.1` and above.
 
 Using bundler:
 
-    gem 'intercom', '~> 3.9.3'
+    gem 'intercom', '~> 3.9.4'
 
 ## Basic Usage
 
