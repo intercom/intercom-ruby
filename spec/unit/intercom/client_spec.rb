@@ -66,6 +66,10 @@ module Intercom
         assert_nil(Client.new(app_id: app_id, api_key: api_key, api_version: nil).api_version)
       end
 
+      it 'allows api version to be Unstable' do
+        Client.new(app_id: app_id, api_key: api_key, api_version: 'Unstable').api_version.must_equal('Unstable')
+      end
+
       it 'raises on invalid api version' do
         proc { Client.new(app_id: app_id, api_key: api_key, api_version: '0.2') }.must_raise MisconfiguredClientError
       end
