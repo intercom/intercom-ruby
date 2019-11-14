@@ -136,7 +136,7 @@ module Intercom
 
     def validate_api_version!
       error = MisconfiguredClientError.new("api_version must be either nil or a valid API version")
-      fail error if (@api_version && Gem::Version.new(@api_version) < Gem::Version.new('1.0'))
+      fail error if (@api_version && @api_version != 'Unstable' && Gem::Version.new(@api_version) < Gem::Version.new('1.0'))
     end
 
     def execute_request(request)
