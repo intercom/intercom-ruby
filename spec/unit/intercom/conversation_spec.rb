@@ -53,11 +53,8 @@ describe "Intercom::Conversation" do
     client.conversations.snooze(id: '147', admin_id: '123', snoozed_until: tomorrow)
   end
 
-  # it "creates a subscription" do
-  #   client.expects(:post).with("/subscriptions", {'url' => "http://example.com", 'topics' => ["user.created"]}).returns(test_subscription)
-  #   subscription = client.subscriptions.create(:url => "http://example.com", :topics => ["user.created"])
-  #   subscription.request.topics[0].must_equal "user.created"
-  #   subscription.request.url.must_equal "http://example.com"
-  # end
-
+  it "runs assignment rules on a conversation" do
+    client.expects(:post).with('/conversations/147/run_assignment_rules').returns(test_conversation)
+    client.conversations.run_assignment_rules('147')
+  end
 end

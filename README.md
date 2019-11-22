@@ -282,6 +282,9 @@ intercom.conversations.reply(id: conversation.id, type: 'admin', assignee_id: as
 
 # MARKING A CONVERSATION AS READ
 intercom.conversations.mark_read(conversation.id)
+
+# RUN ASSIGNMENT RULES
+intercom.conversations.run_assignment_rules(conversation.id)
 ```
 
 #### Full loading of an embedded entity
