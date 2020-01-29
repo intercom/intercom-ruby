@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Intercom
   module Utils
     class << self
@@ -7,6 +9,7 @@ module Intercom
 
       def pluralize(str)
         return str.gsub(/y$/, 'ies') if str =~ /y$/
+
         "#{str}s"
       end
 
@@ -23,7 +26,13 @@ module Intercom
       end
 
       def resource_class_to_singular_name(resource_class)
-        resource_class.to_s.split('::')[-1].downcase
+        resource_name = resource_class.to_s.split('::')[-1]
+        resource_name = maybe_underscore_name(resource_name)
+        resource_name.downcase
+      end
+
+      def maybe_underscore_name(resource_name)
+        resource_name.gsub!(/(.)([A-Z])/, '\1_\2') || resource_name
       end
 
       def resource_class_to_collection_name(resource_class)
@@ -52,9 +61,11 @@ module Intercom
       end
 
       def entity_key_from_type(type)
+        return 'data' if type == 'list'
+
         is_list = type.split('.')[1] == 'list'
         entity_name = type.split('.')[0]
-        is_list ?  Utils.pluralize(entity_name) : entity_name
+        is_list ? Utils.pluralize(entity_name) : entity_name
       end
     end
   end

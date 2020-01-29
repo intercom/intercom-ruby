@@ -96,6 +96,9 @@ module Intercom
   # Raised when a CDA is invalid
   class InvalidDocumentError < IntercomError; end
 
+  # Raised when a merge is invalid
+  class InvalidMergeError < IntercomError; end
+
   #
   # Non-public errors (internal to the gem)
   #

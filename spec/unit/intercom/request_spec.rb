@@ -9,7 +9,7 @@ describe 'Intercom::Request', '#execute' do
   let(:default_body) { { data: "test" }.to_json }
 
   def execute!
-    req.execute(uri, username: 'ted', secret: '')
+    req.execute(uri, token: 'test-token')
   end
 
   it 'should call sleep for rate limit error three times and raise a rate limit error otherwise' do

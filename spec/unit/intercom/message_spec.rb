@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Intercom::Message" do
 
   let (:user) {Intercom::User.new("email" => "jim@example.com", :user_id => "12345", :created_at => Time.now, :name => "Jim Bob")}
-  let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
+  let(:client) { Intercom::Client.new(token: 'token') }
 
   it 'creates an user message with symbol keys' do
     client.expects(:post).with('/messages', {'from' => { :type => 'user', :email => 'jim@example.com'}, 'body' => 'halp'}).returns(:status => 200)

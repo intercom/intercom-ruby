@@ -1,12 +1,12 @@
 require "spec_helper"
 
 describe "Intercom::Team" do
-  let (:client) { Intercom::Client.new(token: 'token') }
+  let(:client) { Intercom::Client.new(token: 'token') }
 
   it "returns a CollectionProxy for all without making any requests" do
     client.expects(:execute_request).never
     all = client.teams.all
-    all.must_be_instance_of(Intercom::ClientCollectionProxy)
+    _(all).must_be_instance_of(Intercom::ClientCollectionProxy)
   end
 
   it 'gets an team list' do

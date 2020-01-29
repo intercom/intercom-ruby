@@ -8,7 +8,5 @@ module Intercom
 
     def identity_vars ; [:id, :email, :user_id] ; end
     def flat_store_attributes ; [:custom_attributes] ; end
-    def update_verb ; 'put' ; end
-
   end
 end

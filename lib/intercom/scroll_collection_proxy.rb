@@ -1,32 +1,34 @@
-require "intercom/utils"
+# frozen_string_literal: true
+
+require 'intercom/utils'
+require 'intercom/base_collection_proxy'
 
 module Intercom
-  class ScrollCollectionProxy
+  class ScrollCollectionProxy < BaseCollectionProxy
+    attr_reader :scroll_url, :scroll_param, :records
 
-    attr_reader :resource_name, :scroll_url, :resource_class, :scroll_param, :records
-
-    def initialize(resource_name, finder_details: {}, client:)
+    def initialize(resource_name, resource_class, details: {}, client:)
       @resource_name = resource_name
-      @resource_class = Utils.constantize_resource_name(resource_name)
-      @scroll_url = (finder_details[:url] || "/#{@resource_name}") + '/scroll'
+      @resource_class = resource_class
+      @scroll_url = (details[:url] || "/#{@resource_name}") + '/scroll'
       @client = client
-
     end
 
-    def next(scroll_parameter=nil)
+    def next(scroll_parameter = nil)
       @records = []
-      if not scroll_parameter
-        #First time so do initial get without scroll_param
-        response_hash = @client.get(@scroll_url, '')
-      else
-        #Not first call so use get next page
-        response_hash = @client.get(@scroll_url, scroll_param: scroll_parameter)
-      end
-      raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
+      response_hash = if !scroll_parameter
+                        # First time so do initial get without scroll_param
+                        @client.get(@scroll_url, '')
+                      else
+                        # Not first call so use get next page
+                        @client.get(@scroll_url, scroll_param: scroll_parameter)
+                      end
+      raise Intercom::HttpError, 'Http Error - No response entity returned' unless response_hash
+
       @scroll_param = extract_scroll_param(response_hash)
       top_level_entity_key = deserialize_response_hash(response_hash)
       response_hash[top_level_entity_key] = response_hash[top_level_entity_key].map do |object_json|
-        Lib::TypedJsonDeserializer.new(object_json).deserialize
+        Lib::TypedJsonDeserializer.new(object_json, @client).deserialize
       end
       @records = response_hash[@resource_name]
       self
@@ -35,47 +37,40 @@ module Intercom
     def each(&block)
       scroll_param = nil
       loop do
-        if not scroll_param
-          response_hash = @client.get(@scroll_url, '')
-        else
-          response_hash = @client.get(@scroll_url, scroll_param: scroll_param)
-        end
-        raise Intercom::HttpError.new('Http Error - No response entity returned') unless response_hash
+        response_hash = if !scroll_param
+                          @client.get(@scroll_url, '')
+                        else
+                          @client.get(@scroll_url, scroll_param: scroll_param)
+                        end
+        raise Intercom::HttpError, 'Http Error - No response entity returned' unless response_hash
+
         response_hash[deserialize_response_hash(response_hash)].each do |object_json|
-          block.call Lib::TypedJsonDeserializer.new(object_json).deserialize
+          block.call Lib::TypedJsonDeserializer.new(object_json, @client).deserialize
         end
         scroll_param = extract_scroll_param(response_hash)
-        break if not records_present?(response_hash)
+        break unless records_present?(response_hash)
       end
       self
     end
-
-    def [](target_index)
-      self.each_with_index do |item, index|
-        return item if index == target_index
-      end
-      nil
-    end
-
-    include Enumerable
 
     private
 
     def deserialize_response_hash(response_hash)
       top_level_type = response_hash.delete('type')
       if resource_name == 'subscriptions'
-        top_level_entity_key = 'items'
+        'items'
       else
-        top_level_entity_key = Utils.entity_key_from_type(top_level_type)
+        Utils.entity_key_from_type(top_level_type)
       end
     end
 
     def records_present?(response_hash)
-      (response_hash[@resource_name].length > 0)
+      !response_hash[@resource_name].empty?
     end
 
     def extract_scroll_param(response_hash)
       return nil unless records_present?(response_hash)
+
       response_hash['scroll_param']
     end
   end

@@ -6,13 +6,11 @@ Ruby bindings for the Intercom API (https://developers.intercom.io/reference).
 
 [Gem Documentation](http://rubydoc.info/github/intercom/intercom-ruby/master/frames)
 
-For generating Intercom javascript script tags for Rails, please see https://github.com/intercom/intercom-rails.
+For generating Intercom JavaScript script tags for Rails, please see https://github.com/intercom/intercom-rails.
 
 ## Upgrading information
 
-Version 3 of intercom-ruby is not backwards compatible with previous versions.
-
-Version 3 moves away from a global setup approach to the use of an Intercom Client.
+Version 4 of intercom-ruby is not backwards compatible with previous versions. Please see our [migration guide](https://github.com/intercom/ruby_v4/wiki/Migration-guide-for-v4) for full details of breaking changes.
 
 This version of the gem is compatible with `Ruby 2.1` and above.
 
@@ -23,7 +21,7 @@ This version of the gem is compatible with `Ruby 2.1` and above.
 
 Using bundler:
 
-    gem 'intercom', '~> 3.9.5'
+    gem 'intercom', '~> 4.0'
 
 ## Basic Usage
 
@@ -38,7 +36,7 @@ intercom = Intercom::Client.new(token: 'my_token')
 
 ```ruby
 # With a versioned app:
-intercom = Intercom::Client.new(token: 'my_token', api_version: '1.0')
+intercom = Intercom::Client.new(token: 'my_token', api_version: '2.0')
 ```
 
 If you are building a third party application you can get your access_tokens by [setting-up-oauth](https://developers.intercom.io/page/setting-up-oauth) for Intercom.
@@ -48,157 +46,231 @@ You can also use the [omniauth-intercom lib](https://github.com/intercom/omniaut
 
 Resources this API supports:
 
-    https://api.intercom.io/users
-    https://api.intercom.io/teams
     https://api.intercom.io/contacts
+    https://api.intercom.io/visitors
     https://api.intercom.io/companies
-    https://api.intercom.io/counts
+    https://api.intercom.io/data_attributes
+    https://api.intercom.io/events
     https://api.intercom.io/tags
     https://api.intercom.io/notes
     https://api.intercom.io/segments
-    https://api.intercom.io/events
     https://api.intercom.io/conversations
     https://api.intercom.io/messages
+    https://api.intercom.io/admins
+    https://api.intercom.io/teams
+    https://api.intercom.io/counts
     https://api.intercom.io/subscriptions
     https://api.intercom.io/jobs
+   
 
 ### Examples
 
-#### Users
-
+#### Contacts
 ```ruby
-# Find user by email
-user = intercom.users.find(email: "bob@example.com")
-# Find user by user_id
-user = intercom.users.find(user_id: "1")
-# Find user by id
-user = intercom.users.find(id: "1")
-# Create a user
-user = intercom.users.create(email: "bob@example.com", name: "Bob Smith", signed_up_at: Time.now.to_i)
-# archive a user
-user = intercom.users.find(id: "1")
-archived_user = intercom.users.archive(user)
-# request a hard delete for a user
-(https://developers.intercom.com/intercom-api-reference/reference#delete-users)
-user = intercom.users.find(id: "1")
-deleted_user = intercom.users.request_hard_delete(user)
-# Update custom_attributes for a user
-user.custom_attributes["average_monthly_spend"] = 1234.56
-intercom.users.save(user)
-# Perform incrementing
-user.increment('karma')
-intercom.users.save(user)
-# Perform decrementing
-user.decrement('karma', 5)
-intercom.users.save(user)
-# Iterate over all users
-intercom.users.all.each {|user| puts %Q(#{user.email} - #{user.custom_attributes["average_monthly_spend"]}) }
-intercom.users.all.map {|user| user.email }
-# List your users create in the last two days
-intercom.users.find_all(type: 'users', page: 1, per_page: 10, created_since: 2, order: :asc).to_a.each_with_index {|usr, i| puts "#{i+1}: #{usr.name}"};
-# Paginate through your list of users choosing how many to return per page (default and max is 50 per page)
-intercom.users.find_all(type: 'users', page: 1, per_page: 10, order: :asc).to_a.each_with_index {|usr, i| puts "#{i+1}: #{usr.name}"}
+# Create a contact with "lead" role
+contact = intercom.contacts.create(email: "some_contact2@example.com", role: "lead")
 
-# Duplicate users? If you have duplicate users you can search for them via their email address.
-# Note this feature is only available from version 1.1 of the API so you will need to switch to that version
-# This will return multiple users if they have the same email address
-usrs = intercom.users.find_all(type: 'users', email: 'myemail@example.com', page: 1, per_page: 10, order: :asc)
-# This returns a user.list so you can access it via
-usrs.to_a.each_with_index {|usr, i| puts "#{i+1}: #{usr.id}"};
+# Get a single contact using their intercom_id
+intercom.contacts.find(id: contact.id)
 
-# If you have over 10,000 users then you will need to use the scroll function to list your users
-# otherwise you will encounter a page limit with list all your users
-# You can use the scroll method to list all your users
-intercom.users.scroll.each { |user| puts user.name}
-# Alternatively you can use the scroll.next method to get 100 users with each request
-result = intercom.users.scroll.next
-# The result object then contains a records attributes that is an array of your user objects and it also contains a scroll_param which
-# you can then use to request the next 100 users. Note that the scroll parameter will time out after one minute and you will need to
-# make a new request
-result.scroll_param
-=> "0730e341-63ef-44da-ab9c-9113f886326d"
-result = intercom.users.scroll.next("0730e341-63ef-44da-ab9c-9113f886326d");
+# Update a contact
+contact.name = "New name"
+intercom.contacts.save(contact)
+
+# Update a contact's role from "lead" to "user"
+contact.role = "user"
+intercom.contacts.save(contact)
+
+# Delete a contact permanently
+intercom.contacts.delete(contact)
+
+# List all contacts
+contacts = intercom.contacts.all
+contacts.each { |contact| p contact.name }
+
+# Search for contacts by email
+contacts = intercom.contacts.search(
+  "query": {
+    "field": 'email',
+    "operator": '=',
+    "value": 'some_contact@example.com'
+  }
+)
+contacts.each {|c| p c.email}
+# For full detail on possible queries, please refer to the API documentation: 
+# https://developers.intercom.com/intercom-api-reference/reference
+
+# Merge a lead into an existing user
+lead = intercom.contacts.create(email: "some_contact2@example.com", role: "lead")
+intercom.contacts.merge(lead, intercom.contacts.find(id: "5db2e80ab1b92243d2188cfe"))
+
+# Add a tag to a contact
+tag = intercom.tags.find(id: "123")
+contact.add_tag(id: tag.id)
+
+# Remove a tag
+contact.remove_tag(id: tag.id)
+
+# List tags for a contact
+contact.tags.each {|t| p t.name}
+
+# Create a note on a contact
+contact.create_note(body: "<p>Text for the note</p>")
+
+# List notes for a contact
+contact.notes.each {|n| p n.body}
+
+# Add a contact to a company
+company = intercom.companies.find(id: "123")
+contact.add_company(id: company.id})
+
+# Remove a contact from a company
+contact.remove_company(id: company.id})
+
+# List companies for a contact
+contact.companies.each {|c| p c.name}
 ```
 
-#### Admins
+#### Visitors
 ```ruby
-# Find access token owner (only with Personal Access Token and OAuth)
-intercom.admins.me
-# Find an admin by id
-intercom.admins.find(id: admin_id)
-# Iterate over all admins
-intercom.admins.all.each {|admin| puts admin.email }
-```
+# Get and update a visitor
+visitor = intercom.visitors.find(id: "5dd570e7b1b922452676af23")
+visitor.name = "New name"
+intercom.visitors.save(visitor)
 
-#### Teams
-```ruby
-# Find a team by id
-intercom.teams.find(id: team_id)
-# Iterate over all teams
-intercom.teams.all.each {|team| puts team.name }
+# Convert a visitor into a lead
+intercom.visitors.convert(visitor)
+
+# Convert a visitor into a user
+user = intercom.contacts.find(id: "5db2e7f5b1b92243d2188cb3")
+intercom.visitors.convert(visitor, user)
 ```
 
 #### Companies
 ```ruby
-# Add a user to one or more companies
-user = intercom.users.find(email: "bob@example.com")
-user.companies = [{company_id: 6, name: "Intercom"}, {company_id: 9, name: "Test Company"}]
-intercom.users.save(user)
-# You can also pass custom attributes within a company as you do this
-user.companies = [{id: 6, name: "Intercom", custom_attributes: {referral_source: "Google"} } ]
-intercom.users.save(user)
 # Find a company by company_id
 company = intercom.companies.find(company_id: "44")
+
 # Find a company by name
 company = intercom.companies.find(name: "Some company")
+
 # Find a company by id
 company = intercom.companies.find(id: "41e66f0313708347cb0000d0")
+
 # Update a company
 company.name = 'Updated company name'
 intercom.companies.save(company)
+
 # Iterate over all companies
 intercom.companies.all.each {|company| puts %Q(#{company.name} - #{company.custom_attributes["referral_source"]}) }
 intercom.companies.all.map {|company| company.name }
-# Get a list of users in a company by Intercom Company ID
-intercom.companies.users_by_intercom_company_id(company.id)
-# Get a list of users in a company by external company_id
-intercom.companies.users_by_company_id(company.company_id)
+
 # Get a large list of companies using scroll
 intercom.companies.scroll.each { |comp| puts comp.name}
 # Please see users scroll for more details of how to use scroll
 ```
 
+#### Data Attributes
+Data Attributes are a type of metadata used to describe your customer and company models. These include standard and custom attributes.
+```ruby
+# Create a new custom data attribute
+intercom.data_attributes.create({ name: "test_attribute", model: "contact", data_type: "string" })
+
+# List all data attributes
+attributes = intercom.data_attributes.all
+attributes.each { |attribute| p attribute.name }
+
+# Update an attribute
+attribute = intercom.data_attributes.all.first
+attribute.label = "New label"
+intercom.data_attributes.save(attribute)
+
+# Archive an attribute
+attribute.archived = true
+intercom.data_attributes.save(attribute)
+
+# Find all customer attributes including archived 
+customer_attributes_incl_archived = intercom.data_attributes.find_all({"model": "contact", "include_archived": true})
+customer_attributes_incl_archived.each { |attr| p attribute.name }
+```
+
+#### Events
+```ruby
+intercom.events.create(
+  event_name: "invited-friend",
+  created_at: Time.now.to_i,
+  email: user.email,
+  metadata: {
+    "invitee_email" => "pi@example.org",
+    invite_code: "ADDAFRIEND",
+    "found_date" => 12909364407
+  }
+)
+
+# Alternatively, use "user_id" in case your app allows multiple accounts having the same email
+intercom.events.create(
+  event_name: "invited-friend",
+  created_at: Time.now.to_i,
+  user_id: user.uuid,
+)
+
+# Retrieve event list for user with id:'123abc'
+ intercom.events.find_all("type" => "user", "intercom_user_id" => "123abc")
+```
+
+Metadata Objects support a few simple types that Intercom can present on your behalf
+
+```ruby
+intercom.events.create(
+  event_name: "placed-order",
+  email: current_user.email,
+  created_at: 1403001013,
+  metadata: {
+    order_date: Time.now.to_i,
+    stripe_invoice: 'inv_3434343434',
+    order_number: {
+      value: '3434-3434',
+      url: 'https://example.org/orders/3434-3434'
+    },
+    price: {
+      currency: 'usd',
+      amount: 2999
+    }
+  }
+)
+```
+
+The metadata key values in the example are treated as follows-
+- order_date: a Date (key ends with '_date')
+- stripe_invoice: The identifier of the Stripe invoice (has a 'stripe_invoice' key)
+- order_number: a Rich Link (value contains 'url' and 'value' keys)
+- price: An Amount in US Dollars (value contains 'amount' and 'currency' keys)
+
+*NB:* This version of the gem reserves the field name `type` in Event data.
+
 #### Tags
 ```ruby
-# Tag users
-tag = intercom.tags.tag(name: 'blue', users: [{email: "test1@example.com"}])
-# Untag users
-intercom.tags.untag(name: 'blue',  users: [{user_id: "42ea2f1b93891f6a99000427"}])
 # Iterate over all tags
 intercom.tags.all.each {|tag| "#{tag.id} - #{tag.name}" }
 intercom.tags.all.map {|tag| tag.name }
+
 # Tag companies
 tag = intercom.tags.tag(name: 'blue', companies: [{company_id: "42ea2f1b93891f6a99000427"}])
+```
+
+#### Notes
+```ruby
+# Find a note by id
+note = intercom.notes.find(id: "123")
 ```
 
 #### Segments
 ```ruby
 # Find a segment
 segment = intercom.segments.find(id: segment_id)
+
 # Iterate over all segments
 intercom.segments.all.each {|segment| puts "id: #{segment.id} name: #{segment.name}"}
-```
-
-#### Notes
-```ruby
-# Find a note by id
-note = intercom.notes.find(id: note)
-# Create a note for a user
-note = intercom.notes.create(body: "<p>Text for the note</p>", email: 'joe@example.com')
-# Iterate over all notes for a user via their email address
-intercom.notes.find_all(email: 'joe@example.com').each {|note| puts note.body}
-# Iterate over all notes for a user via their user_id
-intercom.notes.find_all(user_id: '123').each {|note| puts note.body}
 ```
 
 #### Conversations
@@ -234,11 +306,15 @@ conversation = intercom.conversations.find(id: '1')
 
 # INTERACTING WITH THE PARTS OF A CONVERSATION
 # Getting the subject of a part (only applies to email-based conversations)
-conversation.rendered_message.subject
+conversation.source.subject
 # Get the part_type of the first part
-conversation.conversation_parts[0].part_type
+conversation.conversation_parts.first.part_type
 # Get the body of the second part
 conversation.conversation_parts[1].body
+# Get statistics related to the conversation
+conversation.statistics["first_contact_reply_at"]
+# Get information about the rating of a conversation
+conversation.conversation_rating.rating 
 
 # REPLYING TO CONVERSATIONS
 # User (identified by email) replies with a comment
@@ -282,13 +358,47 @@ intercom.conversations.reply(id: conversation.id, type: 'admin', assignee_id: as
 
 # MARKING A CONVERSATION AS READ
 intercom.conversations.mark_read(conversation.id)
+
+# RUN ASSIGNMENT RULES
+intercom.conversations.run_assignment_rules(conversation.id)
+
+# Search for conversations
+# For full detail on possible queries, please refer to the API documentation: 
+# https://developers.intercom.com/intercom-api-reference/reference 
+ 
+# Search for open conversations, getting 10 per page and sorting by the created_at date
+conversations = intercom.conversations.search(
+  query: {
+    field: "open",
+    operator: "=",
+    value: true
+  },
+  per_page: 10,
+  sort_field: "created_at",
+  sort_order: "descending"
+)
+conversations.each {|c| p c.id}
+
+# Tagging for conversations
+tag = intercom.tags.find(id: "2") 
+conversation = intercom.conversations.find(id: "1")
+
+# An Admin ID is required to add or remove tag on a conversation
+admin = intercom.admins.find(id: "1") 
+
+# Add a tag to a conversation
+conversation.add_tag(id: tag.id, admin_id: admin.id})
+
+# Remove a tag from a conversation
+conversation.remove_tag(id: tag.id, admin_id: admin.id})
+ 
 ```
 
 #### Full loading of an embedded entity
 ```ruby
-# Given a conversation with a partial user, load the full user. This can be
+# Given a conversation with a partial contact, load the full contact. This can be
 # done for any entity
-intercom.users.load(conversation.user)
+intercom.contacts.load(conversation.contacts.first)
 ```
 
 #### Sending messages
@@ -357,125 +467,22 @@ intercom.messages.create({
 })
 ```
 
-#### Events
+#### Admins
 ```ruby
-intercom.events.create(
-  event_name: "invited-friend",
-  created_at: Time.now.to_i,
-  email: user.email,
-  metadata: {
-    "invitee_email" => "pi@example.org",
-    invite_code: "ADDAFRIEND",
-    "found_date" => 12909364407
-  }
-)
-
-# Alternatively, use "user_id" in case your app allows multiple accounts having the same email
-intercom.events.create(
-  event_name: "invited-friend",
-  created_at: Time.now.to_i,
-  user_id: user.uuid,
-)
-
-# Retrieve event list for user with id:'123abc'
- intercom.events.find_all("type" => "user", "intercom_user_id" => "123abc")
-
+# Find access token owner (only with Personal Access Token and OAuth)
+intercom.admins.me
+# Find an admin by id
+intercom.admins.find(id: admin_id)
+# Iterate over all admins
+intercom.admins.all.each {|admin| puts admin.email }
 ```
 
-Metadata Objects support a few simple types that Intercom can present on your behalf
-
+#### Teams
 ```ruby
-intercom.events.create(
-  event_name: "placed-order",
-  email: current_user.email,
-  created_at: 1403001013,
-  metadata: {
-    order_date: Time.now.to_i,
-    stripe_invoice: 'inv_3434343434',
-    order_number: {
-      value: '3434-3434',
-      url: 'https://example.org/orders/3434-3434'
-    },
-    price: {
-      currency: 'usd',
-      amount: 2999
-    }
-  }
-)
-```
-
-The metadata key values in the example are treated as follows-
-- order_date: a Date (key ends with '_date')
-- stripe_invoice: The identifier of the Stripe invoice (has a 'stripe_invoice' key)
-- order_number: a Rich Link (value contains 'url' and 'value' keys)
-- price: An Amount in US Dollars (value contains 'amount' and 'currency' keys)
-
-*NB:* This version of the gem reserves the field name `type` in Event data.
-
-#### Contacts
-
-`Contacts` represent logged out users of your application.
-Note that `contacts` are referred to as `leads` in the [Intercom](https://developers.intercom.com/intercom-api-reference/reference#leads)
-
-```ruby
-# Create a contact
-contact = intercom.contacts.create(email: "some_contact@example.com")
-
-# Update a contact (via create method)
-# You can update a contact by calling the create method but you MUST provide an id or user_id
-# If you just provide an email, for example, it will create a new contact
-# See https://developers.intercom.com/intercom-api-reference/reference#update-lead for more detail
-contact = intercom.contacts.create(email: "some_contact@example.com", id: "3be0398668071a6bc6850413", name:"update_contact")
-
-# Update a contact (via contact object)
-contact.custom_attributes['foo'] = 'bar'
-intercom.contacts.save(contact)
-
-# Find contacts by email
-contacts = intercom.contacts.find_all(email: "some_contact@example.com")
-
-# Using find to search for contacts by email
-contact_list = intercom.contacts.find(email: "some_contact@example.com")
-# This returns a Contact object with type contact.list
-# Note: Multiple contacts can be returned in this list if there are multiple matching contacts found
-# #<Intercom::Contact:0x00007ff3a80789f8
-#   @changed_fields=#<Set: {}>,
-#   @contacts=
-#     [{"type"=>"contact",
-#       "id"=>"5b7fd9b683681ac52274b9c7",
-#       "user_id"=>"05bc4d17-72cc-433e-88ae-0bf88db5d0e6",
-#       "anonymous"=>true,
-#       "email"=>"some_contact@example.com",
-#       ...}],
-#   @custom_attributes={},
-#   @limited=false,
-#   @pages=#<Intercom::Pages:0x00007ff3a7413c58 @changed_fields=#<Set: {}>, @next=nil, @page=1, @per_page=50, @total_pages=1, @type="pages">,
-#   @total_count=1,
-#   @type="contact.list">
-# Access the contact's data
-contact_list.contacts.first
-
-# Convert a contact into a user
-contact = intercom.contacts.find(id: "536e564f316c83104c000020")
-intercom.contacts.convert(contact, Intercom::User.new(email: email))
-# Using find with email will not work here. See https://github.com/intercom/intercom-ruby/issues/419 for more information
-
-# archive a contact
-intercom.contacts.archive(contact)
-
-# Get a large list of contacts using scroll
-intercom.contacts.scroll.each { |lead| puts lead.id}
-# Please see users scroll for more details of how to use scroll
-```
-
-#### Customers
-
-Our Customer API is a central place for all the information on your customers, whether they're users or leads. More detail in our API documentation on [Customers](https://developers.intercom.com/intercom-api-reference/v0/reference#customers).
-
-```ruby
-# Search for customers
-customers = intercom.customers.search(query: { "field": "name", "operator": "=", "value": "Alice"}, per_page: 50, sort_field: "name", sort_order: "ascending")
-customers.each { |customer| p customer.name }
+# Find a team by id
+intercom.teams.find(id: team_id)
+# Iterate over all teams
+intercom.teams.all.each {|team| puts team.name }
 ```
 
 #### Counts

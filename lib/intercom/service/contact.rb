@@ -2,12 +2,9 @@ require 'intercom/service/base_service'
 require 'intercom/api_operations/load'
 require 'intercom/api_operations/list'
 require 'intercom/api_operations/find'
-require 'intercom/api_operations/find_all'
 require 'intercom/api_operations/save'
-require 'intercom/api_operations/scroll'
-require 'intercom/api_operations/convert'
-require 'intercom/api_operations/archive'
-require 'intercom/api_operations/request_hard_delete'
+require 'intercom/api_operations/delete'
+require 'intercom/api_operations/search'
 
 module Intercom
   module Service
@@ -15,15 +12,29 @@ module Intercom
       include ApiOperations::Load
       include ApiOperations::List
       include ApiOperations::Find
-      include ApiOperations::FindAll
       include ApiOperations::Save
-      include ApiOperations::Scroll
-      include ApiOperations::Convert
-      include ApiOperations::Archive
-      include ApiOperations::RequestHardDelete
+      include ApiOperations::Delete
+      include ApiOperations::Search
 
       def collection_class
         Intercom::Contact
+      end
+
+      def collection_proxy_class
+        Intercom::BaseCollectionProxy
+      end
+
+      def merge(lead, user)
+        raise_invalid_merge_error unless lead.role == 'lead' && user.role == 'user'
+
+        response = @client.post('/contacts/merge', from: lead.id, into: user.id)
+        raise Intercom::HttpError, 'Http Error - No response entity returned' unless response
+
+        user.from_response(response)
+      end
+
+      private def raise_invalid_merge_error
+        raise Intercom::InvalidMergeError, 'Merging can only be performed on a lead into a user'
       end
     end
   end

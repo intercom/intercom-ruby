@@ -4,7 +4,7 @@ describe "Intercom::Event" do
 
   let(:user) {Intercom::User.new("email" => "jim@example.com", :user_id => "12345", :created_at => Time.now, :name => "Jim Bob")}
   let(:created_time) {Time.now - 300}
-  let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
+  let(:client) { Intercom::Client.new(token: 'token') }
 
   it 'gets events for a user' do
     client.expects(:get).with('/events', type: 'user', email: 'joe@example.com').returns(test_event_list)
@@ -12,14 +12,14 @@ describe "Intercom::Event" do
   end
 
   it "has the correct collection proxy class" do
-    client.events.collection_proxy_class.must_equal Intercom::EventCollectionProxy
+    _(client.events.collection_proxy_class).must_equal Intercom::EventCollectionProxy
   end
 
   it "stops iterating if no next link" do
     client.expects(:get).with("/events", type: 'user', email: 'joe@example.com').returns(page_of_events(false))
     event_names = []
     client.events.find_all(type: 'user', email: 'joe@example.com').each { |event| event_names << event.event_name }
-    event_names.must_equal %W(invited-friend)
+    _(event_names).must_equal %W(invited-friend)
   end
 
   it "keeps iterating if next link" do
@@ -27,7 +27,7 @@ describe "Intercom::Event" do
     client.expects(:get).with("https://api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550", {}).returns(page_of_events(false))
     event_names = []
     client.events.find_all(type: 'user', email: 'joe@example.com').each { |event| event_names << event.event_name }
-    event_names.must_equal %W(invited-friend invited-friend)
+    _(event_names).must_equal %W(invited-friend invited-friend)
   end
 
   it "creates an event with metadata" do
@@ -74,15 +74,15 @@ describe "Intercom::Event" do
               "state"=>"completed"
             }
           ]
-        }
+      }
     }
     let(:bulk_request) {
-       {
+      {
         items: [
           {
             method: "post",
             data_type: "event",
-            data:{
+            data: {
               event_name: "ordered-item",
               created_at: 1438944980,
               user_id: "314159",
@@ -95,7 +95,7 @@ describe "Intercom::Event" do
           {
             method: "post",
             data_type: "event",
-            data:{
+            data: {
               event_name: "invited-friend",
               created_at: 1438944979,
               user_id: "314159",
@@ -143,9 +143,7 @@ describe "Intercom::Event" do
     end
 
     it "does not submit delete jobs" do
-      lambda { client.events.submit_bulk_job(delete_items: events) }.must_raise ArgumentError
+      _(lambda { client.events.submit_bulk_job(delete_items: events) }).must_raise ArgumentError
     end
-
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'intercom/utils'
 require 'ext/sliceable_hash'
 
@@ -8,8 +10,8 @@ module Intercom
       private_constant :PARAMS_NOT_PROVIDED
 
       def create(params = PARAMS_NOT_PROVIDED)
-        if collection_class.ancestors.include?(Intercom::Contact) && params == PARAMS_NOT_PROVIDED
-          params = Hash.new
+        if collection_class.ancestors.include?(Intercom::Lead) && params == PARAMS_NOT_PROVIDED
+          params = {}
         elsif params == PARAMS_NOT_PROVIDED
           raise ArgumentError, '.create requires 1 parameter'
         end
@@ -20,7 +22,6 @@ module Intercom
       end
 
       def save(object)
-        collection_name = Utils.resource_class_to_collection_name(collection_class)
         if id_present?(object) && !posted_updates?(object)
           response = @client.put("/#{collection_name}/#{object.id}", object.to_submittable_hash)
         else
@@ -30,7 +31,7 @@ module Intercom
       end
 
       def identity_hash(object)
-        object.respond_to?(:identity_vars) ? SliceableHash.new(object.to_hash).slice(*(object.identity_vars.map(&:to_s))) : {}
+        object.respond_to?(:identity_vars) ? SliceableHash.new(object.to_hash).slice(*object.identity_vars.map(&:to_s)) : {}
       end
 
       private
