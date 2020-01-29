@@ -10,7 +10,7 @@ For generating Intercom JavaScript script tags for Rails, please see https://git
 
 ## Upgrading information
 
-Version 4 of intercom-ruby is not backwards compatible with previous versions. Please see our [migration guide](https://github.com/intercom/ruby_v4/wiki/Migration-guide-for-v4) for full details of breaking changes.
+Version 4 of intercom-ruby is not backwards compatible with previous versions. Please see our [migration guide](https://github.com/intercom/intercom-ruby/wiki/Migration-guide-for-v4) for full details of breaking changes.
 
 This version of the gem is compatible with `Ruby 2.1` and above.
 
@@ -66,6 +66,8 @@ Resources this API supports:
 ### Examples
 
 #### Contacts
+Note that this is a new resource compatible only with the new [Contacts API](https://developers.intercom.com/intercom-api-reference/reference#contacts-model) released in API v2.0.
+
 ```ruby
 # Create a contact with "lead" role
 contact = intercom.contacts.create(email: "some_contact2@example.com", role: "lead")
@@ -122,10 +124,10 @@ contact.notes.each {|n| p n.body}
 
 # Add a contact to a company
 company = intercom.companies.find(id: "123")
-contact.add_company(id: company.id})
+contact.add_company(id: company.id)
 
 # Remove a contact from a company
-contact.remove_company(id: company.id})
+contact.remove_company(id: company.id)
 
 # List companies for a contact
 contact.companies.each {|c| p c.name}
@@ -307,14 +309,19 @@ conversation = intercom.conversations.find(id: '1')
 # INTERACTING WITH THE PARTS OF A CONVERSATION
 # Getting the subject of a part (only applies to email-based conversations)
 conversation.source.subject
+
 # Get the part_type of the first part
 conversation.conversation_parts.first.part_type
+
 # Get the body of the second part
 conversation.conversation_parts[1].body
+
 # Get statistics related to the conversation
-conversation.statistics["first_contact_reply_at"]
-# Get information about the rating of a conversation
-conversation.conversation_rating.rating 
+conversation.statistics.time_to_admin_reply
+conversation.statistics.last_assignment_at
+
+# Get information on the sla applied to a conversation
+conversation.sla_applied.sla_name 
 
 # REPLYING TO CONVERSATIONS
 # User (identified by email) replies with a comment
@@ -366,14 +373,13 @@ intercom.conversations.run_assignment_rules(conversation.id)
 # For full detail on possible queries, please refer to the API documentation: 
 # https://developers.intercom.com/intercom-api-reference/reference 
  
-# Search for open conversations, getting 10 per page and sorting by the created_at date
+# Search for open conversations sorted by the created_at date
 conversations = intercom.conversations.search(
   query: {
     field: "open",
     operator: "=",
     value: true
   },
-  per_page: 10,
   sort_field: "created_at",
   sort_order: "descending"
 )
@@ -387,10 +393,10 @@ conversation = intercom.conversations.find(id: "1")
 admin = intercom.admins.find(id: "1") 
 
 # Add a tag to a conversation
-conversation.add_tag(id: tag.id, admin_id: admin.id})
+conversation.add_tag(id: tag.id, admin_id: admin.id)
 
 # Remove a tag from a conversation
-conversation.remove_tag(id: tag.id, admin_id: admin.id})
+conversation.remove_tag(id: tag.id, admin_id: admin.id)
  
 ```
 
