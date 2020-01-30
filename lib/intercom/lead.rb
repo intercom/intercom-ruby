@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-require 'intercom/traits/incrementable_attributes'
 require 'intercom/traits/api_resource'
 
 module Intercom
-  class User
-    include Traits::IncrementableAttributes
+  class Lead
     include Traits::ApiResource
 
     def identity_vars
-      %i[id email user_id]
+      %i[email user_id]
     end
 
     def flat_store_attributes
@@ -17,7 +15,7 @@ module Intercom
     end
 
     def update_verb
-      'post'
+      'put'
     end
   end
 end

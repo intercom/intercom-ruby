@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "Intercom::Conversation" do
-  let (:client) { Intercom::Client.new(app_id: 'app_id',  api_key: 'api_key') }
+  let(:client) { Intercom::Client.new(token: 'token') }
 
   it "gets a conversation" do
     client.expects(:get).with("/conversations/147", {}).returns(test_conversation)
@@ -53,11 +53,33 @@ describe "Intercom::Conversation" do
     client.conversations.snooze(id: '147', admin_id: '123', snoozed_until: tomorrow)
   end
 
-  # it "creates a subscription" do
-  #   client.expects(:post).with("/subscriptions", {'url' => "http://example.com", 'topics' => ["user.created"]}).returns(test_subscription)
-  #   subscription = client.subscriptions.create(:url => "http://example.com", :topics => ["user.created"])
-  #   subscription.request.topics[0].must_equal "user.created"
-  #   subscription.request.url.must_equal "http://example.com"
-  # end
+  it 'runs assignment rules on a conversation' do
+    client.expects(:post).with('/conversations/147/run_assignment_rules').returns(test_conversation)
+    client.conversations.run_assignment_rules('147')
+  end
 
+  describe 'nested resources' do
+    let(:conversation) { Intercom::Conversation.new('id' => '1', 'client' => client) }
+    let(:tag) { Intercom::Tag.new('id' => '1') }
+
+    it 'adds a tag to a conversation' do
+      client.expects(:post).with("/conversations/1/tags", { 'id': tag.id, 'admin_id': test_admin['id'] }).returns(tag.to_hash)
+      conversation.add_tag({ "id": tag.id,  "admin_id": test_admin['id'] })
+    end
+
+    it 'does not add a tag to a conversation if no admin_id is passed' do
+      client.expects(:post).with("/conversations/1/tags", { 'id': tag.id }).returns(nil)
+      _(proc { conversation.add_tag({ "id": tag.id }) }).must_raise Intercom::HttpError
+    end
+
+    it 'removes a tag from a conversation' do
+      client.expects(:delete).with("/conversations/1/tags/1", { "id": tag.id, "admin_id": test_admin['id'] }).returns(tag.to_hash)
+      conversation.remove_tag({ "id": tag.id, "admin_id": test_admin['id'] })
+    end
+
+    it 'does not remove a tag from a conversation if no admin_id is passed' do
+      client.expects(:delete).with("/conversations/1/tags/1", { "id": tag.id }).returns(nil)
+      _(proc { conversation.remove_tag({ "id": tag.id }) }).must_raise Intercom::HttpError
+    end
+  end
 end

@@ -1,13 +1,14 @@
+# frozen_string_literal: true
+
 require 'intercom/client_collection_proxy'
 require 'intercom/utils'
 
 module Intercom
   module ApiOperations
     module FindAll
-
       def find_all(params)
         raise BadRequestError, "#find takes a hash as its parameter but you supplied #{params.inspect}" unless params.is_a? Hash
-        collection_name = Utils.resource_class_to_collection_name(collection_class)
+
         finder_details = {}
         if params[:id] && !type_switched_finder?(params)
           finder_details[:url] = "/#{collection_name}/#{params[:id]}"
@@ -16,7 +17,7 @@ module Intercom
           finder_details[:url] = "/#{collection_name}"
           finder_details[:params] = params
         end
-        collection_proxy_class.new(collection_name, finder_details: finder_details,  client: @client)
+        collection_proxy_class.new(collection_name, collection_class, details: finder_details, client: @client)
       end
 
       private

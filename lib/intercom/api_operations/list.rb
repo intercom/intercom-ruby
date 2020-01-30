@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 require 'intercom/client_collection_proxy'
+require 'intercom/base_collection_proxy'
 require 'intercom/utils'
 
 module Intercom
   module ApiOperations
     module List
       def all
-        ClientCollectionProxy.new(Utils.resource_class_to_collection_name(collection_class), client: @client)
+        collection_proxy_class.new(collection_name, collection_class, client: @client)
       end
     end
   end

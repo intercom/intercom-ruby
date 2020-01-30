@@ -4,13 +4,13 @@ require 'intercom/utils'
 
 module Intercom
   module ApiOperations
-    module Archive
-      def archive(object)
+    module Delete
+      def delete(object)
         @client.delete("/#{collection_name}/#{object.id}", {})
         object
       end
 
-      alias_method 'delete', 'archive'
+      alias_method 'archive', 'delete'
     end
   end
 end
