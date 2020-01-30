@@ -1,3 +1,11 @@
+4.0
+New version to support API version 2.0.
+- Added support for new Contacts API.
+- Added support for Conversation Search and for Conversation model changes.
+- New DataAttribute class to support the Data Attributes. See README for details on usage.
+- New method to run assignment rules on a conversation: `intercom.conversations.run_assignment_rules(<convo_id>)`.
+- See Migration guide for breaking changes: https://github.com/intercom/intercom-ruby/wiki/Migration-guide-for-v4
+
 3.9.5
 Add Unstable version support
 
