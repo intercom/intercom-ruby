@@ -402,7 +402,7 @@ conversation.remove_tag(id: tag.id, admin_id: admin.id)
 conversation.add_contact(admin_id: admin.id, customer: { intercom_user_id: contact.id })
 
 # Remove a contact from a conversation
-conversation.remove_tag(id: contact.id, admin_id: admin.id)
+conversation.remove_contact(id: contact.id, admin_id: admin.id)
 ```
 
 #### Full loading of an embedded entity
