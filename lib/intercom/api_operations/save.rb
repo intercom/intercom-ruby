@@ -27,6 +27,7 @@ module Intercom
         else
           response = @client.post("/#{collection_name}", object.to_submittable_hash.merge(identity_hash(object)))
         end
+        object.client = @client
         object.from_response(response) if response # may be nil we received back a 202
       end
 

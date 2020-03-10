@@ -311,5 +311,60 @@ describe Intercom::Contact do
       client.expects(:delete).with("/contacts/1/companies/#{company.id}", "id": tag.id ).returns(test_company)
       contact.remove_company({ "id": tag.id })
     end
+
+    describe 'just after creating the contact' do
+      let(:contact) do
+        contact = Intercom::Contact.new('email' => 'jo@example.com', :external_id => 'i-1224242')
+        client.expects(:post).with('/contacts', 'email' => 'jo@example.com', 'external_id' => 'i-1224242', 'custom_attributes' => {})
+                             .returns('id' => 1, 'email' => 'jo@example.com', 'external_id' => 'i-1224242')
+        client.contacts.save(contact)
+      end
+
+      it 'returns a collection proxy for listing notes' do
+        proxy = contact.notes
+        _(proxy.resource_name).must_equal 'notes'
+        _(proxy.url).must_equal '/contacts/1/notes'
+        _(proxy.resource_class).must_equal Intercom::Note
+      end
+
+      it 'returns a collection proxy for listing tags' do
+        proxy = contact.tags
+        _(proxy.resource_name).must_equal 'tags'
+        _(proxy.url).must_equal '/contacts/1/tags'
+        _(proxy.resource_class).must_equal Intercom::Tag
+      end
+
+      it 'returns a collection proxy for listing companies' do
+        proxy = contact.companies
+        _(proxy.resource_name).must_equal 'companies'
+        _(proxy.url).must_equal '/contacts/1/companies'
+        _(proxy.resource_class).must_equal Intercom::Company
+      end
+
+      it 'adds a note to a contact' do
+        client.expects(:post).with('/contacts/1/notes', {body: note.body}).returns(note.to_hash)
+        contact.create_note({body: note.body})
+      end
+
+      it 'adds a tag to a contact' do
+        client.expects(:post).with('/contacts/1/tags', "id": tag.id).returns(tag.to_hash)
+        contact.add_tag({ "id": tag.id })
+      end
+
+      it 'removes a tag from a contact' do
+        client.expects(:delete).with("/contacts/1/tags/#{tag.id}", "id": tag.id ).returns(tag.to_hash)
+        contact.remove_tag({ "id": tag.id })
+      end
+
+      it 'adds a contact to a company' do
+        client.expects(:post).with('/contacts/1/companies', "id": company.id).returns(test_company)
+        contact.add_company({ "id": tag.id })
+      end
+
+      it 'removes a contact from a company' do
+        client.expects(:delete).with("/contacts/1/companies/#{company.id}", "id": tag.id ).returns(test_company)
+        contact.remove_company({ "id": tag.id })
+      end
+    end
   end
 end
