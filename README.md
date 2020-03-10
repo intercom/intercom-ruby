@@ -61,7 +61,7 @@ Resources this API supports:
     https://api.intercom.io/counts
     https://api.intercom.io/subscriptions
     https://api.intercom.io/jobs
-   
+
 
 ### Examples
 
@@ -99,7 +99,7 @@ contacts = intercom.contacts.search(
   }
 )
 contacts.each {|c| p c.email}
-# For full detail on possible queries, please refer to the API documentation: 
+# For full detail on possible queries, please refer to the API documentation:
 # https://developers.intercom.com/intercom-api-reference/reference
 
 # Merge a lead into an existing user
@@ -191,7 +191,7 @@ intercom.data_attributes.save(attribute)
 attribute.archived = true
 intercom.data_attributes.save(attribute)
 
-# Find all customer attributes including archived 
+# Find all customer attributes including archived
 customer_attributes_incl_archived = intercom.data_attributes.find_all({"model": "contact", "include_archived": true})
 customer_attributes_incl_archived.each { |attr| p attribute.name }
 ```
@@ -321,7 +321,7 @@ conversation.statistics.time_to_admin_reply
 conversation.statistics.last_assignment_at
 
 # Get information on the sla applied to a conversation
-conversation.sla_applied.sla_name 
+conversation.sla_applied.sla_name
 
 # REPLYING TO CONVERSATIONS
 # User (identified by email) replies with a comment
@@ -370,9 +370,9 @@ intercom.conversations.mark_read(conversation.id)
 intercom.conversations.run_assignment_rules(conversation.id)
 
 # Search for conversations
-# For full detail on possible queries, please refer to the API documentation: 
-# https://developers.intercom.com/intercom-api-reference/reference 
- 
+# For full detail on possible queries, please refer to the API documentation:
+# https://developers.intercom.com/intercom-api-reference/reference
+
 # Search for open conversations sorted by the created_at date
 conversations = intercom.conversations.search(
   query: {
@@ -386,18 +386,23 @@ conversations = intercom.conversations.search(
 conversations.each {|c| p c.id}
 
 # Tagging for conversations
-tag = intercom.tags.find(id: "2") 
+tag = intercom.tags.find(id: "2")
 conversation = intercom.conversations.find(id: "1")
 
 # An Admin ID is required to add or remove tag on a conversation
-admin = intercom.admins.find(id: "1") 
+admin = intercom.admins.find(id: "1")
 
 # Add a tag to a conversation
 conversation.add_tag(id: tag.id, admin_id: admin.id)
 
 # Remove a tag from a conversation
 conversation.remove_tag(id: tag.id, admin_id: admin.id)
- 
+
+# Add a contact to a conversation
+conversation.add_contact(admin_id: admin.id, customer: { intercom_user_id: contact.id })
+
+# Remove a contact from a conversation
+conversation.remove_contact(id: contact.id, admin_id: admin.id)
 ```
 
 #### Full loading of an embedded entity

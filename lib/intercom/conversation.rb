@@ -7,5 +7,6 @@ module Intercom
     include ApiOperations::NestedResource
 
     nested_resource_methods :tag, operations: %i[add delete]
+    nested_resource_methods :contact, operations: %i[add delete], path: :customers
   end
 end

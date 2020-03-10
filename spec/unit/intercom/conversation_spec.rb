@@ -81,5 +81,31 @@ describe "Intercom::Conversation" do
       client.expects(:delete).with("/conversations/1/tags/1", { "id": tag.id }).returns(nil)
       _(proc { conversation.remove_tag({ "id": tag.id }) }).must_raise Intercom::HttpError
     end
+
+    describe 'contacts' do
+      let(:response) do
+        {
+          customers: [
+            { type: test_contact['type'], id: test_contact['id'] }
+          ]
+        }
+      end
+
+      it 'adds a contact to a conversation' do
+        client.expects(:post)
+              .with("/conversations/1/customers",
+                    { admin_id: test_admin['id'], customer: { intercom_user_id: test_contact['id'] } })
+              .returns(response.to_hash)
+        conversation.add_contact(admin_id: test_admin['id'], customer: { intercom_user_id: test_contact['id'] })
+      end
+
+      it 'removes a contact from a conversation' do
+        client.expects(:delete)
+              .with("/conversations/1/customers/aaaaaaaaaaaaaaaaaaaaaaaa",
+                    { id: 'aaaaaaaaaaaaaaaaaaaaaaaa', admin_id: '1234' })
+              .returns(response.to_hash)
+        conversation.remove_contact(id: test_contact['id'], admin_id: test_admin['id'])
+      end
+    end
   end
 end
