@@ -1,4 +1,8 @@
-4.0
+4.0.1
+- Fixed bug with nested resources.
+- Support for add/remove contact on conversation object.
+
+4.0.0
 New version to support API version 2.0.
 - Added support for new Contacts API.
 - Added support for Conversation Search and for Conversation model changes.
