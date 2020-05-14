@@ -8,6 +8,32 @@ require 'time'
 require 'pry'
 include WebMock::API
 
+def test_article
+  {
+      "id": "1",
+      "type": "article",
+      "workspace_id": "tx2p130c",
+      "title": "new title",
+      "description": "test Finished articles are visible when they're added to a Help Center collection",
+      "body": "<p>thingbop</p>",
+      "author_id": 1,
+      "state": "draft"
+  }
+end
+
+def test_updated_article
+  {
+      "id": "1",
+      "type": "article",
+      "workspace_id": "tx2p130c",
+      "title": "new updated title",
+      "description": "test Finished articles are visible when they're added to a Help Center collection",
+      "body": "<p>thingbop</p>",
+      "author_id": 1,
+      "state": "draft"
+  }
+end
+
 def test_user(email = 'bob@example.com')
   {
     'type' => 'user',

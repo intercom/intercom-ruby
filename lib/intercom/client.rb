@@ -48,6 +48,10 @@ module Intercom
       Intercom::Service::Admin.new(self)
     end
 
+    def articles
+      Intercom::Service::Article.new(self)
+    end
+
     def companies
       Intercom::Service::Company.new(self)
     end
