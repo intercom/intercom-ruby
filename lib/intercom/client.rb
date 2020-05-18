@@ -112,6 +112,10 @@ module Intercom
       Intercom::Service::DataAttribute.new(self)
     end
 
+    def collections
+      Intercom::Service::Collection.new(self)
+    end
+
     def get(path, params)
       execute_request Intercom::Request.get(path, params)
     end

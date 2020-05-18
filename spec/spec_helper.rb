@@ -157,7 +157,7 @@ def test_contact(email = 'bob@example.com', role = 'user')
   }
 end
 
-def test_visitor
+  def test_visitor
   {
     'type' => 'visitor',
     'id' => '123',
