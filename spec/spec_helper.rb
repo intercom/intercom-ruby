@@ -157,6 +157,41 @@ def test_contact(email = 'bob@example.com', role = 'user')
   }
 end
 
+def test_collection
+  {
+    'id' => '1',
+    'workspace_id' => 'tx2p130c',
+    'name' => 'Collection 1',
+    'url' => 'http://www.intercom.test/help/',
+    'order' => 1,
+    'type' => 'collection',
+    'description' => 'Collection desc',
+    'icon' => 'book-bookmark'
+  }
+end
+
+def test_collection_list
+  {
+    'type' => 'list',
+    'total_count' => 1,
+    'pages' => {
+      'page' => 1,
+      'per_page' => 20,
+      'total_pages' => 1
+    },
+    'data' => [{
+      'id' => '1',
+      'workspace_id' => 'tx2p130c',
+      'name' => 'Collection 1',
+      'url' => 'http://www.intercom.test/help/',
+      'order' => 1,
+      'type' => 'collection',
+      'description' => 'Collection desc',
+      'icon' => 'book-bookmark'
+    }]
+  }
+end
+
 def test_visitor
   {
     'type' => 'visitor',
