@@ -88,6 +88,10 @@ module Intercom
       Intercom::Service::Segment.new(self)
     end
 
+    def sections
+      Intercom::Service::Section.new(self)
+    end
+
     def tags
       Intercom::Service::Tag.new(self)
     end

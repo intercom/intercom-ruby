@@ -850,6 +850,43 @@ def test_app_count
   }
 end
 
+def test_section
+  {
+    'id' => '18',
+    'workspace_id' => 'tx2p130c',
+    'name' => 'Section 1',
+    'url' => 'http://www.intercom.test/help/',
+    'order' => 0,
+    'created_at' => 1_589_801_953,
+    'updated_at' => 1_589_801_953,
+    'type' => 'section',
+    'parent_id' => 1
+  }
+end
+
+def test_section_list
+  {
+    'type' => 'list',
+    'total_count' => 1,
+    'pages' => {
+      'page' => 1,
+      'per_page' => 20,
+      'total_pages' => 1
+    },
+    'data' => [{
+      'id' => '18',
+      'workspace_id' => 'tx2p130c',
+      'name' => 'Section 1',
+      'url' => 'http://www.intercom.test/help/',
+      'order' => 0,
+      'created_at' => 1_589_801_953,
+      'updated_at' => 1_589_801_953,
+      'type' => 'section',
+      'parent_id' => 1
+    }]
+  }
+end
+
 def test_segment_count
   {
     'type' => 'count',
