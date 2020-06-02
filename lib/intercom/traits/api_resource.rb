@@ -40,7 +40,9 @@ module Intercom
       def to_submittable_hash
         submittable_hash = {}
         to_hash.each do |attribute, value|
-          submittable_hash[attribute] = value if submittable_attribute?(attribute, value)
+          next unless submittable_attribute?(attribute, value)
+
+          submittable_hash[attribute] = value.respond_to?(:to_submittable_hash) ? value.to_submittable_hash : value
         end
         submittable_hash
       end

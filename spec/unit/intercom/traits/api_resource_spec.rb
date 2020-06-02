@@ -17,7 +17,15 @@ describe Intercom::Traits::ApiResource do
       'metadata' => {
         'type' => 'user',
         'color' => 'cyan'
-      } }
+      },
+      'nested_fields' => {
+        'type' => 'nested_fields_content',
+        'field_1' => {
+          'type' => 'field_content',
+          'name' => 'Nested Field'
+        }
+      }
+    }
   end
 
   let(:object_hash) do
@@ -35,6 +43,13 @@ describe Intercom::Traits::ApiResource do
       metadata: {
         type: 'user',
         color: 'cyan'
+      },
+      nested_fields: {
+        type: 'nested_fields_content',
+        field_1: {
+          type: 'field_content',
+          name: 'Nested Field'
+        }
       }
     }
   end
@@ -97,7 +112,7 @@ describe Intercom::Traits::ApiResource do
   it 'an initialized ApiResource is equal to one generated from a response' do
     class ConcreteApiResource; include Intercom::Traits::ApiResource; end
     initialized_api_resource = ConcreteApiResource.new(object_json)
-    except(object_json, 'type').keys.each do |attribute|
+    except(object_json, 'type', 'nested_fields').keys.each do |attribute|
       assert_equal initialized_api_resource.send(attribute), api_resource.send(attribute)
     end
   end
@@ -107,10 +122,26 @@ describe Intercom::Traits::ApiResource do
 
     api_resource.from_hash(object_hash)
     initialized_api_resource = ConcreteApiResource.new(object_hash)
-
-    except(object_json, 'type').keys.each do |attribute|
+    except(object_json, 'type', 'nested_fields').keys.each do |attribute|
       assert_equal initialized_api_resource.send(attribute), api_resource.send(attribute)
     end
+  end
+
+  it 'correctly generates submittable hash when no updates' do
+    assert_equal api_resource.to_submittable_hash, {}
+  end
+
+  it 'correctly generates submittable hash when there are updates' do
+    api_resource.name = 'SuperSuite updated'
+    api_resource.nested_fields.field_1.name = 'Updated Name'
+    assert_equal api_resource.to_submittable_hash, {
+      'name' => 'SuperSuite updated',
+      'nested_fields' => {
+        'field_1' => {
+            'name' => 'Updated Name'
+        }
+      }
+    }
   end
 
   def except(h, *keys)
