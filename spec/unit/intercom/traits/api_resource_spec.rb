@@ -112,7 +112,7 @@ describe Intercom::Traits::ApiResource do
   it 'an initialized ApiResource is equal to one generated from a response' do
     class ConcreteApiResource; include Intercom::Traits::ApiResource; end
     initialized_api_resource = ConcreteApiResource.new(object_json)
-    except(object_json, 'type', 'nested_fields').keys.each do |attribute|
+    except(object_json, 'type').keys.each do |attribute|
       assert_equal initialized_api_resource.send(attribute), api_resource.send(attribute)
     end
   end
@@ -122,8 +122,30 @@ describe Intercom::Traits::ApiResource do
 
     api_resource.from_hash(object_hash)
     initialized_api_resource = ConcreteApiResource.new(object_hash)
-    except(object_json, 'type', 'nested_fields').keys.each do |attribute|
+    except(object_json, 'type').keys.each do |attribute|
       assert_equal initialized_api_resource.send(attribute), api_resource.send(attribute)
+    end
+  end
+
+  describe 'correctly equates two resources' do
+    class DummyResource; include Intercom::Traits::ApiResource; end
+
+    specify 'if each resource has the same class and same value' do
+      api_resource1 = DummyResource.new(object_json)
+      api_resource2 = DummyResource.new(object_json)
+      assert_equal (api_resource1 == api_resource2), true
+    end
+
+    specify 'if each resource has the same class and different value' do
+      object2_json = object_json.merge('id' => 'bbbbbb')
+      api_resource1 = DummyResource.new(object_json)
+      api_resource2 = DummyResource.new(object2_json)
+      assert_equal (api_resource1 == api_resource2), false
+    end
+
+    specify 'if each resource has a different class' do
+      dummy_resource = DummyResource.new(object_json)
+      assert_equal (dummy_resource == api_resource), false
     end
   end
 

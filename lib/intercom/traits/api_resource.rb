@@ -17,6 +17,10 @@ module Intercom
         from_hash(attributes)
       end
 
+      def ==(other)
+        self.class == other.class && to_json == other.to_json
+      end
+
       def from_response(response)
         from_hash(response)
         reset_changed_fields!
@@ -34,6 +38,15 @@ module Intercom
       def to_hash
         instance_variables_excluding_dirty_tracking_field.each_with_object({}) do |variable, hash|
           hash[variable.to_s.delete('@')] = instance_variable_get(variable)
+        end
+      end
+
+      def to_json(*args)
+        instance_variables_excluding_dirty_tracking_field.each_with_object({}) do |variable, hash|
+          next if variable == :@client
+
+          value = instance_variable_get(variable)
+          hash[variable.to_s.delete('@')] = value.respond_to?(:to_json) ? value.to_json(*args) : value
         end
       end
 
