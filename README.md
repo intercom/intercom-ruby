@@ -536,7 +536,7 @@ article = intercom.articles.create(title: "New Article", author_id: "123456")
 # Create an article with translations
 article = intercom.articles.create(title: "New Article",
                                    author_id: "123456",
-                                   translated_content: {fr: {title: "Nouvel Article"}, es: {title: "Articulo nuevo"}})
+                                   translated_content: {fr: {title: "Nouvel Article"}, es: {title: "Nuevo artículo"}})
 
 # Fetch an article
 intercom.articles.find(id: "123456")
@@ -554,7 +554,7 @@ article.translated_content.en.title = "English Updated!"
 intercom.articles.save(article)
 
 # Update an article by adding a new translation
-article.translated_content.fr = {title: "French Added!"}
+article.translated_content.es = {title: "Artículo en español"}
 intercom.articles.save(article)
 
 # Delete an article
@@ -568,7 +568,7 @@ collection = intercom.collections.create(name: "New Collection")
 
 # Create a collection with translations
 collection = intercom.collections.create(name: "New Collection",
-                                         translated_content: {fr: {name: "Nouvelle collection"}, es: {name: "Nuevo colección"}})
+                                         translated_content: {fr: {name: "Nouvelle collection"}, es: {name: "Nueva colección"}})
 
 # Fetch a collection
 intercom.collections.find(id: "123456")
@@ -586,7 +586,7 @@ collection.translated_content.en.name = "English Updated!"
 intercom.collections.save(collection)
 
 # Update a collection by adding a new translation
-collection.translated_content.fr = {name: "French Added", description: "French description"}
+collection.translated_content.es = {name: "Colección en español", description: "Descripción en español"}
 intercom.collections.save(collection)
 
 # Delete an collection
@@ -600,7 +600,7 @@ section = intercom.sections.create(name: "New Section", parent_id: "123456")
 
 # Create a section with translations
 section = intercom.sections.create(name: "New Section",
-                                   translated_content: {fr: {name: "Nouvelle section"}, es: {name: "Nuevo sección"}})
+                                   translated_content: {fr: {name: "Nouvelle section"}, es: {name: "Nueva sección"}})
 
 # Fetch a section
 intercom.sections.find(id: "123456")
@@ -618,7 +618,7 @@ section.translated_content.en.name = "English Updated!"
 intercom.collections.save(section)
 
 # Update a section by adding a new translation
-section.translated_content.fr = {name: "French Added"}
+section.translated_content.es = {name: "Sección en español"}
 intercom.collections.save(section)
 
 # Delete an section
