@@ -36,7 +36,7 @@ intercom = Intercom::Client.new(token: 'my_token')
 
 ```ruby
 # With a versioned app:
-intercom = Intercom::Client.new(token: 'my_token', api_version: '2.0')
+intercom = Intercom::Client.new(token: 'my_token', api_version: '2.1')
 ```
 
 If you are building a third party application you can get your access_tokens by [setting-up-oauth](https://developers.intercom.io/page/setting-up-oauth) for Intercom.
@@ -61,6 +61,9 @@ Resources this API supports:
     https://api.intercom.io/counts
     https://api.intercom.io/subscriptions
     https://api.intercom.io/jobs
+    https://api.intercom.io/articles
+    https://api.intercom.io/help_center/collections
+    https://api.intercom.io/help_center/sections
 
 
 ### Examples
@@ -523,6 +526,103 @@ intercom.subscriptions.delete(subscription)
 
 # list subscriptions
 intercom.subscriptions.all
+```
+
+#### Articles
+```ruby
+# Create an article
+article = intercom.articles.create(title: "New Article", author_id: "123456")
+
+# Create an article with translations
+article = intercom.articles.create(title: "New Article",
+                                   author_id: "123456",
+                                   translated_content: {fr: {title: "Nouvel Article"}, es: {title: "Nuevo artículo"}})
+
+# Fetch an article
+intercom.articles.find(id: "123456")
+
+# List all articles
+articles = intercom.articles.all
+articles.each { |article| p article.title }
+
+# Update an article
+article.title = "Article Updated!"
+intercom.articles.save(article)
+
+# Update an article's existing translation
+article.translated_content.en.title = "English Updated!"
+intercom.articles.save(article)
+
+# Update an article by adding a new translation
+article.translated_content.es = {title: "Artículo en español"}
+intercom.articles.save(article)
+
+# Delete an article
+intercom.articles.delete(article)
+```
+
+#### Collections
+```ruby
+# Create a collection
+collection = intercom.collections.create(name: "New Collection")
+
+# Create a collection with translations
+collection = intercom.collections.create(name: "New Collection",
+                                         translated_content: {fr: {name: "Nouvelle collection"}, es: {name: "Nueva colección"}})
+
+# Fetch a collection
+intercom.collections.find(id: "123456")
+
+# List all collections
+collections = intercom.collections.all
+collections.each { |collection| p collection.name }
+
+# Update a collection
+collection.name = "Collection updated!"
+intercom.collections.save(collection)
+
+# Update a collection's existing translation
+collection.translated_content.en.name = "English Updated!"
+intercom.collections.save(collection)
+
+# Update a collection by adding a new translation
+collection.translated_content.es = {name: "Colección en español", description: "Descripción en español"}
+intercom.collections.save(collection)
+
+# Delete an collection
+intercom.collections.delete(collection)
+```
+
+#### Sections
+```ruby
+# Create a section
+section = intercom.sections.create(name: "New Section", parent_id: "123456")
+
+# Create a section with translations
+section = intercom.sections.create(name: "New Section",
+                                   translated_content: {fr: {name: "Nouvelle section"}, es: {name: "Nueva sección"}})
+
+# Fetch a section
+intercom.sections.find(id: "123456")
+
+# List all sections
+sections = intercom.sections.all
+sections.each { |section| p section.name }
+
+# Update a section
+section.name = "Section updated!"
+intercom.sections.save(section)
+
+# Update a section's existing translation
+section.translated_content.en.name = "English Updated!"
+intercom.collections.save(section)
+
+# Update a section by adding a new translation
+section.translated_content.es = {name: "Sección en español"}
+intercom.collections.save(section)
+
+# Delete an section
+intercom.sections.delete(section)
 ```
 
 ### Errors

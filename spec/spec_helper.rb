@@ -8,6 +8,32 @@ require 'time'
 require 'pry'
 include WebMock::API
 
+def test_article
+  {
+      "id": "1",
+      "type": "article",
+      "workspace_id": "tx2p130c",
+      "title": "new title",
+      "description": "test Finished articles are visible when they're added to a Help Center collection",
+      "body": "<p>thingbop</p>",
+      "author_id": 1,
+      "state": "draft"
+  }
+end
+
+def test_updated_article
+  {
+      "id": "1",
+      "type": "article",
+      "workspace_id": "tx2p130c",
+      "title": "new updated title",
+      "description": "test Finished articles are visible when they're added to a Help Center collection",
+      "body": "<p>thingbop</p>",
+      "author_id": 1,
+      "state": "draft"
+  }
+end
+
 def test_user(email = 'bob@example.com')
   {
     'type' => 'user',
@@ -128,6 +154,41 @@ def test_contact(email = 'bob@example.com', role = 'user')
             'region_name' => 'Europe',
             'timezone' => '+1000',
             'country_code' => 'IRL' }
+  }
+end
+
+def test_collection
+  {
+    'id' => '1',
+    'workspace_id' => 'tx2p130c',
+    'name' => 'Collection 1',
+    'url' => 'http://www.intercom.test/help/',
+    'order' => 1,
+    'type' => 'collection',
+    'description' => 'Collection desc',
+    'icon' => 'book-bookmark'
+  }
+end
+
+def test_collection_list
+  {
+    'type' => 'list',
+    'total_count' => 1,
+    'pages' => {
+      'page' => 1,
+      'per_page' => 20,
+      'total_pages' => 1
+    },
+    'data' => [{
+      'id' => '1',
+      'workspace_id' => 'tx2p130c',
+      'name' => 'Collection 1',
+      'url' => 'http://www.intercom.test/help/',
+      'order' => 1,
+      'type' => 'collection',
+      'description' => 'Collection desc',
+      'icon' => 'book-bookmark'
+    }]
   }
 end
 
@@ -786,6 +847,43 @@ def test_app_count
     'user' => {
       'count' => 12_239
     }
+  }
+end
+
+def test_section
+  {
+    'id' => '18',
+    'workspace_id' => 'tx2p130c',
+    'name' => 'Section 1',
+    'url' => 'http://www.intercom.test/help/',
+    'order' => 0,
+    'created_at' => 1_589_801_953,
+    'updated_at' => 1_589_801_953,
+    'type' => 'section',
+    'parent_id' => 1
+  }
+end
+
+def test_section_list
+  {
+    'type' => 'list',
+    'total_count' => 1,
+    'pages' => {
+      'page' => 1,
+      'per_page' => 20,
+      'total_pages' => 1
+    },
+    'data' => [{
+      'id' => '18',
+      'workspace_id' => 'tx2p130c',
+      'name' => 'Section 1',
+      'url' => 'http://www.intercom.test/help/',
+      'order' => 0,
+      'created_at' => 1_589_801_953,
+      'updated_at' => 1_589_801_953,
+      'type' => 'section',
+      'parent_id' => 1
+    }]
   }
 end
 

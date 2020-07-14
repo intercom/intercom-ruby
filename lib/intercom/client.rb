@@ -48,6 +48,10 @@ module Intercom
       Intercom::Service::Admin.new(self)
     end
 
+    def articles
+      Intercom::Service::Article.new(self)
+    end
+
     def companies
       Intercom::Service::Company.new(self)
     end
@@ -84,6 +88,10 @@ module Intercom
       Intercom::Service::Segment.new(self)
     end
 
+    def sections
+      Intercom::Service::Section.new(self)
+    end
+
     def tags
       Intercom::Service::Tag.new(self)
     end
@@ -106,6 +114,10 @@ module Intercom
 
     def data_attributes
       Intercom::Service::DataAttribute.new(self)
+    end
+
+    def collections
+      Intercom::Service::Collection.new(self)
     end
 
     def get(path, params)

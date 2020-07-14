@@ -17,7 +17,15 @@ describe Intercom::Traits::ApiResource do
       'metadata' => {
         'type' => 'user',
         'color' => 'cyan'
-      } }
+      },
+      'nested_fields' => {
+        'type' => 'nested_fields_content',
+        'field_1' => {
+          'type' => 'field_content',
+          'name' => 'Nested Field'
+        }
+      }
+    }
   end
 
   let(:object_hash) do
@@ -35,6 +43,13 @@ describe Intercom::Traits::ApiResource do
       metadata: {
         type: 'user',
         color: 'cyan'
+      },
+      nested_fields: {
+        type: 'nested_fields_content',
+        field_1: {
+          type: 'field_content',
+          name: 'Nested Field'
+        }
       }
     }
   end
@@ -107,10 +122,48 @@ describe Intercom::Traits::ApiResource do
 
     api_resource.from_hash(object_hash)
     initialized_api_resource = ConcreteApiResource.new(object_hash)
-
     except(object_json, 'type').keys.each do |attribute|
       assert_equal initialized_api_resource.send(attribute), api_resource.send(attribute)
     end
+  end
+
+  describe 'correctly equates two resources' do
+    class DummyResource; include Intercom::Traits::ApiResource; end
+
+    specify 'if each resource has the same class and same value' do
+      api_resource1 = DummyResource.new(object_json)
+      api_resource2 = DummyResource.new(object_json)
+      assert_equal (api_resource1 == api_resource2), true
+    end
+
+    specify 'if each resource has the same class and different value' do
+      object2_json = object_json.merge('id' => 'bbbbbb')
+      api_resource1 = DummyResource.new(object_json)
+      api_resource2 = DummyResource.new(object2_json)
+      assert_equal (api_resource1 == api_resource2), false
+    end
+
+    specify 'if each resource has a different class' do
+      dummy_resource = DummyResource.new(object_json)
+      assert_equal (dummy_resource == api_resource), false
+    end
+  end
+
+  it 'correctly generates submittable hash when no updates' do
+    assert_equal api_resource.to_submittable_hash, {}
+  end
+
+  it 'correctly generates submittable hash when there are updates' do
+    api_resource.name = 'SuperSuite updated'
+    api_resource.nested_fields.field_1.name = 'Updated Name'
+    assert_equal api_resource.to_submittable_hash, {
+      'name' => 'SuperSuite updated',
+      'nested_fields' => {
+        'field_1' => {
+            'name' => 'Updated Name'
+        }
+      }
+    }
   end
 
   def except(h, *keys)
