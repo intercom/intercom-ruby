@@ -25,5 +25,17 @@ module Intercom
     def flat_store_attributes
       [:custom_attributes]
     end
+
+    def archive
+      response = @client.post("/contacts/#{self.id}/archive", {})
+      raise Intercom::HttpError, 'Http Error - No response entity returned' unless response
+      self.class.from_api(response)
+    end
+
+    def unarchive
+      response = @client.post("/contacts/#{self.id}/unarchive", {})
+      raise Intercom::HttpError, 'Http Error - No response entity returned' unless response
+      self.class.from_api(response)
+    end
   end
 end

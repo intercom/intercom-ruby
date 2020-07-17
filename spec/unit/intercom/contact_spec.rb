@@ -260,6 +260,20 @@ describe Intercom::Contact do
     end
   end
 
+  describe 'archiving' do
+    let(:contact) { Intercom::Contact.new(id: '1', client: client) }
+
+    it 'should successfully archive a contact' do
+      client.expects(:post).with("/contacts/#{contact.id}/archive")
+      contact.archive
+    end
+
+    it 'should successfully unarchive a contact'
+      client.expects(:post).with("/contacts/#{contact.id}/archive")
+      contact.archive
+    end
+  end
+
   describe 'nested resources' do
     let(:contact) { Intercom::Contact.new(id: '1', client: client) }
     let(:company) { Intercom::Company.new(id: '1') }
