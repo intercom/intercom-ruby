@@ -53,6 +53,16 @@ describe "Intercom::Conversation" do
     client.conversations.snooze(id: '147', admin_id: '123', snoozed_until: tomorrow)
   end
 
+  it 'redacts a source' do
+    client.expects(:post).with('/conversations/redact', { conversation_id: '147', type: 'source', source_id: '587'}).returns(test_conversation)
+    client.conversations.redact(id: '147', type: 'source', source_id: '587')
+  end
+
+  it 'redacts a conversation_part' do
+    client.expects(:post).with('/conversations/redact', { conversation_id: '147', type: 'conversation_part', conversation_part_id: '587'}).returns(test_conversation)
+    client.conversations.redact(id: '147', type: 'conversation_part', conversation_part_id: '587')
+  end
+
   it 'runs assignment rules on a conversation' do
     client.expects(:post).with('/conversations/147/run_assignment_rules').returns(test_conversation)
     client.conversations.run_assignment_rules('147')

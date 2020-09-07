@@ -61,6 +61,28 @@ module Intercom
         response = @client.post("/#{collection_name}/#{id}/run_assignment_rules")
         collection_class.new.from_response(response)
       end
+
+      def redact(redact_data)
+        redact_type = redact_data.fetch(:type) { raise 'type field is required' }
+        conversation_id = redact_data.delete(:id) { raise 'id field is required' }
+        params = {
+            type: redact_type,
+            conversation_id: conversation_id
+        }
+
+        if redact_type == 'source'
+          source_id = redact_data.fetch(:source_id) { raise 'source_id field is required for type "source"' }
+          params[:source_id] = source_id
+        elsif redact_type == 'conversation_part'
+          conversation_part_id = redact_data.fetch(:conversation_part_id) { raise 'conversation_part_id field is required for type "conversation_part"' }
+          params[:conversation_part_id] = conversation_part_id
+        else
+          raise 'unknown redact_type'
+        end
+
+        response = @client.post("/#{collection_name}/redact", params)
+        collection_class.new.from_response(response)
+      end
     end
   end
 end

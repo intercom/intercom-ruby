@@ -357,6 +357,12 @@ intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123'
 # Reply and Close
 intercom.conversations.reply(id: conversation.id, type: 'admin', admin_id: '123', message_type: 'close', body: 'bar')
 
+# Redact conversation source
+intercom.conversations.redact(id: conversation.id, type: 'source', source_id: '587')
+
+# Redact conversation part
+intercom.conversations.redact(id: conversation.id, type: 'conversation_part', conversation_part_id: '587')
+
 # Admin reply to last conversation
 intercom.conversations.reply_to_last(intercom_user_id: '5678', type: 'admin', admin_id: '123', message_type: 'comment', body: 'bar')
 
