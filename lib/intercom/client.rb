@@ -128,7 +128,7 @@ module Intercom
       execute_request Intercom::Request.get(path, params)
     end
 
-    def post(path, payload_hash = {})
+    def post(path, payload_hash)
       execute_request Intercom::Request.post(path, payload_hash)
     end
 
