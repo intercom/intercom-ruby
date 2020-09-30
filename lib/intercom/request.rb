@@ -158,7 +158,7 @@ module Intercom
     private def raise_errors_on_failure(res)
       code = res.code.to_i
 
-      if code ==429
+      if code == 429
         raise Intercom::RateLimitExceeded, 'Rate Limit Exceeded'
       elsif code == 500
         raise Intercom::ServerError, 'Server Error'
