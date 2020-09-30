@@ -61,7 +61,6 @@ module Intercom
             response = http.request(net_http_method)
 
             set_rate_limit_details(response)
-            raise_errors_on_failure(response)
 
             parsed_body = extract_response_body(response)
 
@@ -153,28 +152,6 @@ module Intercom
 
     private def set_api_version(method, api_version)
       method.add_field('Intercom-Version', api_version)
-    end
-
-    private def raise_errors_on_failure(res)
-      code = res.code.to_i
-
-      if code == 404
-        raise Intercom::ResourceNotFound, 'Resource Not Found'
-      elsif code == 401
-        raise Intercom::AuthenticationError, 'Unauthorized'
-      elsif code == 403
-        raise Intercom::AuthenticationError, 'Forbidden'
-      elsif code == 429
-        raise Intercom::RateLimitExceeded, 'Rate Limit Exceeded'
-      elsif code == 500
-        raise Intercom::ServerError, 'Server Error'
-      elsif code == 502
-        raise Intercom::BadGatewayError, 'Bad Gateway Error'
-      elsif code == 503
-        raise Intercom::ServiceUnavailableError, 'Service Unavailable'
-      elsif code == 504
-        raise Intercom::GatewayTimeoutError, 'Gateway Timeout'
-      end
     end
 
     private def raise_application_errors_on_failure(error_list_details, http_code)
