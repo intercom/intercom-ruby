@@ -248,6 +248,18 @@ describe Intercom::Contact do
     client.contacts.delete(contact)
   end
 
+  it 'archives a contact' do
+    contact = Intercom::Contact.new('id' => '1')
+    client.expects(:post).with('/contacts/1/archive', {}).returns(contact)
+    client.contacts.archive(contact)
+  end
+
+  it 'unarchives a contact' do
+    contact = Intercom::Contact.new('id' => '1')
+    client.expects(:post).with('/contacts/1/unarchive', {}).returns(contact)
+    client.contacts.unarchive(contact)
+  end
+
   describe 'merging' do
     let(:lead) { Intercom::Contact.from_api(external_id: 'contact_id', role: 'lead') }
     let(:user) { Intercom::Contact.from_api(id: 'external_id', role: 'user') }
