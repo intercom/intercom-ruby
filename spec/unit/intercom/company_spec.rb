@@ -35,4 +35,10 @@ describe Intercom::Company do
     _(proxy.url).must_equal '/companies/1/contacts'
     _(proxy.resource_class).must_equal Intercom::Contact
   end
+
+  it "deletes a company" do
+    company = Intercom::Company.new("id" => "1")
+    client.expects(:delete).with("/companies/1", {}).returns(test_company)
+    client.companies.delete(company)
+  end
 end
