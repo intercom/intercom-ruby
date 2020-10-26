@@ -27,10 +27,9 @@ module Intercom
 
       @scroll_param = extract_scroll_param(response_hash)
       top_level_entity_key = deserialize_response_hash(response_hash)
-      response_hash[top_level_entity_key] = response_hash[top_level_entity_key].map do |object_json|
+      @records = response_hash[top_level_entity_key].map do |object_json|
         Lib::TypedJsonDeserializer.new(object_json, @client).deserialize
       end
-      @records = response_hash[@resource_name]
       self
     end
 
@@ -44,11 +43,13 @@ module Intercom
                         end
         raise Intercom::HttpError, 'Http Error - No response entity returned' unless response_hash
 
-        response_hash[deserialize_response_hash(response_hash)].each do |object_json|
+        top_level_entity_key = deserialize_response_hash(response_hash)
+        response_records = response_hash[top_level_entity_key]
+        response_records.each do |object_json|
           block.call Lib::TypedJsonDeserializer.new(object_json, @client).deserialize
         end
         scroll_param = extract_scroll_param(response_hash)
-        break unless records_present?(response_hash)
+        break if response_records.empty?
       end
       self
     end
@@ -62,10 +63,6 @@ module Intercom
       else
         Utils.entity_key_from_type(top_level_type)
       end
-    end
-
-    def records_present?(response_hash)
-      !response_hash[@resource_name].empty?
     end
 
     def extract_scroll_param(response_hash)
