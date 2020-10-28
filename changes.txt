@@ -1,3 +1,6 @@
+4.1.1
+- Fixed bug with deprecated lead resource.
+
 4.1.0
 - Added support for new Articles API.
 - Added support for new Collections API.
