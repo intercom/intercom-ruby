@@ -38,7 +38,7 @@ describe Intercom::Company do
 
   it "deletes a company" do
     company = Intercom::Company.new("id" => "1")
-    client.expects(:delete).with("/companies/1", {}).returns(test_company)
+    client.expects(:delete).with("/companies/1", {})
     client.companies.delete(company)
   end
 end
