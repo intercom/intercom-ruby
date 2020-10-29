@@ -1,4 +1,5 @@
 require 'intercom/service/base_service'
+require 'intercom/api_operations/delete'
 require 'intercom/api_operations/list'
 require 'intercom/api_operations/scroll'
 require 'intercom/api_operations/find'
@@ -11,6 +12,7 @@ require 'intercom/extended_api_operations/segments'
 module Intercom
   module Service
     class Company < BaseService
+      include ApiOperations::Delete
       include ApiOperations::Find
       include ApiOperations::FindAll
       include ApiOperations::Load
