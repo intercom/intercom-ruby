@@ -54,7 +54,7 @@ describe "Intercom::Conversation" do
   end
 
   it 'runs assignment rules on a conversation' do
-    client.expects(:post).with('/conversations/147/run_assignment_rules').returns(test_conversation)
+    client.expects(:post).with('/conversations/147/run_assignment_rules', {}).returns(test_conversation)
     client.conversations.run_assignment_rules('147')
   end
 
