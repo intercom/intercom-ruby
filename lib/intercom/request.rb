@@ -158,7 +158,13 @@ module Intercom
     private def raise_errors_on_failure(res)
       code = res.code.to_i
 
-      if code == 429
+      if code == 404
+        raise Intercom::ResourceNotFound, 'Resource Not Found'
+      elsif code == 401
+        raise Intercom::AuthenticationError, 'Unauthorized'
+      elsif code == 403
+        raise Intercom::AuthenticationError, 'Forbidden'
+      elsif code == 429
         raise Intercom::RateLimitExceeded, 'Rate Limit Exceeded'
       elsif code == 500
         raise Intercom::ServerError, 'Server Error'
