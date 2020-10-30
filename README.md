@@ -261,6 +261,9 @@ intercom.tags.all.map {|tag| tag.name }
 
 # Tag companies
 tag = intercom.tags.tag(name: 'blue', companies: [{company_id: "42ea2f1b93891f6a99000427"}])
+
+# Untag Companies
+tag = intercom.tags.untag(name: 'blue', companies: [{ company_id: "42ea2f1b93891f6a99000427" }])
 ```
 
 #### Notes
