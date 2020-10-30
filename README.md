@@ -86,6 +86,12 @@ intercom.contacts.save(contact)
 contact.role = "user"
 intercom.contacts.save(contact)
 
+# Archive a contact
+intercom.contacts.archive(contact)
+
+# Unarchive a contact
+intercom.contacts.unarchive(contact)
+
 # Delete a contact permanently
 intercom.contacts.delete(contact)
 
@@ -168,6 +174,9 @@ company = intercom.companies.find(id: "41e66f0313708347cb0000d0")
 # Update a company
 company.name = 'Updated company name'
 intercom.companies.save(company)
+
+# Delete a company
+intercom.companies.delete(company)
 
 # Iterate over all companies
 intercom.companies.all.each {|company| puts %Q(#{company.name} - #{company.custom_attributes["referral_source"]}) }
