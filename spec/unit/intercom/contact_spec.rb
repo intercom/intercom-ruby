@@ -285,6 +285,13 @@ describe Intercom::Contact do
       _(proxy.resource_class).must_equal Intercom::Note
     end
 
+    it 'returns a collection proxy for listing segments' do
+      proxy = contact.segments
+      _(proxy.resource_name).must_equal 'segments'
+      _(proxy.url).must_equal '/contacts/1/segments'
+      _(proxy.resource_class).must_equal Intercom::Segment
+    end
+
     it 'returns a collection proxy for listing tags' do
       proxy = contact.tags
       _(proxy.resource_name).must_equal 'tags'

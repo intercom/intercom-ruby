@@ -13,6 +13,7 @@ module Intercom
     nested_resource_methods :tag, operations: %i[add delete list]
     nested_resource_methods :note, operations: %i[create list]
     nested_resource_methods :company, operations: %i[add delete list]
+    nested_resource_methods :segment, operations: %i[list]
 
     def self.collection_proxy_class
       Intercom::BaseCollectionProxy
