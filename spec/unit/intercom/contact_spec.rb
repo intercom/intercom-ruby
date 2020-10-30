@@ -250,13 +250,13 @@ describe Intercom::Contact do
 
   it 'archives a contact' do
     contact = Intercom::Contact.new('id' => '1')
-    client.expects(:post).with('/contacts/1/archive', {}).returns(contact)
+    client.expects(:post).with('/contacts/1/archive', {})
     client.contacts.archive(contact)
   end
 
   it 'unarchives a contact' do
     contact = Intercom::Contact.new('id' => '1')
-    client.expects(:post).with('/contacts/1/unarchive', {}).returns(contact)
+    client.expects(:post).with('/contacts/1/unarchive', {})
     client.contacts.unarchive(contact)
   end
 
