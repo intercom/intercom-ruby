@@ -33,6 +33,16 @@ module Intercom
         user.from_response(response)
       end
 
+      def archive(contact)
+        @client.post("/#{collection_name}/#{contact.id}/archive", {})
+        contact
+      end
+
+      def unarchive(contact)
+        @client.post("/#{collection_name}/#{contact.id}/unarchive", {})
+        contact
+      end
+
       private def raise_invalid_merge_error
         raise Intercom::InvalidMergeError, 'Merging can only be performed on a lead into a user'
       end
