@@ -125,6 +125,9 @@ contact.create_note(body: "<p>Text for the note</p>")
 # List notes for a contact
 contact.notes.each {|n| p n.body}
 
+# List segments for a contact
+contact.segments.each {|segment| p segment.name}
+
 # Add a contact to a company
 company = intercom.companies.find(id: "123")
 contact.add_company(id: company.id)
