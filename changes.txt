@@ -1,3 +1,10 @@
+4.1.2
+- Adding support for company delete.
+- Adding support for archiving/unarchiving contacts.
+- Adding support for listing contact segments.
+- Fixed issue with scroll collection proxy.
+- Fixed issue with running assignment rules on a conversation.
+
 4.1.1
 - Fixed bug with deprecated lead resource.
 

@@ -36,7 +36,7 @@ intercom = Intercom::Client.new(token: 'my_token')
 
 ```ruby
 # With a versioned app:
-intercom = Intercom::Client.new(token: 'my_token', api_version: '2.1')
+intercom = Intercom::Client.new(token: 'my_token', api_version: '2.2')
 ```
 
 If you are building a third party application you can get your access_tokens by [setting-up-oauth](https://developers.intercom.io/page/setting-up-oauth) for Intercom.
