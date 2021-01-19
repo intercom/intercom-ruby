@@ -700,13 +700,13 @@ intercom = Intercom::Client.new(token: ENV['AT'], handle_rate_limit: true)
 
 ```bash
 # all tests
-bundle exec spec
+bundle exec rake spec
 
 # unit tests
-bundle exec spec:unit
+bundle exec rake spec:unit
 
 # integration tests
-bundle exec spec:integration
+bundle exec rake spec:integration
 
 # single test file
 bundle exec m spec/unit/intercom/job_spec.rb
