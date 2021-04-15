@@ -208,7 +208,7 @@ intercom.data_attributes.save(attribute)
 
 # Find all customer attributes including archived
 customer_attributes_incl_archived = intercom.data_attributes.find_all({"model": "contact", "include_archived": true})
-customer_attributes_incl_archived.each { |attr| p attribute.name }
+customer_attributes_incl_archived.each { |attr| p attr.name }
 ```
 
 #### Events
