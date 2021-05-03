@@ -1,12 +1,26 @@
 # intercom-ruby
 
-Ruby bindings for the Intercom API (https://developers.intercom.io/reference).
+[![Circle CI](https://circleci.com/gh/intercom/intercom-ruby.png?style=shield)](https://circleci.com/gh/intercom/intercom-ruby)
+[![gem](https://img.shields.io/gem/v/intercom)](https://rubygems.org/gems/intercom)
+![Intercom API Version](https://img.shields.io/badge/Intercom%20API%20Version-2.2-blue)
+
+> Ruby bindings for the [Intercom API](https://developers.intercom.io/reference).
+
+## Project Updates
+
+### Maintenance
+
+We're currently building a new team to provide in-depth and dedicated SDK support.
+
+In the meantime, we'll be operating on limited capacity, meaning all pull requests will be evaluated on a best effort basis and will be limited to critical issues.
+
+We'll communicate all relevant updates as we build this new team and support strategy in the coming months.
 
 [API Documentation](https://developers.intercom.io/docs)
 
 [Gem Documentation](http://rubydoc.info/github/intercom/intercom-ruby/master/frames)
 
-For generating Intercom JavaScript script tags for Rails, please see https://github.com/intercom/intercom-rails.
+For generating Intercom JavaScript script tags for Rails, please see [intercom/intercom-rails](https://github.com/intercom/intercom-rails)
 
 ## Upgrading information
 
@@ -16,12 +30,15 @@ This version of the gem is compatible with `Ruby 2.1` and above.
 
 ## Installation
 
-
-    gem install intercom
+```bash
+gem install intercom
+```
 
 Using bundler:
 
-    gem 'intercom', '~> 4.1'
+```bundler
+gem 'intercom', '~> 4.1'
+```
 
 ## Basic Usage
 
@@ -46,29 +63,31 @@ You can also use the [omniauth-intercom lib](https://github.com/intercom/omniaut
 
 Resources this API supports:
 
-    https://api.intercom.io/contacts
-    https://api.intercom.io/visitors
-    https://api.intercom.io/companies
-    https://api.intercom.io/data_attributes
-    https://api.intercom.io/events
-    https://api.intercom.io/tags
-    https://api.intercom.io/notes
-    https://api.intercom.io/segments
-    https://api.intercom.io/conversations
-    https://api.intercom.io/messages
-    https://api.intercom.io/admins
-    https://api.intercom.io/teams
-    https://api.intercom.io/counts
-    https://api.intercom.io/subscriptions
-    https://api.intercom.io/jobs
-    https://api.intercom.io/articles
-    https://api.intercom.io/help_center/collections
-    https://api.intercom.io/help_center/sections
-
+```text
+https://api.intercom.io/contacts
+https://api.intercom.io/visitors
+https://api.intercom.io/companies
+https://api.intercom.io/data_attributes
+https://api.intercom.io/events
+https://api.intercom.io/tags
+https://api.intercom.io/notes
+https://api.intercom.io/segments
+https://api.intercom.io/conversations
+https://api.intercom.io/messages
+https://api.intercom.io/admins
+https://api.intercom.io/teams
+https://api.intercom.io/counts
+https://api.intercom.io/subscriptions
+https://api.intercom.io/jobs
+https://api.intercom.io/articles
+https://api.intercom.io/help_center/collections
+https://api.intercom.io/help_center/sections
+```
 
 ### Examples
 
 #### Contacts
+
 Note that this is a new resource compatible only with the new [Contacts API](https://developers.intercom.com/intercom-api-reference/reference#contacts-model) released in API v2.0.
 
 ```ruby
@@ -146,6 +165,7 @@ contact.companies.each {|c| p c.name}
 ```
 
 #### Visitors
+
 ```ruby
 # Get and update a visitor
 visitor = intercom.visitors.find(id: "5dd570e7b1b922452676af23")
@@ -161,6 +181,7 @@ intercom.visitors.convert(visitor, user)
 ```
 
 #### Companies
+
 ```ruby
 # Find a company by company_id
 company = intercom.companies.find(company_id: "44")
@@ -188,7 +209,9 @@ intercom.companies.scroll.each { |comp| puts comp.name}
 ```
 
 #### Data Attributes
+
 Data Attributes are a type of metadata used to describe your customer and company models. These include standard and custom attributes.
+
 ```ruby
 # Create a new custom data attribute
 intercom.data_attributes.create({ name: "test_attribute", model: "contact", data_type: "string" })
@@ -212,6 +235,7 @@ customer_attributes_incl_archived.each { |attr| p attr.name }
 ```
 
 #### Events
+
 ```ruby
 intercom.events.create(
   event_name: "invited-friend",
@@ -257,7 +281,8 @@ intercom.events.create(
 )
 ```
 
-The metadata key values in the example are treated as follows-
+The metadata key values in the example are treated as follows:
+
 - order_date: a Date (key ends with '_date')
 - stripe_invoice: The identifier of the Stripe invoice (has a 'stripe_invoice' key)
 - order_number: a Rich Link (value contains 'url' and 'value' keys)
@@ -266,6 +291,7 @@ The metadata key values in the example are treated as follows-
 *NB:* This version of the gem reserves the field name `type` in Event data.
 
 #### Tags
+
 ```ruby
 # Iterate over all tags
 intercom.tags.all.each {|tag| "#{tag.id} - #{tag.name}" }
@@ -279,12 +305,14 @@ tag = intercom.tags.untag(name: 'blue', companies: [{ company_id: "42ea2f1b93891
 ```
 
 #### Notes
+
 ```ruby
 # Find a note by id
 note = intercom.notes.find(id: "123")
 ```
 
 #### Segments
+
 ```ruby
 # Find a segment
 segment = intercom.segments.find(id: segment_id)
@@ -294,6 +322,7 @@ intercom.segments.all.each {|segment| puts "id: #{segment.id} name: #{segment.na
 ```
 
 #### Conversations
+
 ```ruby
 # Iterate over all conversations for your app
 intercom.conversations.all.each { |convo| ... }
@@ -424,6 +453,7 @@ conversation.remove_contact(id: contact.id, admin_id: admin.id)
 ```
 
 #### Full loading of an embedded entity
+
 ```ruby
 # Given a conversation with a partial contact, load the full contact. This can be
 # done for any entity
@@ -431,6 +461,7 @@ intercom.contacts.load(conversation.contacts.first)
 ```
 
 #### Sending messages
+
 ```ruby
 
 # InApp message from admin to user
@@ -497,6 +528,7 @@ intercom.messages.create({
 ```
 
 #### Admins
+
 ```ruby
 # Find access token owner (only with Personal Access Token and OAuth)
 intercom.admins.me
@@ -507,6 +539,7 @@ intercom.admins.all.each {|admin| puts admin.email }
 ```
 
 #### Teams
+
 ```ruby
 # Find a team by id
 intercom.teams.find(id: team_id)
@@ -544,6 +577,7 @@ intercom.subscriptions.all
 ```
 
 #### Articles
+
 ```ruby
 # Create an article
 article = intercom.articles.create(title: "New Article", author_id: "123456")
@@ -577,6 +611,7 @@ intercom.articles.delete(article)
 ```
 
 #### Collections
+
 ```ruby
 # Create a collection
 collection = intercom.collections.create(name: "New Collection")
@@ -609,6 +644,7 @@ intercom.collections.delete(collection)
 ```
 
 #### Sections
+
 ```ruby
 # Create a section
 section = intercom.sections.create(name: "New Section", parent_id: "123456")
@@ -674,7 +710,7 @@ intercom.rate_limit_details
 You can handle the rate limits yourself but a simple option is to use the handle_rate_limit flag.
 This will automatically catch the 429 rate limit exceeded error and wait until the reset time to retry. After three retries a rate limit exception will be raised. Encountering this error frequently may require a revisiting of your usage of the API.
 
-```
+```ruby
 intercom = Intercom::Client.new(token: ENV['AT'], handle_rate_limit: true)
 ```
 
