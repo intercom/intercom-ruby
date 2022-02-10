@@ -274,6 +274,7 @@ describe Intercom::Contact do
 
   describe 'nested resources' do
     let(:contact) { Intercom::Contact.new(id: '1', client: client) }
+    let(:contact_no_tags) { Intercom::Contact.new(id: '2', client: client, tags: []) }
     let(:company) { Intercom::Company.new(id: '1') }
     let(:tag) { Intercom::Tag.new(id: '1') }
     let(:note) { Intercom::Note.new(body: "<p>Text for the note</p>") }
@@ -297,6 +298,27 @@ describe Intercom::Contact do
       _(proxy.resource_name).must_equal 'tags'
       _(proxy.url).must_equal '/contacts/1/tags'
       _(proxy.resource_class).must_equal Intercom::Tag
+    end
+
+    it 'returns correct tags from differring contacts' do
+      client.expects(:get).with('/contacts/1/tags', {}).returns({
+        'type' => 'tag.list',
+        'tags' => [
+          {
+            'type' => 'tag',
+            'id' => '1',
+            'name' => 'VIP Customer'
+          },
+          {
+            'type' => 'tag',
+            'id' => '2',
+            'name' => 'Test tag'
+          }
+        ]
+      })
+
+      _(contact_no_tags.tags.map{ |t| t.id }).must_equal []
+      _(contact.tags.map{ |t| t.id }).must_equal ['1', '2']
     end
 
     it 'returns a collection proxy for listing companies' do
