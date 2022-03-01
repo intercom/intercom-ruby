@@ -696,6 +696,7 @@ Intercom::RateLimitExceeded
 Intercom::AttributeNotSetError # Raised when you try to call a getter that does not exist on an object
 Intercom::MultipleMatchingUsersError
 Intercom::HttpError # Raised when response object is unexpectedly nil
+Intercom::GatewayTimeoutError
 ```
 
 ### Rate Limiting
@@ -736,13 +737,13 @@ intercom = Intercom::Client.new(token: ENV['AT'], handle_rate_limit: true)
 
 ```bash
 # all tests
-bundle exec spec
+bundle exec rake spec
 
 # unit tests
-bundle exec spec:unit
+bundle exec rake spec:unit
 
 # integration tests
-bundle exec spec:integration
+bundle exec rake spec:integration
 
 # single test file
 bundle exec m spec/unit/intercom/job_spec.rb

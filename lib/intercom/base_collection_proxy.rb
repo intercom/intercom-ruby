@@ -58,6 +58,7 @@ module Intercom
         @params[:starting_after] = paging_next['starting_after']
         return true
       else
+        @params[:starting_after] = nil
         return false
       end
     end
