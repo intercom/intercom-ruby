@@ -124,6 +124,14 @@ module Intercom
       Intercom::Service::Collection.new(self)
     end
 
+    def export_content
+      Intercom::Service::ExportContent.new(self)
+    end
+
+    def phone_call_redirect
+      Intercom::Service::PhoneCallRedirect.new(self)
+    end
+
     def get(path, params)
       execute_request Intercom::Request.get(path, params)
     end
