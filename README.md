@@ -532,6 +532,16 @@ intercom.messages.create({
   },
   body: "halp"
 })
+
+#From version 2.6 the type contact is not supported and you would have to use leads to send messages to a lead.
+
+intercom.messages.create({
+  from: {
+    type: "lead",
+    id: "536e5643as316c83104c400671"
+  },
+  body: "halp"
+})
 ```
 
 #### Admins
