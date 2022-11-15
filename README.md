@@ -686,6 +686,29 @@ intercom.collections.save(section)
 intercom.sections.delete(section)
 ```
 
+#### Phone Call Redirect (switch)
+
+```ruby
+# Create a redirect
+redirect = intercom.phone_call_redirect.create(phone_number: "+353871234567")
+
+```
+
+#### Data Content Export
+
+```ruby
+# Create a data export
+export = intercom.data_content_export.create(created_at_after: 1667566801, created_at_before: 1668085202)
+
+
+#View a data export
+export = intercom.data_content_export.find(id: 'k0e27ohsyvh8ef3m')
+
+# Cancel a data export
+export = intercom.data_content_export.cancel('k0e27ohsyvh8ef3m')
+
+```
+
 ### Errors
 
 There are different styles for error handling - some people prefer exceptions; some prefer nil and check; some prefer error objects/codes. Balancing these preferences alongside our wish to provide an idiomatic gem has brought us to use the current mechanism of throwing specific exceptions. Our approach in the client is to propagate errors and signal our failure loudly so that erroneous data does not get propagated through our customers' systems - in other words, if you see a `Intercom::ServiceUnavailableError` you know where the problem is.

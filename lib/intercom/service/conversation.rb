@@ -21,6 +21,10 @@ module Intercom
         Intercom::Conversation
       end
 
+      def collection_proxy_class
+        Intercom::BaseCollectionProxy
+      end
+
       def mark_read(id)
         @client.put("/conversations/#{id}", read: true)
       end
