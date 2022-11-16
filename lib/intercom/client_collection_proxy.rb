@@ -38,7 +38,12 @@ module Intercom
       return nil unless paging_info_present?(response_hash)
 
       paging_info = response_hash.delete('pages')
-      paging_info['next']
+      if paging_info['next'] && !paging_info['next']['starting_after'].nil?
+        return @url + "?starting_after="+ paging_info['next']['starting_after']
+      else
+        paging_info['next']
+      end
+
     end
 
     def extract_current_page(response_hash)
