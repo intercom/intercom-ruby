@@ -222,6 +222,8 @@ module Intercom
         raise Intercom::ApiVersionInvalid.new(error_details['message'], error_context)
       when 'scroll_exists'
         raise Intercom::ScrollAlreadyExistsError.new(error_details['message'], error_context)
+      when 'tag_has_dependent_objects'
+        raise Intercom::TagHasDependentObjects.new(error_details['message'], error_context)
       when nil, ''
         raise Intercom::UnexpectedError.new(message_for_unexpected_error_without_type(error_details, parsed_http_code), error_context)
       else
