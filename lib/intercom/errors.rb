@@ -99,6 +99,9 @@ module Intercom
   # Raised when a merge is invalid
   class InvalidMergeError < IntercomError; end
 
+  # Raised when a tag has dependent objects
+  class TagHasDependentObjects < IntercomError; end
+
   #
   # Non-public errors (internal to the gem)
   #

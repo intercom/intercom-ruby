@@ -28,4 +28,10 @@ describe 'Intercom::Tag' do
     client.expects(:post).with('/tags', 'name' => 'Test Tag', 'companies' => [{ company_id: 'abc123', untag: true }, { company_id: 'def456', untag: true }], 'tag_or_untag' => 'untag').returns(test_tag)
     client.tags.untag(name: 'Test Tag', companies: [{ company_id: 'abc123' }, { company_id: 'def456' }])
   end
+
+  it 'delete tags' do
+    tag = Intercom::Tag.new('id' => '1')
+    client.expects(:delete).with('/tags/1', {}).returns(tag)
+    client.tags.delete(tag)
+  end
 end

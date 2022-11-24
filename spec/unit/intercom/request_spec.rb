@@ -124,6 +124,9 @@ describe 'Intercom::Request', '#execute' do
     let(:uri) {"https://api.intercom.io/conversations/reply"}
     let(:req) { Intercom::Request.put(uri, {}) }
 
+    let(:tag_uri) {"https://api.intercom.io/tags/"}
+    let(:del_req) { Intercom::Request.delete(tag_uri, {}) }
+
     it 'should raise ResourceNotUniqueError error on resource_conflict code' do
       stub_request(:put, uri).to_return(
         status: [409, "Resource Already Exists"],
@@ -152,6 +155,16 @@ describe 'Intercom::Request', '#execute' do
       )
 
       expect { execute! }.must_raise(Intercom::ResourceNotFound)
+    end
+
+    it 'should raise TagHasDependentObjects error on tag_has_dependent_objects code' do
+      stub_request(:delete, tag_uri).to_return(
+        status: [400, "Bad Request"],
+        headers: { 'X-RateLimit-Reset' => (Time.now.utc + 10).to_i.to_s },
+        body: { type: "error.list", errors: [ code: "tag_has_dependent_objects" ] }.to_json
+      )
+
+      expect { del_req.execute(tag_uri, token: 'test-token') }.must_raise(Intercom::TagHasDependentObjects)
     end
   end
 end
