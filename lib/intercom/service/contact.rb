@@ -43,6 +43,10 @@ module Intercom
         contact
       end
 
+      def delete_archived_contact(id)
+        @client.delete("/#{collection_name}/#{id}", {})
+      end
+
       private def raise_invalid_merge_error
         raise Intercom::InvalidMergeError, 'Merging can only be performed on a lead into a user'
       end

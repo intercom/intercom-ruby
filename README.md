@@ -114,6 +114,9 @@ intercom.contacts.unarchive(contact)
 # Delete a contact permanently
 intercom.contacts.delete(contact)
 
+# Deletes an archived contact permanently
+contact.delete_archived_contact("124")
+
 # List all contacts
 contacts = intercom.contacts.all
 contacts.each { |contact| p contact.name }
