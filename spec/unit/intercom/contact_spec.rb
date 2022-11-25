@@ -276,6 +276,7 @@ describe Intercom::Contact do
     let(:contact) { Intercom::Contact.new(id: '1', client: client) }
     let(:contact_no_tags) { Intercom::Contact.new(id: '2', client: client, tags: []) }
     let(:company) { Intercom::Company.new(id: '1') }
+    let(:subscription) { Intercom::Subscription.new(id: '1', client: client) }
     let(:tag) { Intercom::Tag.new(id: '1') }
     let(:note) { Intercom::Note.new(body: "<p>Text for the note</p>") }
 
@@ -338,6 +339,11 @@ describe Intercom::Contact do
       contact.add_tag({ "id": tag.id })
     end
 
+    it 'removes a subscription to a contact' do
+      client.expects(:delete).with("/contacts/1/subscription_types/#{subscription.id}", "id": subscription.id).returns(subscription.to_hash)
+      contact.remove_subscription_type({ "id": subscription.id })
+    end
+
     it 'removes a tag from a contact' do
       client.expects(:delete).with("/contacts/1/tags/#{tag.id}", "id": tag.id ).returns(tag.to_hash)
       contact.remove_tag({ "id": tag.id })
@@ -385,6 +391,11 @@ describe Intercom::Contact do
       it 'adds a note to a contact' do
         client.expects(:post).with('/contacts/1/notes', {body: note.body}).returns(note.to_hash)
         contact.create_note({body: note.body})
+      end
+
+      it 'adds a subscription to a contact' do
+        client.expects(:post).with('/contacts/1/subscription_types', "id": subscription.id).returns(subscription.to_hash)
+        contact.create_subscription_type({ "id": subscription.id })
       end
 
       it 'adds a tag to a contact' do

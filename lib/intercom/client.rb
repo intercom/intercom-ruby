@@ -84,6 +84,10 @@ module Intercom
       Intercom::Service::Subscription.new(self)
     end
 
+    def subscription_types
+      Intercom::Service::SubscriptionType.new(self)
+    end
+
     def segments
       Intercom::Service::Segment.new(self)
     end

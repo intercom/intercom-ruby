@@ -162,6 +162,16 @@ contact.remove_company(id: company.id)
 
 # List companies for a contact
 contact.companies.each {|c| p c.name}
+
+# attach a subscription_types on a contact
+contact.create_subscription_types(id: '1')
+
+# List subscription_types for a contact
+contact.subscription_types.each {|n| p n.body}
+
+# Remove subscription_types
+contact.remove_subscription_type({ "id": subscription.id })
+
 ```
 
 #### Visitors
@@ -584,6 +594,19 @@ intercom.subscriptions.delete(subscription)
 
 # list subscriptions
 intercom.subscriptions.all
+```
+
+
+#### Subscription Types
+
+Subscribe to events in Intercom to receive webhooks.
+
+```ruby
+
+# fetch a subscription
+intercom.subscription_types.find(id: "1")
+
+intercom.subscription_types.all
 ```
 
 #### Articles
