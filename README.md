@@ -114,6 +114,9 @@ intercom.contacts.unarchive(contact)
 # Delete a contact permanently
 intercom.contacts.delete(contact)
 
+# Deletes an archived contact permanently
+contact.delete_archived_contact("124")
+
 # List all contacts
 contacts = intercom.contacts.all
 contacts.each { |contact| p contact.name }
@@ -312,6 +315,13 @@ tag = intercom.tags.tag(name: 'blue', companies: [{company_id: "42ea2f1b93891f6a
 
 # Untag Companies
 tag = intercom.tags.untag(name: 'blue', companies: [{ company_id: "42ea2f1b93891f6a99000427" }])
+
+
+# Delete Tags
+
+# Note : If there any depedent objects for the tag we are trying to delete, then an error TagHasDependentObjects will be thrown.
+tag = intercom.tags.find(id:"123")
+intercom.tags.delete(tag)
 ```
 
 #### Notes
