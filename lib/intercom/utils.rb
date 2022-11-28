@@ -25,6 +25,10 @@ module Intercom
         constant
       end
 
+      def camelize(snake_cased_word)
+        snake_cased_word.split(/_/).map(&:capitalize).join
+      end
+
       def resource_class_to_singular_name(resource_class)
         resource_name = resource_class.to_s.split('::')[-1]
         resource_name = maybe_underscore_name(resource_name)
@@ -40,7 +44,7 @@ module Intercom
       end
 
       def constantize_resource_name(resource_name)
-        class_name = Utils.singularize(resource_name.capitalize)
+        class_name = camelize Utils.singularize(resource_name.capitalize)
         define_lightweight_class(class_name) unless Intercom.const_defined?(class_name, false)
         namespaced_class_name = "Intercom::#{class_name}"
         constantize namespaced_class_name

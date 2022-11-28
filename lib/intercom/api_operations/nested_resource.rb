@@ -13,9 +13,7 @@ module Intercom
           raise ArgumentError, 'operations array required' if operations.nil?
 
           resource_url_method = :"#{resource_plural}_url"
-
           resource_name = Utils.resource_class_to_collection_name(self)
-
           define_method(resource_url_method.to_sym) do |id, nested_id = nil|
             url = "/#{resource_name}/#{id}/#{path}"
             url += "/#{nested_id}" unless nested_id.nil?

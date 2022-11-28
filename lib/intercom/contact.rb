@@ -12,6 +12,7 @@ module Intercom
 
     nested_resource_methods :tag, operations: %i[add delete list]
     nested_resource_methods :note, operations: %i[create list]
+    nested_resource_methods :subscription_type, operations: %i[create delete list]
     nested_resource_methods :company, operations: %i[add delete list]
     nested_resource_methods :segment, operations: %i[list]
 
