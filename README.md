@@ -115,7 +115,7 @@ intercom.contacts.unarchive(contact)
 intercom.contacts.delete(contact)
 
 # Deletes an archived contact permanently
-contact.delete_archived_contact("124")
+intercom.contacts.delete_archived_contact(contact.id)
 
 # List all contacts
 contacts = intercom.contacts.all
@@ -731,14 +731,14 @@ redirect = intercom.phone_call_redirect.create(phone_number: "+353871234567")
 
 ```ruby
 # Create a data export
-export = intercom.data_content_export.create(created_at_after: 1667566801, created_at_before: 1668085202)
+export = intercom.export_content.create(created_at_after: 1667566801, created_at_before: 1668085202)
 
 
 #View a data export
-export = intercom.data_content_export.find(id: 'k0e27ohsyvh8ef3m')
+export = intercom.export_content.find(id: 'k0e27ohsyvh8ef3m')
 
 # Cancel a data export
-export = intercom.data_content_export.cancel('k0e27ohsyvh8ef3m')
+export = intercom.export_content.cancel('k0e27ohsyvh8ef3m')
 
 ```
 
