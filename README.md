@@ -82,6 +82,9 @@ https://api.intercom.io/jobs
 https://api.intercom.io/articles
 https://api.intercom.io/help_center/collections
 https://api.intercom.io/help_center/sections
+https://api.intercom.io/phone_call_redirects
+https://api.intercom.io/subscription_types
+https://api.intercom.io/export/content/data
 ```
 
 ### Examples
@@ -167,13 +170,13 @@ contact.remove_company(id: company.id)
 contact.companies.each {|c| p c.name}
 
 # attach a subscription_types on a contact
-contact.create_subscription_types(id: '1')
+contact.create_subscription_types(id: subscription_type.id)
 
 # List subscription_types for a contact
-contact.subscription_types.each {|n| p n.body}
+contact.subscription_types.each {|n| p n.id}
 
 # Remove subscription_types
-contact.remove_subscription_type({ "id": subscription.id })
+contact.remove_subscription_type({ "id": subscription_type.id })
 
 ```
 
@@ -609,7 +612,7 @@ intercom.subscriptions.all
 
 #### Subscription Types
 
-Subscribe to events in Intercom to receive webhooks.
+List all the subscription types that a contact can opt in to
 
 ```ruby
 

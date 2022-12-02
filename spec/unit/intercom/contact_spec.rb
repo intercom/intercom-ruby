@@ -346,7 +346,7 @@ describe Intercom::Contact do
     end
 
     it 'removes a subscription to a contact' do
-      client.expects(:delete).with("/contacts/1/subscription_types/#{subscription.id}", "id": subscription.id).returns(subscription.to_hash)
+      client.expects(:delete).with("/contacts/1/subscriptions/#{subscription.id}", "id": subscription.id).returns(subscription.to_hash)
       contact.remove_subscription_type({ "id": subscription.id })
     end
 
@@ -400,7 +400,7 @@ describe Intercom::Contact do
       end
 
       it 'adds a subscription to a contact' do
-        client.expects(:post).with('/contacts/1/subscription_types', "id": subscription.id).returns(subscription.to_hash)
+        client.expects(:post).with('/contacts/1/subscriptions', "id": subscription.id).returns(subscription.to_hash)
         contact.create_subscription_type({ "id": subscription.id })
       end
 
