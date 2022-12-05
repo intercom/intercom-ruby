@@ -350,6 +350,8 @@ intercom.segments.all.each {|segment| puts "id: #{segment.id} name: #{segment.na
 # Iterate over all conversations for your app
 intercom.conversations.all.each { |convo| ... }
 
+# The below method of finding conversations by using the find_all method work only for API versions 2.5 and below
+
 # FINDING CONVERSATIONS FOR AN ADMIN
 # Iterate over all conversations (open and closed) assigned to an admin
 intercom.conversations.find_all(type: 'admin', id: '7').each {|convo| ... }
