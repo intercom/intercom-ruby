@@ -9,9 +9,10 @@ module Intercom
     class TypedJsonDeserializer
       attr_reader :json
 
-      def initialize(json, client)
+      def initialize(json, client, type = nil)
         @json = json
         @client = client
+        @type = type
       end
 
       def deserialize
@@ -27,7 +28,7 @@ module Intercom
       private
 
       def blank_object_type?(object_type)
-        object_type.nil? || object_type == ''
+        object_type.nil? || object_type == '' && @type.nil?
       end
 
       def list_object_type?(object_type)
@@ -48,7 +49,11 @@ module Intercom
       end
 
       def object_type
-        @object_type ||= json['type']
+        if !@type.nil?
+          @object_type = @type
+        else
+          @object_type ||= json['type'] 
+        end
       end
 
       def object_entity_key

@@ -45,7 +45,11 @@ module Intercom
                                Utils.entity_key_from_type(top_level_type)
                              end
       response_hash[top_level_entity_key].each do |object_json|
-        block.call Lib::TypedJsonDeserializer.new(object_json, @client).deserialize
+        if top_level_type == 'event.summary'
+          block.call Lib::TypedJsonDeserializer.new(object_json, @client, top_level_type).deserialize
+        else
+          block.call Lib::TypedJsonDeserializer.new(object_json, @client).deserialize
+        end
       end
     end
 
