@@ -278,7 +278,7 @@ intercom.events.create(
 # name - name of the event
 # first - time when event first occured.
 # last - time when event last occured
-# count - nmber of times the event occured
+# count - number of times the event occured
 # description -  description of the event
  events = intercom.events.find_all(type: 'user',intercom_user_id: 'abc',summary: true)
 ```
