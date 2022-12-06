@@ -273,6 +273,14 @@ intercom.events.create(
 
 # Retrieve event list for user with id:'123abc'
  intercom.events.find_all("type" => "user", "intercom_user_id" => "123abc")
+
+# Retrieve the event summary for user with id: 'abc' this will return an event object with the following characteristics: 
+# name - name of the event
+# first - time when event first occured.
+# last - time when event last occured
+# count - nmber of times the event occured
+# description -  description of the event
+ events = intercom.events.find_all(type: 'user',intercom_user_id: 'abc',summary: true)
 ```
 
 Metadata Objects support a few simple types that Intercom can present on your behalf
