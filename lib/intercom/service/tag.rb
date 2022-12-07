@@ -28,8 +28,15 @@ module Intercom
 
       def untag(params)
         params['tag_or_untag'] = 'untag'
-        params[:companies].each do |company|
-          company[:untag] = true
+        if params.has_key?(:companies)
+          params[:companies].each do |company|
+            company[:untag] = true
+          end
+        end
+        if params.has_key?(:users)
+          params[:users].each do |user|
+            user[:untag] = true
+          end
         end
         create(params)
       end
