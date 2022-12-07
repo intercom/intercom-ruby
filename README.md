@@ -2,7 +2,7 @@
 
 [![Circle CI](https://circleci.com/gh/intercom/intercom-ruby.png?style=shield)](https://circleci.com/gh/intercom/intercom-ruby)
 [![gem](https://img.shields.io/gem/v/intercom)](https://rubygems.org/gems/intercom)
-![Intercom API Version](https://img.shields.io/badge/Intercom%20API%20Version-2.2-blue)
+![Intercom API Version](https://img.shields.io/badge/Intercom%20API%20Version-2.6-blue)
 
 > Ruby bindings for the [Intercom API](https://developers.intercom.io/reference).
 
@@ -274,7 +274,7 @@ intercom.events.create(
 # Retrieve event list for user with id:'123abc'
  intercom.events.find_all("type" => "user", "intercom_user_id" => "123abc")
 
-# Retrieve the event summary for user with id: 'abc' this will return an event object with the following characteristics: 
+# Retrieve the event summary for user with id: 'abc' this will return an event object with the following characteristics:
 # name - name of the event
 # first - time when event first occured.
 # last - time when event last occured
