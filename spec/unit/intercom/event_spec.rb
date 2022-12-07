@@ -22,6 +22,13 @@ describe "Intercom::Event" do
     _(event_names).must_equal %W(invited-friend)
   end
 
+  it "able to fetch event summary" do
+    client.expects(:get).with("/events", type: 'user', email: 'joe@example.com', summary: true).returns(page_of_events(false))
+    event_names = []
+    client.events.find_all(type: 'user', email: 'joe@example.com',summary: true).each { |event| event_names << event.event_name }
+    _(event_names).must_equal %W(invited-friend)
+  end
+
   it "keeps iterating if next link" do
     client.expects(:get).with("/events", type: 'user', email: 'joe@example.com').returns(page_of_events(true))
     client.expects(:get).with("https://api.intercom.io/events?type=user&intercom_user_id=55a3b&before=144474756550", {}).returns(page_of_events(false))
