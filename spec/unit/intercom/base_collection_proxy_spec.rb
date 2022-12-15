@@ -44,4 +44,9 @@ describe Intercom::BaseCollectionProxy do
     contacts.each { |contact| emails_iter2 << contact.email }
     _(emails_iter1).must_equal emails_iter2
   end
+
+  it "supports query params" do
+    client.expects(:get).with("/conversations", {:intercom_user_id => 'abcdef0000'}).returns(test_conversation_list)
+    _(client.conversations.find_all(:intercom_user_id => 'abcdef0000').map(&:id)).must_equal %w[147]
+  end
 end
