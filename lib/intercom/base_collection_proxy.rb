@@ -68,10 +68,7 @@ module Intercom
     end
 
     def payload
-      payload = {}
-      payload[:per_page] = @params[:per_page] if @params[:per_page]
-      payload[:starting_after] = @params[:starting_after] if @params[:starting_after]
-      payload
+      @params.keep_if { |k, v| !v.nil? }.to_h
     end
   end
 end
