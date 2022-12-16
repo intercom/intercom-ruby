@@ -13,6 +13,11 @@ describe "Intercom::Conversation" do
     client.conversations.all.each { |c| }
   end
 
+  it "can filter conversations based on params" do
+    client.expects(:get).with("/conversations", {type: 'user', intercom_user_id: '123456789'}).returns(test_conversation_list)
+    client.conversations.find_all(type: 'user', intercom_user_id: '123456789').each { |c| }
+  end
+
   it 'marks a conversation as read' do
     client.expects(:put).with('/conversations/147', { read: true })
     client.conversations.mark_read('147')

@@ -9,7 +9,7 @@ describe Intercom::Company do
       _(proc { client.companies.find(:company_id => "4")}).must_raise Intercom::HttpError
     end
 
-    it "on find_all" do
+    it "on all" do
       client.expects(:get).with("/companies", {}).returns(nil)
       _(proc { client.companies.all.each {|company| }}).must_raise Intercom::HttpError
     end
