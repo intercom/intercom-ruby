@@ -170,7 +170,7 @@ contact.remove_company(id: company.id)
 contact.companies.each {|c| p c.name}
 
 # attach a subscription_types on a contact
-contact.create_subscription_types(id: subscription_type.id)
+contact.create_subscription_type(id: subscription_type.id)
 
 # List subscription_types for a contact
 contact.subscription_types.each {|n| p n.id}
