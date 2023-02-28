@@ -23,7 +23,7 @@ module Intercom
 
       private
       def validate_key_and_value(key, value)
-        raise ArgumentError.new("This does not support nested data structures (key: #{key}, value: #{value}") if value.is_a?(Array) || value.is_a?(Hash)
+        raise ArgumentError.new("This does not support nested hashes (key: #{key}, value: #{value}") if value.is_a?(Hash)
         raise ArgumentError.new("Key must be String or Symbol: #{key}") unless key.is_a?(String) || key.is_a?(Symbol)
       end
     end

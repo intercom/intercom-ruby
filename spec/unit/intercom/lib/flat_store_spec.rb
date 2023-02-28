@@ -5,7 +5,6 @@ require 'spec_helper'
 describe Intercom::Lib::FlatStore do
   it 'raises if you try to set or merge in nested hash structures' do
     data = Intercom::Lib::FlatStore.new
-    _(proc { data['thing'] = [1] }).must_raise ArgumentError
     _(proc { data['thing'] = { 1 => 2 } }).must_raise ArgumentError
     _(proc { Intercom::Lib::FlatStore.new(1 => { 2 => 3 }) }).must_raise ArgumentError
   end
@@ -19,13 +18,21 @@ describe Intercom::Lib::FlatStore do
     data = Intercom::Lib::FlatStore.new
     data['a'] = 1
     data[:b] = 2
+    data['array'] = [1]
+    data[:another_array] = [2]
     _(data[:a]).must_equal 1
     _(data['b']).must_equal 2
     _(data[:b]).must_equal 2
+    _(data[:array]).must_equal [1]
+    _(data['another_array']).must_equal [2]
     data = Intercom::Lib::FlatStore.new('a' => 1, :b => 2)
     _(data['a']).must_equal 1
     _(data[:a]).must_equal 1
     _(data['b']).must_equal 2
     _(data[:b]).must_equal 2
+    _(data[:array]).must_equal [1]
+    _(data['array']).must_equal [1]
+    _(data[:another_array]).must_equal [2]
+    _(data['another_array']).must_equal [2]
   end
 end
