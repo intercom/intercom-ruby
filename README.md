@@ -6,7 +6,7 @@
 
 > Ruby bindings for the [Intercom API](https://developers.intercom.io/reference).
 
-## Project Updates
+## Project Update
 
 ### Maintenance
 
