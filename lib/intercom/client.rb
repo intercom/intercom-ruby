@@ -23,7 +23,7 @@ module Intercom
           timeouts[:open_timeout] = open_timeout if open_timeout
           timeouts[:read_timeout] = read_timeout if read_timeout
           o.send(:timeouts=, timeouts)
-          proc { |_obj| set_timeouts(old_timeouts).call(o) }
+          proc { |_obj| set_timeouts(**old_timeouts).call(o) }
         end
       end
     end
