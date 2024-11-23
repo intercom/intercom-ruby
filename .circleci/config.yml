@@ -6,7 +6,6 @@ jobs:
         type: string
     docker:
       - image: circleci/ruby:<< parameters.ruby_version >>
-    working_directory: ~/intercom-ruby
     steps:
       - checkout
       - run: bundle install
