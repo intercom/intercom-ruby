@@ -1,22 +1,13 @@
 version: 2.1
 
-executors:
-  ruby-executor:
+jobs:
+  test:
     parameters:
       ruby_version:
         type: string
     docker:
       - image: cimg/ruby:<< parameters.ruby_version >>
     working_directory: ~/intercom-ruby
-
-jobs:
-  test:
-    parameters:
-      ruby_version:
-        type: string
-    executor:
-      name: ruby-executor
-      ruby_version: << parameters.ruby_version >>
     steps:
       - checkout
 
