@@ -16,10 +16,10 @@ jobs:
             - bundler-<< parameters.ruby_version >>-{{ checksum "Gemfile.lock" }}
 
       - run:
-          name: Install correct Bundler version (2.6.6)
+          name: Install correct Bundler version (2.4.22)
           command: |
             gem uninstall bundler -a -x || true
-            gem install bundler -v 2.6.6
+            gem install bundler -v 2.4.22
 
       - run:
           name: Install dependencies
