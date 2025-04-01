@@ -1,35 +1,53 @@
-version: 2
+version: 2.1
+
+executors:
+  ruby-executor:
+    parameters:
+      ruby_version:
+        type: string
+    docker:
+      - image: cimg/ruby:<< parameters.ruby_version >>
+    working_directory: ~/intercom-ruby
+
 jobs:
-  "Test against Ruby 2.4":
-    docker:
-      - image: circleci/ruby:2.4.9
-    working_directory: ~/intercom-ruby
+  test:
+    parameters:
+      ruby_version:
+        type: string
+    executor:
+      name: ruby-executor
+      ruby_version: << parameters.ruby_version >>
     steps:
       - checkout
-      - run: bundle install
-      - run: bundle exec rake
-  "Test against Ruby 2.5":
-    docker:
-      - image: circleci/ruby:2.5.7
-    working_directory: ~/intercom-ruby
-    steps:
-      - checkout
-      - run: bundle install
-      - run: bundle exec rake
-  "Test against Ruby 2.6":
-    docker:
-      - image: circleci/ruby:2.6.5
-    working_directory: ~/intercom-ruby
-    steps:
-      - checkout
-      - run: bundle install
-      - run: bundle exec rake
+
+      - restore_cache:
+          keys:
+            - bundler-<< parameters.ruby_version >>-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Install dependencies
+          command: |
+            gem install bundler
+            bundle install --jobs=4 --retry=3
+
+      - save_cache:
+          key: bundler-<< parameters.ruby_version >>-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Run tests
+          command: bundle exec rake
 
 workflows:
-  version: 2
   build_and_test:
     jobs:
-      - "Test against Ruby 2.4"
-      - "Test against Ruby 2.5"
-      - "Test against Ruby 2.6"
-
+      - test:
+          name: "Test against Ruby 2.4"
+          ruby_version: "2.4"
+      - test:
+          name: "Test against Ruby 2.5"
+          ruby_version: "2.5"
+      - test:
+          name: "Test against Ruby 2.6"
+          ruby_version: "2.6"
