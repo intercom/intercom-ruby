@@ -16,10 +16,15 @@ jobs:
             - bundler-<< parameters.ruby_version >>-{{ checksum "Gemfile.lock" }}
 
       - run:
+          name: Install correct Bundler version (2.6.6)
+          command: |
+            gem uninstall bundler -a -x || true
+            gem install bundler -v 2.6.6
+
+      - run:
           name: Install dependencies
           command: |
-            gem install bundler
-            bundle install --jobs=4 --retry=3
+            bundle _2.6.6_ install --jobs=4 --retry=3
 
       - save_cache:
           key: bundler-<< parameters.ruby_version >>-{{ checksum "Gemfile.lock" }}
@@ -28,7 +33,7 @@ jobs:
 
       - run:
           name: Run tests
-          command: bundle exec rake
+          command: bundle _2.6.6_ exec rake
 
 workflows:
   build_and_test:
@@ -42,3 +47,12 @@ workflows:
       - test:
           name: "Test against Ruby 2.6"
           ruby_version: "2.6"
+      - test:
+          name: "Test against Ruby 3.1"
+          ruby_version: "3.1"
+      - test:
+          name: "Test against Ruby 3.2"
+          ruby_version: "3.2"
+      - test:
+          name: "Test against Ruby 3.3"
+          ruby_version: "3.3"
