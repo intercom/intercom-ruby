@@ -1,3 +1,7 @@
+4.2.1
+- Fixed FlatStore to skip hash values when building API request payloads
+- Removed hash validation on FlatStore reads to allow for custom objects
+
 4.1.3
 - Updated ReadMe with more errors.
 - Fixed issue where paginated requests could only be iterated through once.
