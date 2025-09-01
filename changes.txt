@@ -1,4 +1,4 @@
-4.2.1
+4.2.2
 - Fixed FlatStore to skip hash values when building API request payloads
 - Removed hash validation on FlatStore reads to allow for custom objects
 
