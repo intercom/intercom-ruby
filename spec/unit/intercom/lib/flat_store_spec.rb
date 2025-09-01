@@ -16,7 +16,7 @@ describe Intercom::Lib::FlatStore do
 
   it 'raises if you try to use a non string key' do
     data = Intercom::Lib::FlatStore.new
-    _(proc { data[1] = 'something' }).must_raise ArgumentErrorca
+    _(proc { data[1] = 'something' }).must_raise ArgumentError
   end
 
   it 'sets and merges valid entries' do
