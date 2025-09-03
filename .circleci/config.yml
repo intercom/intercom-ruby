@@ -1,35 +1,58 @@
-version: 2
+version: 2.1
+
 jobs:
-  "Test against Ruby 2.4":
+  test:
+    parameters:
+      ruby_version:
+        type: string
     docker:
-      - image: circleci/ruby:2.4.9
+      - image: cimg/ruby:<< parameters.ruby_version >>
     working_directory: ~/intercom-ruby
     steps:
       - checkout
-      - run: bundle install
-      - run: bundle exec rake
-  "Test against Ruby 2.5":
-    docker:
-      - image: circleci/ruby:2.5.7
-    working_directory: ~/intercom-ruby
-    steps:
-      - checkout
-      - run: bundle install
-      - run: bundle exec rake
-  "Test against Ruby 2.6":
-    docker:
-      - image: circleci/ruby:2.6.5
-    working_directory: ~/intercom-ruby
-    steps:
-      - checkout
-      - run: bundle install
-      - run: bundle exec rake
+
+      - restore_cache:
+          keys:
+            - bundler-<< parameters.ruby_version >>-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Install correct Bundler version (2.4.22)
+          command: |
+            gem uninstall bundler -a -x || true
+            gem install bundler -v 2.4.22
+
+      - run:
+          name: Install dependencies
+          command: |
+            bundle _2.6.6_ install --jobs=4 --retry=3
+
+      - save_cache:
+          key: bundler-<< parameters.ruby_version >>-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: Run tests
+          command: bundle _2.6.6_ exec rake
 
 workflows:
-  version: 2
   build_and_test:
     jobs:
-      - "Test against Ruby 2.4"
-      - "Test against Ruby 2.5"
-      - "Test against Ruby 2.6"
-
+      - test:
+          name: "Test against Ruby 2.4"
+          ruby_version: "2.4"
+      - test:
+          name: "Test against Ruby 2.5"
+          ruby_version: "2.5"
+      - test:
+          name: "Test against Ruby 2.6"
+          ruby_version: "2.6"
+      - test:
+          name: "Test against Ruby 3.1"
+          ruby_version: "3.1"
+      - test:
+          name: "Test against Ruby 3.2"
+          ruby_version: "3.2"
+      - test:
+          name: "Test against Ruby 3.3"
+          ruby_version: "3.3"
