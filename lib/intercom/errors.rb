@@ -64,7 +64,14 @@ module Intercom
   class BadRequestError < IntercomError; end
 
   # Raised when you have exceeded the API rate limit
-  class RateLimitExceeded < IntercomError; end
+  class RateLimitExceeded < IntercomError
+    attr_accessor :rate_limit_details
+
+    def initialize(message, context={})
+      super
+      @rate_limit_details = context[:rate_limit_details]
+    end
+  end
 
   # Raised when some attribute of the response cannot be handled
   class UnexpectedResponseError < IntercomError; end
