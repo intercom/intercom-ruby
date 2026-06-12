@@ -2,7 +2,7 @@ module Intercom
   module Lib
 
     # Sub-class of {Hash} for storing custom data attributes.
-    # Doesn't allow nested Hashes or Arrays. And requires {String} or {Symbol} keys.
+    # Doesn't allow Arrays. And requires {String} or {Symbol} keys.
     class FlatStore < Hash
 
       def initialize(attributes={})
@@ -21,9 +21,16 @@ module Intercom
         super(key.to_s)
       end
 
+      def to_submittable_hash
+        # Filter out Custom Object references when submitting to API
+        self.reject do |key, value|
+          value.is_a?(Hash)
+        end
+      end
+
       private
       def validate_key_and_value(key, value)
-        raise ArgumentError.new("This does not support nested data structures (key: #{key}, value: #{value}") if value.is_a?(Array) || value.is_a?(Hash)
+        raise ArgumentError.new("This does not support nested data structures (key: #{key}, value: #{value}") if value.is_a?(Array)
         raise ArgumentError.new("Key must be String or Symbol: #{key}") unless key.is_a?(String) || key.is_a?(Symbol)
       end
     end

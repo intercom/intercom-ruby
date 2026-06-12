@@ -2,7 +2,7 @@
 
 require 'intercom'
 require 'minitest/autorun'
-require 'mocha/setup'
+require 'mocha/minitest'
 require 'webmock'
 require 'time'
 require 'pry'

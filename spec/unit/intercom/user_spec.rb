@@ -106,12 +106,10 @@ describe 'Intercom::User' do
     _(user.to_hash['companies']).must_equal companies
   end
 
-  it 'rejects nested data structures in custom_attributes' do
+  it 'rejects lists in custom_attributes' do
     user = Intercom::User.new
 
     _(proc { user.custom_attributes['thing'] = [1] }).must_raise(ArgumentError)
-    _(proc { user.custom_attributes['thing'] = { 1 => 2 } }).must_raise(ArgumentError)
-    _(proc { user.custom_attributes['thing'] = { 1 => { 2 => 3 } } }).must_raise(ArgumentError)
 
     user = Intercom::User.from_api(test_user)
     _(proc { user.custom_attributes['thing'] = [1] }).must_raise(ArgumentError)

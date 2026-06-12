@@ -90,12 +90,10 @@ describe Intercom::Contact do
     _(contact.to_hash['custom_attributes']).must_equal 'mad' => 123, 'other' => now.to_i, 'thing' => 'yay'
   end
 
-  it 'rejects nested data structures in custom_attributes' do
+  it 'rejects lists in custom_attributes' do
     contact = Intercom::Contact.new
 
     _(proc { contact.custom_attributes['thing'] = [1] }).must_raise(ArgumentError)
-    _(proc { contact.custom_attributes['thing'] = { 1 => 2 } }).must_raise(ArgumentError)
-    _(proc { contact.custom_attributes['thing'] = { 1 => { 2 => 3 } } }).must_raise(ArgumentError)
 
     contact = Intercom::Contact.new(test_contact)
     _(proc { contact.custom_attributes['thing'] = [1] }).must_raise(ArgumentError)
