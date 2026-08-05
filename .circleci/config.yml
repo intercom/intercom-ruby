@@ -1,8 +1,11 @@
-version: 2.1
-
-commands:
-  configure_bundler:
+version: 2
+jobs:
+  "Test against Ruby 2.4":
+    docker:
+      - image: circleci/ruby:2.4.9
+    working_directory: ~/intercom-ruby
     steps:
+      - checkout
       - run:
           name: Route Bundler through the Socket Firewall registry
           command: |
@@ -22,15 +25,6 @@ commands:
             bundle config mirror.https://rubygems.org "$SOCKET_GEM_URL"
             bundle config mirror.https://rubygems.org | grep -q socket-firewall-registry \
               || { echo "FAIL: bundler mirror not pointing at Socket Firewall"; exit 1; }
-
-jobs:
-  "Test against Ruby 2.4":
-    docker:
-      - image: circleci/ruby:2.4.9
-    working_directory: ~/intercom-ruby
-    steps:
-      - checkout
-      - configure_bundler
       - run: bundle install
       - run: bundle exec rake
   "Test against Ruby 2.5":
@@ -39,7 +33,21 @@ jobs:
     working_directory: ~/intercom-ruby
     steps:
       - checkout
-      - configure_bundler
+      - run:
+          name: Route Bundler through the Socket Firewall registry
+          command: |
+            set -euo pipefail
+            if [ -z "${SOCKET_GEM_URL:-}" ]; then
+              if [ -n "${CIRCLE_PR_REPONAME:-}" ]; then
+                echo "Forked PR: no Socket Firewall credentials available, gems will come from rubygems.org."
+                exit 0
+              fi
+              echo "FATAL: SOCKET_GEM_URL is required (provided by the socket-firewall context)"
+              exit 1
+            fi
+            bundle config mirror.https://rubygems.org "$SOCKET_GEM_URL"
+            bundle config mirror.https://rubygems.org | grep -q socket-firewall-registry \
+              || { echo "FAIL: bundler mirror not pointing at Socket Firewall"; exit 1; }
       - run: bundle install
       - run: bundle exec rake
   "Test against Ruby 2.6":
@@ -48,7 +56,21 @@ jobs:
     working_directory: ~/intercom-ruby
     steps:
       - checkout
-      - configure_bundler
+      - run:
+          name: Route Bundler through the Socket Firewall registry
+          command: |
+            set -euo pipefail
+            if [ -z "${SOCKET_GEM_URL:-}" ]; then
+              if [ -n "${CIRCLE_PR_REPONAME:-}" ]; then
+                echo "Forked PR: no Socket Firewall credentials available, gems will come from rubygems.org."
+                exit 0
+              fi
+              echo "FATAL: SOCKET_GEM_URL is required (provided by the socket-firewall context)"
+              exit 1
+            fi
+            bundle config mirror.https://rubygems.org "$SOCKET_GEM_URL"
+            bundle config mirror.https://rubygems.org | grep -q socket-firewall-registry \
+              || { echo "FAIL: bundler mirror not pointing at Socket Firewall"; exit 1; }
       - run: bundle install
       - run: bundle exec rake
 
