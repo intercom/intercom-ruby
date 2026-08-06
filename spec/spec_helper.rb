@@ -10,14 +10,473 @@ include WebMock::API
 
 def test_article
   {
-      "id": "1",
-      "type": "article",
-      "workspace_id": "tx2p130c",
-      "title": "new title",
-      "description": "test Finished articles are visible when they're added to a Help Center collection",
-      "body": "<p>thingbop</p>",
-      "author_id": 1,
-      "state": "draft"
+      "id" => "1",
+      "type" => "article",
+      "workspace_id" => "tx2p130c",
+      "title" => "new title",
+      "description" => "test Finished articles are visible when they're added to a Help Center collection",
+      "body" => "<p>thingbop</p>",
+      "author_id" => 1,
+      "state" => "draft"
+  }
+end
+
+def test_article_with_translations
+  {
+    "type" => "article",
+    "id" => "6871119",
+    "workspace_id" => "hfi1bx4l",
+    "title" => "Default language title",
+    "description" => "Default language description",
+    "body" => "Default language body in html",
+    "author_id" => "5017691",
+    "state" => "published",
+    "created_at" => 1672928359,
+    "updated_at" => 1672928610,
+    "url" => "http://intercom.test/help/en/articles/3-default-language",
+    "parent_id" => "125685",
+    "parent_ids" => [
+      18,
+      19
+    ],
+    "parent_type" => "collection",
+    "default_locale" => "en",
+    "translated_content" => {
+      "type" => "article_translated_content",
+      "ar" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "bg" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "bs" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "ca" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "cs" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "da" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "de" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "el" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "en" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "es" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "et" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "fi" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "fr" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "he" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "hr" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "hu" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "id" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "it" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "ja" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "ko" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "lt" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "lv" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "mn" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "nb" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "nl" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "pl" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "pt" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "ro" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "ru" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "sl" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "sr" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "sv" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "tr" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "vi" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "pt-BR" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "zh-CN" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      },
+      "zh-TW" => {
+        "type" => "article_content",
+        "title" => "How to create a new article",
+        "description" => "This article will show you how to create a new article.",
+        "body" => "This is the body of the article.",
+        "author_id" => "5017691",
+        "state" => "draft",
+        "created_at" => 1663597223,
+        "updated_at" => 1663597260,
+        "url" => "http://intercom.test/help/en/articles/3-default-language"
+      }
+    },
+    "statistics" => {
+      "type" => "article_statistics",
+      "views" => 10,
+      "conversions" => 0,
+      "reactions" => 10,
+      "happy_reaction_precentage" => 40,
+      "netural_reaction_precentage" => 40,
+      "sad_reaction_precentage" => 20
+    }
+  }
+end
+
+def test_article_list
+  {
+    "type" => "list",
+    "pages" => {
+      "type" => "pages",
+      "page" => 1,
+      "per_page" => 25,
+      "total_pages" => 1
+      },
+    "total_count" => 2,
+    "data" => [
+      test_article,
+      test_article_with_translations
+    ]
   }
 end
 

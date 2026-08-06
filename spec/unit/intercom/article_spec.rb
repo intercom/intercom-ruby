@@ -8,6 +8,18 @@ describe "Intercom::Article" do
       client.expects(:get).with("/articles/1", {}).returns(test_article)
       client.articles.find(id: "1")
     end
+
+    it "successfully finds an article with translations" do
+      client.expects(:get).with("/articles/1", {}).returns(test_article_with_translations)
+      client.articles.find(id: "1")
+    end
+  end
+
+  describe "Listing Articles" do
+    it "successfully finds all articles" do
+      client.expects(:get).with("/articles", {}).returns(test_article_list)
+      client.articles.all.to_a
+    end
   end
 
   describe "Creating an Article" do

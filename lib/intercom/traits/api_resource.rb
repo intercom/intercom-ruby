@@ -73,9 +73,9 @@ module Intercom
 
       def initialize_property(attribute, value)
         return if addressable_list?(attribute, value)
-
-        Lib::DynamicAccessors.define_accessors(attribute, value, self) unless accessors_already_defined?(attribute)
-        set_property(attribute, value)
+        safe_attribute = attribute.to_s.include?("-") ? attribute.to_s.gsub("-", "_") : attribute
+        Lib::DynamicAccessors.define_accessors(safe_attribute, value, self) unless accessors_already_defined?(safe_attribute)
+        set_property(safe_attribute, value)
       end
 
       def addressable_list?(attribute, value)
