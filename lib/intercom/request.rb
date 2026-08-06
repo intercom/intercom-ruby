@@ -80,6 +80,7 @@ module Intercom
                 retry
               end
             else
+              e.rate_limit_details = @rate_limit_details
               raise e
             end
           rescue Timeout::Error
