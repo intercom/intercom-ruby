@@ -37,7 +37,7 @@ module Intercom
 
       def to_hash
         instance_variables_excluding_dirty_tracking_field.each_with_object({}) do |variable, hash|
-          hash[variable.to_s.delete('@')] = instance_variable_get(variable)
+          hash[attribute_key(variable)] = instance_variable_get(variable)
         end
       end
 
@@ -46,8 +46,16 @@ module Intercom
           next if variable == :@client
 
           value = instance_variable_get(variable)
-          hash[variable.to_s.delete('@')] = value.respond_to?(:to_json) ? value.to_json(*args) : value
+          hash[attribute_key(variable)] = value.respond_to?(:to_json) ? value.to_json(*args) : value
         end
+      end
+
+      def register_attribute_key(ivar, attribute)
+        (@attribute_keys ||= {})[ivar.to_sym] = attribute.to_s
+      end
+
+      def attribute_key(variable)
+        (@attribute_keys || {}).fetch(variable, variable.to_s.delete('@'))
       end
 
       def to_submittable_hash

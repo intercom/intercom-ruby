@@ -17,7 +17,7 @@ module Intercom
         private
 
         def define_flat_store_based_accessors(attribute, value, object)
-          ivar = ivar_name(attribute)
+          ivar = ivar_name(attribute, object)
           object.singleton_class.class_eval do
             define_method("#{attribute}=") do |val|
               mark_field_as_changed!(attribute.to_sym)
@@ -28,7 +28,7 @@ module Intercom
         end
 
         def define_date_based_accessors(attribute, value, object)
-          ivar = ivar_name(attribute)
+          ivar = ivar_name(attribute, object)
           object.singleton_class.class_eval do
             define_method("#{attribute}=") do |val|
               mark_field_as_changed!(attribute.to_sym)
@@ -42,7 +42,7 @@ module Intercom
         end
 
         def define_standard_accessors(attribute, value, object)
-          ivar = ivar_name(attribute)
+          ivar = ivar_name(attribute, object)
           object.singleton_class.class_eval do
             define_method("#{attribute}=") do |val|
               mark_field_as_changed!(attribute.to_sym)
@@ -53,8 +53,10 @@ module Intercom
         end
 
         # Keys such as "pt-BR" are not valid identifiers, so normalise them for the ivar name.
-        def ivar_name(attribute)
-          "@#{attribute.to_s.gsub(/\W/, '_')}"
+        def ivar_name(attribute, object)
+          ivar = "@#{attribute.to_s.gsub(/\W/, '_')}"
+          object.register_attribute_key(ivar, attribute) if ivar != "@#{attribute}"
+          ivar
         end
 
       end

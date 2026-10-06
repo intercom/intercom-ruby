@@ -51,6 +51,8 @@ describe "Intercom::Article" do
       )
       _(article.translated_content.fr.title).must_equal "Bonjour"
       _(article.translated_content.public_send("pt-BR").title).must_equal "Ola"
+      article.translated_content.public_send("pt-BR").title = "Oi"
+      _(article.to_submittable_hash).must_equal("translated_content" => { "pt-BR" => { "title" => "Oi" } })
     end
   end
 end

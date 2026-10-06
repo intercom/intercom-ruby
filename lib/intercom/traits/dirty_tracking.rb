@@ -22,7 +22,7 @@ module Intercom
 
       def field_changed?(field_name)
         @changed_fields ||= Set.new
-        field = instance_variable_get("@#{field_name}")
+        field = instance_variable_get("@#{field_name.to_s.gsub(/\W/, '_')}")
         if field.respond_to?(:field_changed?)
           field.to_hash.any? do |attribute, _|
             field.field_changed?(attribute)
@@ -33,7 +33,7 @@ module Intercom
       end
 
       def instance_variables_excluding_dirty_tracking_field
-        instance_variables.reject{|var| var == :@changed_fields}
+        instance_variables.reject{|var| var == :@changed_fields || var == :@attribute_keys}
       end
     end
   end
