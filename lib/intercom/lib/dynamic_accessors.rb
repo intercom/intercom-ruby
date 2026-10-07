@@ -17,39 +17,46 @@ module Intercom
         private
 
         def define_flat_store_based_accessors(attribute, value, object)
-          object.instance_eval %Q"
-            def #{attribute}=(value)
-              mark_field_as_changed!(:#{attribute})
-              @#{attribute} = Intercom::Lib::FlatStore.new(value)
+          ivar = ivar_name(attribute, object)
+          object.singleton_class.class_eval do
+            define_method("#{attribute}=") do |val|
+              mark_field_as_changed!(attribute.to_sym)
+              instance_variable_set(ivar, Intercom::Lib::FlatStore.new(val))
             end
-            def #{attribute}
-              @#{attribute}
-            end
-          "
+            define_method(attribute) { instance_variable_get(ivar) }
+          end
         end
 
         def define_date_based_accessors(attribute, value, object)
-          object.instance_eval %Q"
-            def #{attribute}=(value)
-              mark_field_as_changed!(:#{attribute})
-              @#{attribute} = value.nil? ? nil : value.to_i
+          ivar = ivar_name(attribute, object)
+          object.singleton_class.class_eval do
+            define_method("#{attribute}=") do |val|
+              mark_field_as_changed!(attribute.to_sym)
+              instance_variable_set(ivar, val.nil? ? nil : val.to_i)
             end
-            def #{attribute}
-              @#{attribute}.nil? ? nil : Time.at(@#{attribute})
+            define_method(attribute) do
+              time = instance_variable_get(ivar)
+              time.nil? ? nil : Time.at(time)
             end
-          "
+          end
         end
 
         def define_standard_accessors(attribute, value, object)
-            object.instance_eval %Q"
-              def #{attribute}=(value)
-                mark_field_as_changed!(:#{attribute})
-                @#{attribute} = value
-              end
-              def #{attribute}
-                @#{attribute}
-              end
-            "
+          ivar = ivar_name(attribute, object)
+          object.singleton_class.class_eval do
+            define_method("#{attribute}=") do |val|
+              mark_field_as_changed!(attribute.to_sym)
+              instance_variable_set(ivar, val)
+            end
+            define_method(attribute) { instance_variable_get(ivar) }
+          end
+        end
+
+        # Keys such as "pt-BR" are not valid identifiers, so normalise them for the ivar name.
+        def ivar_name(attribute, object)
+          ivar = "@#{attribute.to_s.gsub(/\W/, '_')}"
+          object.register_attribute_key(ivar, attribute) if ivar != "@#{attribute}"
+          ivar
         end
 
       end
