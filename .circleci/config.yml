@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   "Test against Ruby 2.4":
     docker:
@@ -75,7 +75,6 @@ jobs:
       - run: bundle exec rake
 
 workflows:
-  version: 2
   build_and_test:
     jobs:
       - "Test against Ruby 2.4":
