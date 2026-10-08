@@ -87,6 +87,14 @@ module Intercom
 
         client.get('/contacts', id: '123')
       end
+
+      it 'sets rate limit details to empty hash' do
+        stub_request(:any, "https://api.intercom.io/test").to_raise(StandardError)
+
+        expect { client.get('/test', {}) }.must_raise(StandardError)
+
+        client.rate_limit_details.must_equal({})
+      end
     end
 
     describe 'OAuth clients' do

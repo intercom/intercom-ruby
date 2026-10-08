@@ -168,7 +168,7 @@ module Intercom
       request.handle_rate_limit = handle_rate_limit
       request.execute(@base_url, token: @token, api_version: @api_version, **timeouts)
     ensure
-      @rate_limit_details = request.rate_limit_details
+      @rate_limit_details = request.rate_limit_details unless request.rate_limit_details.empty?
     end
 
     attr_writer :base_url

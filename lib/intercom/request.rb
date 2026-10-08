@@ -72,11 +72,11 @@ module Intercom
             parsed_body
           rescue Intercom::RateLimitExceeded => e
             if @handle_rate_limit
-              seconds_to_retry = (@rate_limit_details[:reset_at] - Time.now.utc).ceil
+              seconds_to_retry = ((@rate_limit_details[:reset_at] || Time.now.utc) - Time.now.utc).ceil
               if (retries -= 1) < 0
                 raise Intercom::RateLimitExceeded, 'Rate limit retries exceeded. Please examine current API Usage.'
               else
-                sleep seconds_to_retry unless seconds_to_retry < 0
+                sleep seconds_to_retry unless seconds_to_retry <= 0
                 retry
               end
             else
