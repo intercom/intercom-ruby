@@ -1,3 +1,6 @@
+4.2.3
+- Fixed SyntaxError when reading articles with hyphenated locales
+
 4.2.2
 - Fixed FlatStore to skip hash values when building API request payloads
 - Removed hash validation on FlatStore reads to allow for custom objects
