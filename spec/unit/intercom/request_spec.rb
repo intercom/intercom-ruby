@@ -51,6 +51,17 @@ describe 'Intercom::Request', '#execute' do
     execute!
   end
 
+  it 'should not call sleep for rate limit if reset is not received' do
+    stub_request(:any, uri).to_return(
+      status: [429, "Too Many Requests"],
+    ).then.to_return(status: [200, "OK"], body: default_body)
+
+    req.handle_rate_limit=true
+    req.expects(:sleep).never.with(any_parameters)
+
+    execute!
+  end
+
   it 'should not sleep if rate limit reset time has passed' do
     stub_request(:any, uri).to_return(
       status: [429, "Too Many Requests"],
