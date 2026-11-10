@@ -92,6 +92,8 @@ https://api.intercom.io/export/content/data
 #### Contacts
 
 Note that this is a new resource compatible only with the new [Contacts API](https://developers.intercom.com/intercom-api-reference/reference#contacts-model) released in API v2.0.
+- `user_id` refers to an attribute that you would have on your side to identify your users
+- `user.id` refers to the internal ID used by intercom to identify users
 
 ```ruby
 # Create a contact with "lead" role
@@ -198,7 +200,15 @@ intercom.visitors.convert(visitor, user)
 
 #### Companies
 
+Note that 
+- "company_id" refers to an attribute that you would have on your side
+- company.id refers to the internal company ID used by Intercom
+
+
 ```ruby
+# Create a company
+company = intercom.companies.create(name: 'Intercom', company_id: 42)
+
 # Find a company by company_id
 company = intercom.companies.find(company_id: "44")
 
