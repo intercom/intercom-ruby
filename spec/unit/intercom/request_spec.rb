@@ -118,6 +118,22 @@ describe 'Intercom::Request', '#execute' do
 
       expect { execute! }.must_raise(Intercom::GatewayTimeoutError)
     end
+
+    describe 'when raises RateLimitExceeded' do
+      it 'sets on the exception the rate limit details from the response headers' do
+        stub_request(:any, uri).to_return(
+          status: [429, "Too Many Requests"],
+          headers: {
+            'X-RateLimit-Limit' => '5000',
+            'X-RateLimit-Remaining' => '0',
+            'X-RateLimit-Reset' => Time.parse("February 25 2010").utc.to_i.to_s,
+          },
+        )
+
+        error = expect { execute! }.must_raise(Intercom::RateLimitExceeded)
+        assert_equal({ limit: 5000, remaining: 0, reset_at: Time.parse("February 25 2010").utc}, error.rate_limit_details)
+      end
+    end
   end
 
   describe "application error handling" do
